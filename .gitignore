@@ -4,26 +4,16 @@
 *.o
 *.obj
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
 # Executables
 *.exe
-*.out
-*.app
+
+# Binary folders
+/MapEditor/Degug
+/MapEditor/x64
+/x64
+/Debug
+/.vs
+
+# Visual Studio Files
+*.sd
+*.db
