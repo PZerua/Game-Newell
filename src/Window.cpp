@@ -1,7 +1,7 @@
 #include "Window.h"
 #include <iostream>
 
-Window::Window() :
+CWindow::CWindow() :
 	mWindow(NULL),
 	_pressing(false),
 	_isFullscreen(false),
@@ -15,7 +15,15 @@ Window::Window() :
 	mHeight(0)
 {}
 
-SDL_Window* Window::init(const std::string &screenTitle, int window_width, int window_height, bool fullscreen)
+CWindow::~CWindow()
+{
+	if (mWindow != NULL)
+	{
+		SDL_DestroyWindow(mWindow);
+	}
+}
+
+SDL_Window* CWindow::init(const std::string &screenTitle, int window_width, int window_height, bool fullscreen)
 {
 	// Set attributes
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -63,75 +71,8 @@ SDL_Window* Window::init(const std::string &screenTitle, int window_width, int w
 	return mWindow;
 }
 
-void Window::handleEvent(SDL_Event& e)
+void CWindow::handleEvent(SDL_Event& e)
 {
-	// If an event was detected for this window
-	if (e.type == (unsigned)SDL_WINDOWEVENT)
-	{
-		switch (e.window.event)
-		{
-			// Window appeared
-		case SDL_WINDOWEVENT_SHOWN:
-			mShown = true;
-			break;
-
-			// Window disappeared
-		case SDL_WINDOWEVENT_HIDDEN:
-			mShown = false;
-			break;
-
-			// Get new dimensions and repaint
-		case SDL_WINDOWEVENT_SIZE_CHANGED:
-			// SDL_RenderPresent(mRenderer);
-			break;
-
-			// Repaint on expose
-		case SDL_WINDOWEVENT_EXPOSED:
-			// SDL_RenderPresent(mRenderer);
-			break;
-
-			// Mouse enter
-		case SDL_WINDOWEVENT_ENTER:
-			mMouseFocus = true;
-			break;
-
-			// Mouse exit
-		case SDL_WINDOWEVENT_LEAVE:
-			mMouseFocus = false;
-			break;
-
-			// Keyboard focus gained
-		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			mKeyboardFocus = true;
-			break;
-
-			// Keyboard focus lost
-		case SDL_WINDOWEVENT_FOCUS_LOST:
-			mKeyboardFocus = false;
-			break;
-
-			// Window minimized
-		case SDL_WINDOWEVENT_MINIMIZED:
-			mMinimized = true;
-			break;
-
-			// Window maxized
-		case SDL_WINDOWEVENT_MAXIMIZED:
-			mMinimized = false;
-			break;
-
-			// Window restored
-		case SDL_WINDOWEVENT_RESTORED:
-			mMinimized = false;
-			break;
-
-			// Hide on close
-		case SDL_WINDOWEVENT_CLOSE:
-			free();
-			mClosed = true;
-			break;
-		}
-	}
 	switch (e.type)
 	{
 	case SDL_KEYDOWN:
@@ -164,7 +105,7 @@ void Window::handleEvent(SDL_Event& e)
 	}
 }
 
-void Window::focus()
+void CWindow::focus()
 {
 	// Restore window if needed
 	if (!mShown)
@@ -176,7 +117,7 @@ void Window::focus()
 	SDL_RaiseWindow(mWindow);
 }
 
-void Window::Present()
+void CWindow::Present()
 {
 	if (!mMinimized)
 	{
@@ -185,7 +126,7 @@ void Window::Present()
 	}
 }
 
-void Window::Clear()
+void CWindow::Clear()
 {
 	if (!mMinimized)
 	{
@@ -194,7 +135,7 @@ void Window::Clear()
 	}
 }
 
-void Window::free()
+void CWindow::free()
 {
 	if (mWindow != NULL)
 	{
@@ -207,56 +148,61 @@ void Window::free()
 	mHeight = 0;
 }
 
-int Window::getWidth()
+int CWindow::getWidth()
 {
 	return mWidth;
 }
 
-int Window::getHeight()
+int CWindow::getHeight()
 {
 	return mHeight;
 }
 
-bool Window::hasMouseFocus()
+bool CWindow::hasMouseFocus()
 {
 	return mMouseFocus;
 }
 
-bool Window::hasKeyboardFocus()
+bool CWindow::hasKeyboardFocus()
 {
 	return mKeyboardFocus;
 }
 
-bool Window::isMinimized()
+bool CWindow::isMinimized()
 {
 	return mMinimized;
 }
 
-bool Window::isShown()
+bool CWindow::isShown()
 {
 	return mShown;
 }
 
-bool Window::isClosed()
+bool CWindow::isClosed()
 {
 	return mClosed;
 }
 
-void Window::setFocus(bool focus)
+void CWindow::setFocus(bool focus)
 {
 	mMouseFocus = focus;
 }
 
-bool Window::isFullscreen()
+bool CWindow::isFullscreen()
 {
 	return _isFullscreen;
 }
 
-void Window::setSize(int width, int height)
+void CWindow::setSize(int width, int height)
 {
 	mWidth = width;
 	mHeight = height;
 
 	SDL_SetWindowSize(mWindow, width, height);
 	SDL_SetWindowPosition(mWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+
+void CWindow::setFullscreen()
+{
+	SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
 }

@@ -4,13 +4,14 @@
 #include "mesh.h"
 #include "camera.h"
 #include "shader.h"
+#include <glm\glm.hpp>
 
-class Tile
+class CTile
 {
 public:
-	Tile();
-	Tile(float x, float y, int row, int col);
-	~Tile();
+	CTile() : x(0), y(0), row(0), col(0), quad(NULL) {}
+	CTile(float x, float y, int row, int col);
+	~CTile();
 	void update(double deltaTime);
 	void setValues(float x, float y, int row, int col);
 	std::string getTilemapName();
@@ -19,11 +20,11 @@ public:
 	int getRow();
 	int getCol();
 	void setPos(float x, float y);
-	Mesh* quad;
-	Matrix44 model;
+	CMesh* quad;
+	glm::mat4 model;
 
 private:
-	Texture *tilemap;
+	CTexture *tilemap;
 	int row;
 	int col;
 	float x;

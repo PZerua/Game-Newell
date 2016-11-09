@@ -1,18 +1,18 @@
 #include "TextureManager.h"
 
-TextureManager *TextureManager::instance = NULL;
+CTextureManager *CTextureManager::instance = NULL;
 
-TextureManager::TextureManager()
+CTextureManager::CTextureManager()
 {
 	if (instance == NULL)
 		instance = this;
 }
 
-Texture *TextureManager::getTexture(const char *path)
+CTexture *CTextureManager::getTexture(const char *path)
 {
 	auto pos = textureMan.find(std::string(path));
 
-	Texture *texture = new Texture();
+	CTexture *texture = new CTexture();
 	if (pos == textureMan.end())
 	{
 		if (texture->load(path))

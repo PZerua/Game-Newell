@@ -8,36 +8,40 @@
 #include "utils.h"
 #include "imgui.h"
 
-class Editor
+class CEditor
 {
 public:
-	Editor(Window *window);
-	~Editor();
+	CEditor(CWindow *window) : m_window(window), lastRow(-1), lastCol(-1), showGrid(true), selectedMap(NULL), 
+		isMouseLeftPressed(false), isMouseRightPressed(false), tileSelected(NULL), tileIDSelected(-1) {}
+	~CEditor();
 	void init();
 	void render();
 	void renderImGui();
 	void update(double deltaTime);
-	Vector2 mouse_position;
-	const Uint8* keystate;
 	void onKeyPressed(SDL_KeyboardEvent event);
 	void onMouseButtonDown(SDL_MouseButtonEvent event);
 	void onMouseButtonUp(SDL_MouseButtonEvent event);
 	void setWindowSize(int width, int height);
 	void drawGrid();
-	int mouse_state;
 	void setGrid();
-	Window *window;
+	void setCameraPos(float x, float y);
+	CWindow *m_window;
+	glm::vec2 mouse_position;
+	const Uint8* keystate;
+	int mouse_state;
 
 private:
-	GameMap *selectedMap;
-	std::vector<GameMap *> gameMaps;
-	Camera *camera;
-	Mesh *gridMesh;
-	Shader *gridShader;
-	Shader *tileSelectedShader;
-	Tile *tileSelected;
+	CTexture *tilemapSelected;
+	CGameMap *selectedMap;
+	std::map<std::string, CGameMap *> gameMaps;
+	CCamera camera;
+	CMesh gridMesh;
+	CShader *gridShader;
+	CShader *tileSelectedShader;
+	CTile *tileSelected;
 	ImVec2 editorSize;
-	Vector3 camTraslation;
+	glm::vec3 camTraslation;
+	std::vector<std::string> maps;
 
 	bool showGrid;
 	bool isMouseRightPressed;
@@ -45,4 +49,5 @@ private:
 	int tileIDSelected;
 	int lastRow;
 	int lastCol;
+	int currentMapID;
 };

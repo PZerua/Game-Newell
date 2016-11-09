@@ -3,37 +3,39 @@
 #include "includes.h"
 #include <string>
 
-class Window
+class CWindow
 {
 public:
-	//Intializes internals
-	Window();
+	// Intializes internals
+	CWindow();
 
-	//Creates window
+	~CWindow();
+
+	// Creates window
 	SDL_Window* init(const std::string &screenTitle, int window_width, int window_height, bool fullscreen = false);
 
-	//Handles window events
+	// Handles window events
 	void handleEvent(SDL_Event& e);
 
-	//Focuses on window
+	// Focuses on window
 	void focus();
 
-	//Print render
+	// Print render
 	void Present();
 
-	//Clear screen
+	// Clear screen
 	void Clear();
 
-	//Deallocates internals
+	// Deallocates internals
 	void free();
 
 	void setFocus(bool focus);
 
-	//Window dimensions
+	// Window dimensions
 	int getWidth();
 	int getHeight();
 
-	//Window focus
+	// Window focus
 	bool hasMouseFocus();
 	bool hasKeyboardFocus();
 	bool isMinimized();
@@ -41,10 +43,11 @@ public:
 	bool isClosed();
 	bool isFullscreen();
 	void setSize(int width, int height);
+	void setFullscreen();
 
 	SDL_Window* mWindow;
 
-	//Window dimensions
+	// Window dimensions
 	int mWidth;
 	int mHeight;
 

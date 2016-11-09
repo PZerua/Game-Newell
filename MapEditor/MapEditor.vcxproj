@@ -123,28 +123,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\camera.cpp" />
+    <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Editor.cpp" />
-    <ClCompile Include="..\src\Framework.cpp" />
     <ClCompile Include="..\src\GameMap.cpp" />
     <ClCompile Include="..\src\imgui.cpp" />
     <ClCompile Include="..\src\imgui_demo.cpp" />
     <ClCompile Include="..\src\imgui_draw.cpp" />
     <ClCompile Include="..\src\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\mesh.cpp" />
-    <ClCompile Include="..\src\shader.cpp" />
-    <ClCompile Include="..\src\texture.cpp" />
+    <ClCompile Include="..\src\Mesh.cpp" />
+    <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
-    <ClCompile Include="..\src\Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\headers\camera.h" />
+    <ClInclude Include="..\headers\Camera.h" />
     <ClInclude Include="..\headers\Editor.h" />
-    <ClInclude Include="..\headers\Framework.h" />
     <ClInclude Include="..\headers\GameMap.h" />
     <ClInclude Include="..\headers\imconfig.h" />
     <ClInclude Include="..\headers\imgui.h" />
@@ -152,18 +149,17 @@
     <ClInclude Include="..\headers\imgui_internal.h" />
     <ClInclude Include="..\headers\includes.h" />
     <ClInclude Include="..\headers\json.h" />
-    <ClInclude Include="..\headers\mesh.h" />
-    <ClInclude Include="..\headers\shader.h" />
+    <ClInclude Include="..\headers\Mesh.h" />
+    <ClInclude Include="..\headers\Shader.h" />
     <ClInclude Include="..\headers\stb_image.h" />
     <ClInclude Include="..\headers\stb_rect_pack.h" />
     <ClInclude Include="..\headers\stb_textedit.h" />
     <ClInclude Include="..\headers\stb_truetype.h" />
-    <ClInclude Include="..\headers\texture.h" />
+    <ClInclude Include="..\headers\Texture.h" />
     <ClInclude Include="..\headers\TextureManager.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\utils.h" />
     <ClInclude Include="..\headers\Window.h" />
-    <ClInclude Include="..\headers\Zone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

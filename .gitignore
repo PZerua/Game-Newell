@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# Game Maps
+/MapEditor/data/maps
+
 # Executables
 *.exe
 

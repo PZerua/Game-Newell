@@ -3,19 +3,19 @@
 #include "includes.h"
 #include "texture.h"
 
-class TextureManager
+class CTextureManager
 {
 public:
-	static TextureManager *instance;
-	static TextureManager *getInstance()
+	static CTextureManager *instance;
+	static CTextureManager *getInstance()
 	{
 		if (instance == NULL)
-			instance = new TextureManager();
+			instance = new CTextureManager();
 		return instance;
 	}
-	Texture* getTexture(const char* path);
+	CTexture* getTexture(const char* path);
 
 private:
-	TextureManager();
-	std::map<std::string, Texture *> textureMan;
+	CTextureManager();
+	std::map<std::string, CTexture *> textureMan;
 };

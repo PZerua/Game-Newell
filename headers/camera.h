@@ -1,65 +1,45 @@
-/*  by Javi Agenjo 2013 UPF  javi.agenjo@gmail.com
-	This class wraps the behaviour of a camera. A Camera helps to set the point of view from where we will render the scene.
-	The most important attributes are  eye and center which say where is the camera and where is it pointing.
-	This class also stores the matrices used to do the transformation and projection of the scene.
-*/
+#ifndef CAMERA_H
+#define CAMERA_H
 
-#pragma once
+#include "includes.h"
 
-#include "framework.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-class Camera
-{
-public:
+class CCamera {
+	public:
+		CCamera::CCamera() : scale(1), left(0), right(0), bottom(0), top(0), zNear(0), zFar(0) {}
 
-	enum { PERSPECTIVE, ORTHOGRAPHIC }; //types of cameras available
+		// Setting Functions
+		// Set the position of the camera
+		void setPosition(glm::vec3 pos);
+		// Change the viewport location and size
+		void setViewport(int loc_x, int loc_y, int width, int height);
+		void translate(float x, float y);
+		void setOrtho(float left, float right, float bottom, float top, float zNear, float zFar, float scale);
 
-	char type; //camera type
+		// Getting Functions
+		void getViewport(int &loc_x, int &loc_y, int &width, int &height);
+		void getMatricies(glm::mat4 &P, glm::mat4 &V);
 
-	//vectors to define the orientation of the camera
-	Vector3 eye; //where is the camera
-	Vector3 center; //where is it pointing
-	Vector3 up; //the up pointing up
+		int viewport_x;
+		int viewport_y;
+		int window_width;
+		int window_height;
 
-	//properties of the projection of the camera
-	float fov;			//view angle in degrees (1/zoom)
-	float aspect;		//aspect ratio (width/height)
-	float near_plane;	//near plane
-	float far_plane;	//far plane
+		double aspect;
+		float scale;
+		float right;
+		float left;
+		float bottom;
+		float top;
+		float zNear;
+		float zFar;
 
-	//for orthogonal projection
-	float left,right,top,bottom;
-
-	//planes
-	float frustum[6][4];
-
-	//matrices
-	Matrix44 view_matrix;
-	Matrix44 projection_matrix;
-	Matrix44 viewprojection_matrix;
-
-	Camera();
-	void set();
-
-	//translate and rotate the camera
-	void move(Vector3 delta);
-	void rotate(float angle, const Vector3& axis);
-
-	//transform a local camera vector to world coordinates
-	Vector3 getLocalVector(const Vector3& v);
-
-	//set the info
-	void setPerspective(float fov, float aspect, float near_plane, float far_plane);
-	void setOrthographic(float left, float right, float bottom, float top, float near_plane, float far_plane);
-	void lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
-
-	void extractFrustum();
-
-	//compute the matrices
-	void updateViewMatrix();
-	void updateProjectionMatrix();
-
-	//culling
-	bool testPointInFrustum( Vector3 v );
-	bool testSphereInFrustum( Vector3 v, float radius);
+		glm::vec3 camera_position;
+		glm::mat4 projection;
+		glm::mat4 view;
+		glm::mat4 VP;
 };
+#endif

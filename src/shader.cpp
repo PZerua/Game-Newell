@@ -1,10 +1,9 @@
 #include "shader.h"
 #include <cassert>
-#include "Framework.h"
 #include <vector>
 #include "texture.h"
 #include "utils.h"
-
+#include <glm/gtc/type_ptr.hpp>
 
 //typedef unsigned int GLhandleARB;
 
@@ -46,29 +45,29 @@
 
 #endif
 
-std::map<std::string,Shader*> Shader::s_Shaders;
-bool Shader::s_ready = false;
+std::map<std::string,CShader*> CShader::s_Shaders;
+bool CShader::s_ready = false;
 
 
-Shader::Shader()
+CShader::CShader()
 {
-	if(!Shader::s_ready)
-		Shader::init();
+	if(!CShader::s_ready)
+		CShader::init();
 	compiled = false;
 }
 
-Shader::~Shader()
+CShader::~CShader()
 {
 	release();
 }
 
-void Shader::setFilenames(const std::string& vsf, const std::string& psf)
+void CShader::setFilenames(const std::string& vsf, const std::string& psf)
 {
 	vs_filename = vsf;
 	ps_filename = psf;
 }
 
-bool Shader::load(const std::string& vsf, const std::string& psf)
+bool CShader::load(const std::string& vsf, const std::string& psf)
 {
 	assert(	compiled == false );
 	assert (glGetError() == GL_NO_ERROR);
@@ -92,40 +91,40 @@ bool Shader::load(const std::string& vsf, const std::string& psf)
 	return true;
 }
 
-Shader* Shader::Load(const char* vsf, const char* psf)
+CShader* CShader::Load(const char* vsf, const char* psf)
 {
 	std::string name = std::string(vsf) + "," + std::string(psf);
-	std::map<std::string,Shader*>::iterator it = s_Shaders.find(name);
+	std::map<std::string,CShader*>::iterator it = s_Shaders.find(name);
 	if (it != s_Shaders.end())
 		return it->second;
 
-	Shader* sh = new Shader();
+	CShader* sh = new CShader();
 	if (!sh->load(vsf,psf))
 		return NULL;
 	s_Shaders[name] = sh;
 	return sh;
 }
 
-void Shader::ReloadAll()
+void CShader::ReloadAll()
 {
-	for( std::map<std::string,Shader*>::iterator it = s_Shaders.begin(); it!=s_Shaders.end();it++)
+	for( std::map<std::string,CShader*>::iterator it = s_Shaders.begin(); it!=s_Shaders.end();it++)
 		it->second->compile();
 	std::cout << "Shaders recompiled" << std::endl;
 }
 
-bool Shader::compile()
+bool CShader::compile()
 {
 	assert(!compiled && "Shader already compiled" );
     return load(vs_filename,ps_filename);
 }
 
-bool Shader::recompile()
+bool CShader::recompile()
 {
 	release(); //remove old shader
     return load(vs_filename,ps_filename);
 }
 
-bool Shader::readFile(const std::string& filename, std::string& content)
+bool CShader::readFile(const std::string& filename, std::string& content)
 {
 	content.clear();
 
@@ -154,19 +153,19 @@ bool Shader::readFile(const std::string& filename, std::string& content)
 	return true;
 }
 
-std::string Shader::getInfoLog() const
+std::string CShader::getInfoLog() const
 {
 	return info_log;
 }
 
-bool Shader::hasInfoLog() const
+bool CShader::hasInfoLog() const
 {
 	return info_log.size() > 0; 
 }
 
 // ******************************************
 
-bool Shader::compileFromMemory(const std::string& vsm, const std::string& psm)
+bool CShader::compileFromMemory(const std::string& vsm, const std::string& psm)
 {
 	if (glCreateProgram == 0)
 	{
@@ -213,7 +212,7 @@ bool Shader::compileFromMemory(const std::string& vsm, const std::string& psm)
 	return true;
 }
 
-bool Shader::validate()
+bool CShader::validate()
 {
 	glValidateProgram(program);
 	assert ( glGetError() == GL_NO_ERROR );
@@ -232,17 +231,17 @@ bool Shader::validate()
 	return true;
 }
 
-bool Shader::createVertexShaderObject(const std::string& shader)
+bool CShader::createVertexShaderObject(const std::string& shader)
 {
 	return createShaderObject(GL_VERTEX_SHADER,vs,shader);
 }
 
-bool Shader::createFragmentShaderObject(const std::string& shader)
+bool CShader::createFragmentShaderObject(const std::string& shader)
 {
 	return createShaderObject(GL_FRAGMENT_SHADER,fs,shader);
 }
 
-bool Shader::createShaderObject(unsigned int type, GLuint& handle, const std::string& code)
+bool CShader::createShaderObject(unsigned int type, GLuint& handle, const std::string& code)
 {
 	handle = glCreateShader(type);
 	assert( glGetError() == GL_NO_ERROR );
@@ -280,7 +279,7 @@ bool Shader::createShaderObject(unsigned int type, GLuint& handle, const std::st
 }
 
 
-void Shader::release()
+void CShader::release()
 {
 	if (vs)
 	{
@@ -307,7 +306,7 @@ void Shader::release()
 }
 
 
-void Shader::enable()
+void CShader::enable()
 {
 	glUseProgram(program);
 	assert (glGetError() == GL_NO_ERROR);
@@ -316,20 +315,20 @@ void Shader::enable()
 }
 
 
-void Shader::disable()
+void CShader::disable()
 {
 	glUseProgram(0);
 	glActiveTexture(GL_TEXTURE0);
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::disableShaders()
+void CShader::disableShaders()
 {
 	glUseProgram(0);
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::saveShaderInfoLog(GLuint obj)
+void CShader::saveShaderInfoLog(GLuint obj)
 {
 	int len = 0;
 	assert(glGetError() == GL_NO_ERROR);
@@ -351,7 +350,7 @@ void Shader::saveShaderInfoLog(GLuint obj)
 }
 
 
-void Shader::saveProgramInfoLog(GLuint obj)
+void CShader::saveProgramInfoLog(GLuint obj)
 {
 	int len = 0;
 	assert(glGetError() == GL_NO_ERROR);
@@ -372,7 +371,7 @@ void Shader::saveProgramInfoLog(GLuint obj)
 	}
 }
 
-GLint Shader::getLocation(const char* varname,loctable* table)
+GLint CShader::getLocation(const char* varname,loctable* table)
 {
 	if(varname == 0 || table == 0)
 		return 0;
@@ -400,7 +399,7 @@ GLint Shader::getLocation(const char* varname,loctable* table)
 	return loc;
 }
 
-int Shader::getAttribLocation(const char* varname)
+int CShader::getAttribLocation(const char* varname)
 {
 	int loc = glGetAttribLocation(program, varname);
 	if (loc == -1)
@@ -412,7 +411,7 @@ int Shader::getAttribLocation(const char* varname)
 	return loc;
 }
 
-int Shader::getUniformLocation(const char* varname)
+int CShader::getUniformLocation(const char* varname)
 {
 	int loc = getLocation(varname, &locations);
 	if (loc == -1)
@@ -423,12 +422,12 @@ int Shader::getUniformLocation(const char* varname)
 	return loc;
 }
 
-void Shader::setTexture(const char* varname, Texture* tex)
+void CShader::setTexture(const char* varname, CTexture* tex)
 {
 	setTexture( varname, tex->texture_id );
 }
 
-void Shader::setTexture(const char* varname, unsigned int tex)
+void CShader::setTexture(const char* varname, unsigned int tex)
 {
 	glActiveTexture(GL_TEXTURE0 + last_slot);
 	glBindTexture(GL_TEXTURE_2D,tex);
@@ -437,7 +436,7 @@ void Shader::setTexture(const char* varname, unsigned int tex)
 	glActiveTexture(GL_TEXTURE0 + last_slot);
 }
 
-void Shader::setUniform1(const char* varname, int input1)
+void CShader::setUniform1(const char* varname, int input1)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -445,7 +444,7 @@ void Shader::setUniform1(const char* varname, int input1)
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform2(const char* varname, int input1, int input2)
+void CShader::setUniform2(const char* varname, int input1, int input2)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -453,7 +452,7 @@ void Shader::setUniform2(const char* varname, int input1, int input2)
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform3(const char* varname, int input1, int input2, int input3)
+void CShader::setUniform3(const char* varname, int input1, int input2, int input3)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -461,7 +460,7 @@ void Shader::setUniform3(const char* varname, int input1, int input2, int input3
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform4(const char* varname, const int input1, const int input2, const int input3, const int input4)
+void CShader::setUniform4(const char* varname, const int input1, const int input2, const int input3, const int input4)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -469,7 +468,7 @@ void Shader::setUniform4(const char* varname, const int input1, const int input2
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform1Array(const char* varname, const int* input, const int count)
+void CShader::setUniform1Array(const char* varname, const int* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -477,7 +476,7 @@ void Shader::setUniform1Array(const char* varname, const int* input, const int c
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform2Array(const char* varname, const int* input, const int count)
+void CShader::setUniform2Array(const char* varname, const int* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -485,7 +484,7 @@ void Shader::setUniform2Array(const char* varname, const int* input, const int c
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform3Array(const char* varname, const int* input, const int count)
+void CShader::setUniform3Array(const char* varname, const int* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -493,7 +492,7 @@ void Shader::setUniform3Array(const char* varname, const int* input, const int c
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform4Array(const char* varname, const int* input, const int count)
+void CShader::setUniform4Array(const char* varname, const int* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -501,7 +500,7 @@ void Shader::setUniform4Array(const char* varname, const int* input, const int c
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform1(const char* varname, const float input1)
+void CShader::setUniform1(const char* varname, const float input1)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -509,7 +508,7 @@ void Shader::setUniform1(const char* varname, const float input1)
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform2(const char* varname, const float input1, const float input2)
+void CShader::setUniform2(const char* varname, const float input1, const float input2)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -517,7 +516,7 @@ void Shader::setUniform2(const char* varname, const float input1, const float in
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform3(const char* varname, const float input1, const float input2, const float input3)
+void CShader::setUniform3(const char* varname, const float input1, const float input2, const float input3)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -525,7 +524,7 @@ void Shader::setUniform3(const char* varname, const float input1, const float in
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform4(const char* varname, const float input1, const float input2, const float input3, const float input4)
+void CShader::setUniform4(const char* varname, const float input1, const float input2, const float input3, const float input4)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -533,7 +532,7 @@ void Shader::setUniform4(const char* varname, const float input1, const float in
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform1Array(const char* varname, const float* input, const int count)
+void CShader::setUniform1Array(const char* varname, const float* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -541,7 +540,7 @@ void Shader::setUniform1Array(const char* varname, const float* input, const int
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform2Array(const char* varname, const float* input, const int count)
+void CShader::setUniform2Array(const char* varname, const float* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -549,7 +548,7 @@ void Shader::setUniform2Array(const char* varname, const float* input, const int
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform3Array(const char* varname, const float* input, const int count)
+void CShader::setUniform3Array(const char* varname, const float* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -557,7 +556,7 @@ void Shader::setUniform3Array(const char* varname, const float* input, const int
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setUniform4Array(const char* varname, const float* input, const int count)
+void CShader::setUniform4Array(const char* varname, const float* input, const int count)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -565,7 +564,7 @@ void Shader::setUniform4Array(const char* varname, const float* input, const int
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setMatrix44(const char* varname, const float* m)
+void CShader::setMatrix44(const char* varname, const float* m)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
@@ -573,20 +572,20 @@ void Shader::setMatrix44(const char* varname, const float* m)
 	assert (glGetError() == GL_NO_ERROR);
 }
 
-void Shader::setMatrix44(const char* varname, const Matrix44 &m)
+void CShader::setMatrix44(const char* varname, const glm::mat4 &m)
 {
 	GLint loc = getLocation(varname, &locations);
 	CHECK_SHADER_VAR(loc,varname);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, m.m);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(m));
 	assert (glGetError() == GL_NO_ERROR);
 }
 
 
 
-void Shader::init()
+void CShader::init()
 {
 	static bool firsttime = true;
-	Shader::s_ready = true;
+	CShader::s_ready = true;
 	if(firsttime)
 	{
 

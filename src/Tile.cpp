@@ -1,92 +1,77 @@
 #include "Tile.h"
 #include "TextureManager.h"
 
-Tile::Tile()
+CTile::CTile(float x, float y, int row, int col) : x(x), y(y), row(row), col(col)
 {
-	this->x = 0;
-	this->y = 0;
-	this->row = 0;
-	this->col = 0;
+	model = glm::translate(model, glm::vec3(x, y, 0));
 
-	quad = NULL;
-}
+	quad = new CMesh();
+	quad->createQuad(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
 
-Tile::Tile(float x, float y, int row, int col)
-{
-	this->x = x;
-	this->y = y;
-	this->row = row;
-	this->col = col;
-
-	model.setTranslation(x, y, 0);
-
-	quad = new Mesh();
-	quad->createQuadUVs(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
-
-	TextureManager *manager;
+	CTextureManager *manager;
 	tilemap = manager->getInstance()->getTexture("data/images/tilemap.png");
 
 	quad->uploadToVRAM();
 }
 
-Tile::~Tile()
+CTile::~CTile()
 {
 	delete quad;
 }
 
-void Tile::setValues(float x, float y, int row, int col)
+void CTile::setValues(float x, float y, int row, int col)
 {
 	this->x = x;
 	this->y = y;
 	this->row = row;
 	this->col = col;
 
-	model.setTranslation(x, y, 0);
+	model = glm::translate(model, glm::vec3(x, y, 0));
 
-	quad = new Mesh();
-	quad->createQuadUVs(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
+	if (quad)
+		delete quad;
+
+	quad = new CMesh();
+	quad->createQuad(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
 
 	quad->uploadToVRAM();
-
-	TextureManager *manager;
-	tilemap = manager->getInstance()->getTexture("data/images/tilemap.png");
-
+	
+	tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
 }
 
-
-void Tile::update(double deltaTime)
+void CTile::update(double deltaTime)
 {
 
 }
 
-std::string Tile::getTilemapName()
+std::string CTile::getTilemapName()
 {
 	return tilemap->filename;
 }
 
-float Tile::getXPos()
+float CTile::getXPos()
 {
 	return x;
 }
 
-float Tile::getYPos()
+float CTile::getYPos()
 {
 	return y;
 }
 
-int Tile::getRow()
+int CTile::getRow()
 {
 	return row;
 }
 
-int Tile::getCol()
+int CTile::getCol()
 {
 	return col;
 }
 
-void Tile::setPos(float x, float y)
+void CTile::setPos(float x, float y)
 {
 	this->x = x;
 	this->y = y;
-	model.setTranslation(x, y, 0);
+	model = glm::translate(model, glm::vec3(x, y, 0));
 }

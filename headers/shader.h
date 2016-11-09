@@ -7,7 +7,8 @@
 #include "includes.h"
 #include <string>
 #include <map>
-#include "framework.h"
+#include <glm\glm.hpp>
+#include <glm\mat4x4.hpp>
 
 #ifdef _DEBUG
 #define CHECK_SHADER_VAR(a,b) if (a == -1) return
@@ -16,17 +17,17 @@
 #define CHECK_SHADER_VAR(a,b) if (a == -1) return
 #endif
 
-class Texture;
+class CTexture;
 
-class Shader
+class CShader
 {
 	int last_slot;
 
 	static bool s_ready; //used to initialize shader vars
 
 public:
-	Shader();
-	virtual ~Shader();
+	CShader();
+	virtual ~CShader();
 
 	virtual void setFilenames(const std::string& vsf, const std::string& psf); //set but not compile
 	virtual bool compile();
@@ -48,9 +49,9 @@ public:
 
 	//upload
 	virtual void setFloat(const char* varname, const float& input) { setUniform1(varname, input); }
-	virtual void setVector3(const char* varname, const Vector3& input) { setUniform3(varname, input.x, input.y, input.z); }
+	virtual void setVector3(const char* varname, const glm::vec3& input) { setUniform3(varname, input.x, input.y, input.z); }
 	virtual void setMatrix44(const char* varname, const float* m);
-	virtual void setMatrix44(const char* varname, const Matrix44 &m);
+	virtual void setMatrix44(const char* varname, const glm::mat4 &m);
 
 	virtual void setUniform1Array(const char* varname, const float* input, const int count) ;
 	virtual void setUniform2Array(const char* varname, const float* input, const int count) ;
@@ -65,7 +66,7 @@ public:
 	virtual void setUniform1(const char* varname, const int input1) ;
 	virtual void setUniform2(const char* varname, const int input1, const int input2) ;
 	virtual void setUniform3(const char* varname, const int input1, const int input2, const int input3) ;
-	virtual void setUniform3(const char* varname, const Vector3& input) { setUniform3(varname, input.x, input.y, input.z); }
+	virtual void setUniform3(const char* varname, const glm::vec3& input) { setUniform3(varname, input.x, input.y, input.z); }
 	virtual void setUniform4(const char* varname, const int input1, const int input2, const int input3, const int input4) ;
 
 	virtual void setUniform1(const char* varname, const float input) ;
@@ -74,7 +75,7 @@ public:
 	virtual void setUniform4(const char* varname, const float input1, const float input2, const float input3, const float input4) ;
 
 	virtual void setTexture(const char* varname, const unsigned int tex) ;
-	virtual void setTexture(const char* varname, Texture* texture);
+	virtual void setTexture(const char* varname, CTexture* texture);
 
 	virtual int getAttribLocation(const char* varname);
 	virtual int getUniformLocation(const char* varname);
@@ -83,9 +84,9 @@ public:
 	bool hasInfoLog() const;
 	bool compiled;
 
-	static Shader* Load(const char* vsf, const char* psf);
+	static CShader* Load(const char* vsf, const char* psf);
 	static void ReloadAll();
-	static std::map<std::string,Shader*> s_Shaders;
+	static std::map<std::string,CShader*> s_Shaders;
 
 protected:
 

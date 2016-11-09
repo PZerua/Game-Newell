@@ -2,19 +2,7 @@
 #include <cassert>
 #include "shader.h"
 
-Mesh::Mesh()
-{
-	vertices_vbo_id = 0;
-	uvs_vbo_id = 0;
-}
-
-Mesh::Mesh(const Mesh& m)
-{
-	vertices = m.vertices;
-	uvs = m.uvs;
-}
-
-Mesh::~Mesh()
+CMesh::~CMesh()
 {
 	if (vertices_vbo_id) glDeleteBuffersARB(1, &vertices_vbo_id);
 	if (uvs_vbo_id) glDeleteBuffersARB(1, &uvs_vbo_id);
@@ -22,17 +10,17 @@ Mesh::~Mesh()
 	clear();
 }
 
-void Mesh::clear()
+void CMesh::clear()
 {
 	vertices.clear();
 	uvs.clear();
 }
 
-void Mesh::render(int primitive, Shader* sh)
+void CMesh::render(int primitive, CShader* shader)
 {
 	assert(vertices.size() && "No vertices in this mesh");
 
-	int vertex_location = sh->getAttribLocation("a_vertex");
+	int vertex_location = shader->getAttribLocation("a_vertex");
 	assert(vertex_location != -1 && "No a_vertex found in shader");
 
 	if (vertex_location == -1)
@@ -50,7 +38,7 @@ void Mesh::render(int primitive, Shader* sh)
 	int uv_location = -1;
 	if (uvs.size())
 	{
-		uv_location = sh->getAttribLocation("a_uv");
+		uv_location = shader->getAttribLocation("a_uv");
 		if (uv_location != -1)
 		{
 			glEnableVertexAttribArray(uv_location);
@@ -71,7 +59,7 @@ void Mesh::render(int primitive, Shader* sh)
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 }
 
-void Mesh::uploadToVRAM()
+void CMesh::uploadToVRAM()
 {
 	//delete old
 	if (vertices_vbo_id) glDeleteBuffersARB(1, &vertices_vbo_id);
@@ -89,51 +77,36 @@ void Mesh::uploadToVRAM()
 	}
 }
 
-void Mesh::createQuadUVs(float center_x, float center_y, float w, float h, int row, int col)
+void CMesh::createQuad(float center_x, float center_y, float w, float h, int row, int col)
 {
 	vertices.clear();
 	uvs.clear();
 
-	//create six vertices (3 for upperleft triangle and 3 for lowerright)
+	// Create six vertices (3 for upper left triangle and 3 for lower right)
+	vertices.push_back(glm::vec3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
+	vertices.push_back(glm::vec3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
+	vertices.push_back(glm::vec3(center_x + w*0.5f, center_y - h*0.5f, 0.0f));
+	vertices.push_back(glm::vec3(center_x - w*0.5f, center_y + h*0.5f, 0.0f));
+	vertices.push_back(glm::vec3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
+	vertices.push_back(glm::vec3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
 
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y + h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
-
-	//texture coordinates
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.0f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
+	// Texture coordinates (supposing always tilemap of 8 * 8 tiles) -> 1 / 8 = 0.125
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.0f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
 }
 
-void Mesh::createQuad(float center_x, float center_y, float w, float h)
-{
-	vertices.clear();
-
-	//create six vertices (3 for upperleft triangle and 3 for lowerright)
-
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y + h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
-	vertices.push_back(Vector3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
-}
-
-void Mesh::setUVs(int row, int col)
+void CMesh::setUVs(int row, int col)
 {
 	uvs.clear();
 
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.0f + 0.125f * row));
-	uvs.push_back(Vector2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
-	uvs.push_back(Vector2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.0f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.0f + 0.125f * col, 0.125f + 0.125f * row));
+	uvs.push_back(glm::vec2(0.125f + 0.125f * col, 0.0f + 0.125f * row));
 }

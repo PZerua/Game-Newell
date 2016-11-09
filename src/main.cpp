@@ -1,11 +1,37 @@
 #include "Window.h"
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
+#include <chrono>
+
+using namespace std::chrono;
 
 float P2M = 60.0;
 float M2P = 1.0 / P2M;
 //b2World *world;
-Editor *editor;
+CEditor *editor;
+
+auto timePrev = high_resolution_clock::now();
+
+// Returns time since last time this function was called in seconds with nanosecond precision
+double GetDelta()
+{
+	// Gett current time as a std::chrono::time_point
+	// which basically contains info about the current point in time
+	auto timeCurrent = high_resolution_clock::now();
+
+	// Compare the two to create time_point containing delta time in nanosecnds
+	auto timeDiff = duration_cast< nanoseconds >(timeCurrent - timePrev);
+
+	// Get the tics as a variable
+	double delta = timeDiff.count();
+
+	// Turn nanoseconds into seconds
+	delta /= 1000000.0;
+
+	timePrev = timeCurrent;
+
+	return delta;
+}
 
 void mainLoop()
 {
@@ -13,7 +39,7 @@ void mainLoop()
 	int x, y;
 
 	SDL_GetMouseState(&x, &y);
-	editor->mouse_position.set(x, y);
+	editor->mouse_position = glm::vec2(x, y);
 	double deltaTime = 0;
 
 	while (1)
@@ -48,11 +74,10 @@ void mainLoop()
 		//get mouse position and delta (do after pump events)
 		editor->mouse_state = SDL_GetMouseState(&x, &y);
 		//editor->mouse_delta.set(game->mouse_position.x - x, game->mouse_position.y - y);
-		editor->mouse_position.set(x, y);
-
+		editor->mouse_position = glm::vec2(x, y);
 
 		//update logic
-		deltaTime = 1000.0f / ImGui::GetIO().Framerate;
+		deltaTime = GetDelta();
 		editor->update(deltaTime);
 		editor->render();
 	}
@@ -81,23 +106,22 @@ int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
-	Window *window;
-	window = new Window();
+	CWindow *window;
+	window = new CWindow();
 
 	float fullscreen = false;
-	Vector2 size(480, 270);
+	glm::vec2 size(1280, 720);
 
 	if (fullscreen)
 		size = getDesktopSize(0);
-
 	window->init("MAP EDITOR", size.x, size.y, fullscreen);
+
+	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	ImGui_ImplSdlGL3_Init(window->mWindow);
 
-	editor = new Editor(window);
+	editor = new CEditor(window);
 	editor->init();
-
-	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	mainLoop();
 

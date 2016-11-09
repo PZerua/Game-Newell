@@ -1,6 +1,7 @@
 #include "utils.h"
-
 #include "includes.h"
+#include <string>
+#include <sstream>
 
 double irand(int min, int max)
 {
@@ -28,12 +29,12 @@ std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
-Vector2 getDesktopSize(int display_index)
+glm::vec2 getDesktopSize(int display_index)
 {
 	SDL_DisplayMode current;
 	// Get current display mode of all displays.
 	int should_be_zero = SDL_GetCurrentDisplayMode(display_index, &current);
-	return Vector2(current.w, current.h);
+	return glm::vec2(current.w, current.h);
 }
 
 void convertCoord(int &x, int &y, int Xres, int Yres)

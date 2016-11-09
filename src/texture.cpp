@@ -1,18 +1,10 @@
 #include "texture.h"
-#include "Framework.h"
 #include "includes.h"
-#include <cmath>
 #define STBI_ONLY_PNG
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture::Texture()
-{
-	width = 0;
-	height = 0;
-}
-
-bool Texture::load(const char* filename)
+bool CTexture::load(const char* filename)
 {
 	std::string str = filename;
 	std::string ext = str.substr(str.size() - 4, 4);
@@ -21,7 +13,7 @@ bool Texture::load(const char* filename)
 
 	if (ext == ".png")
 	{
-		TEXInfo* texinfo = loadTEX(filename);
+		STexInfo* texinfo = loadTEX(filename);
 		if (texinfo == NULL)
 			return false;
 
@@ -47,19 +39,19 @@ bool Texture::load(const char* filename)
 	return false;
 }
 
-void Texture::bind()
+void CTexture::bind()
 {
 	glEnable(GL_TEXTURE_2D); //enable the textures
 	glBindTexture(GL_TEXTURE_2D, texture_id);	//enable the id of the texture we are going to use
 }
 
-void Texture::unbind()
+void CTexture::unbind()
 {
 	glDisable(GL_TEXTURE_2D); //disable the textures
 	glBindTexture(GL_TEXTURE_2D, 0);	//disable the id of the texture we are going to use
 }
 
-void Texture::UnbindAll()
+void CTexture::UnbindAll()
 {
 	glDisable(GL_TEXTURE_CUBE_MAP);
 	glDisable(GL_TEXTURE_2D);
@@ -67,9 +59,9 @@ void Texture::UnbindAll()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-Texture::TEXInfo* Texture::loadTEX(const char* filename)
+CTexture::STexInfo* CTexture::loadTEX(const char* filename)
 {
-	TEXInfo* texinfo = new TEXInfo;
+	STexInfo* texinfo = new STexInfo;
 	texinfo->data = stbi_load(filename, &texinfo->width, &texinfo->height, &texinfo->bpp, 0);
 
 	if (texinfo->width <= 0 || texinfo->height <= 0 || texinfo->data == NULL)

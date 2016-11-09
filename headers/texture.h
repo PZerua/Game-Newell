@@ -4,31 +4,29 @@
 #include <string>
 #include "includes.h"
 
-// TEXTURE CLASS
-class Texture
+class CTexture
 {
-	typedef struct sTEXInfo //a general struct to store all the information about a TGA file
-	{
-		GLint width;
-		GLint height;
-		GLint bpp; //bits per pixel
-		GLubyte* data; //bytes with the pixel information
-	} TEXInfo;
 
 public:
-	GLuint texture_id; // GL id to identify the texture in opengl, every texture must have its own id
+	GLuint texture_id;
+	std::string filename;
 	float width;
 	float height;
-	std::string filename;
 
-	Texture();
+	CTexture() : width(0), height(0) {}
 	void bind();
 	void unbind();
 	static void UnbindAll();
-
 	bool load(const char* filename);
-	void generateMipmaps();
 
-protected:
-	TEXInfo* loadTEX(const char* filename);
+private:
+	struct STexInfo
+	{
+		GLint width;
+		GLint height;
+		GLint bpp; // bits per pixel
+		GLubyte* data; // bytes with the pixel information
+	};
+
+	STexInfo* loadTEX(const char* filename);
 };

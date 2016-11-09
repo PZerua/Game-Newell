@@ -4,24 +4,26 @@
 #include "Tile.h"
 #include "camera.h"
 
-class GameMap
+class CGameMap
 {
 public:
-	GameMap(const std::string &mapName, int width, int height);
-	~GameMap();
-	bool readMap();
+	CGameMap();
+	CGameMap(const std::string &mapName, int width, int height);
+	~CGameMap();
+	bool readMap(const std::string &name);
 	void saveMap();
-	void setTile(Tile *tile, int row, int col);
+	void setTile(CTile *tile, int row, int col);
 	void deleteTile(int row, int col);
-	void render(Camera *camara);
+	void render(CCamera *camara);
 	int width;
 	int height;
+	std::string getName();
 
 private:
 	std::string mapName;
-	std::vector<Tile *> tiles;
-	Shader *testShader;
-	Texture *tilemap;
-	Mesh* quad;
+	std::vector<CTile *> tiles;
+	CShader *testShader;
+	CTexture *tilemap;
+	CMesh* quad;
 
 };
