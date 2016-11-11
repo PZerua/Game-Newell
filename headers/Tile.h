@@ -24,7 +24,7 @@ public:
 	glm::mat4 model;
 
 private:
-	CTexture *tilemap;
+	CTexture *m_tilemap;
 	int row;
 	int col;
 	float x;

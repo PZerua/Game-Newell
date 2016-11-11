@@ -1,15 +1,15 @@
 #pragma once
 
+#include "includes.h"
 #include <map>
 #include <string>
-#include "includes.h"
 
 class CTexture
 {
 
 public:
-	GLuint texture_id;
-	std::string filename;
+	GLuint m_texture_id;
+	std::string m_filename;
 	float width;
 	float height;
 
@@ -24,8 +24,8 @@ private:
 	{
 		GLint width;
 		GLint height;
-		GLint bpp; // bits per pixel
-		GLubyte* data; // bytes with the pixel information
+		GLint bpp;
+		GLubyte* data;
 	};
 
 	STexInfo* loadTEX(const char* filename);

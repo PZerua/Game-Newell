@@ -20,10 +20,10 @@ public:
 	std::string getName();
 
 private:
-	std::string mapName;
-	std::vector<CTile *> tiles;
-	CShader *testShader;
-	CTexture *tilemap;
-	CMesh* quad;
+	std::string m_mapName;
+	std::vector<CTile *> m_tiles;
+	CShader *m_testShader;
+	CTexture *m_tilemap;
+	CMesh* m_quad;
 
 };

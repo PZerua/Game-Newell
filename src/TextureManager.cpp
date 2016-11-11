@@ -1,22 +1,22 @@
 #include "TextureManager.h"
 
-CTextureManager *CTextureManager::instance = NULL;
+CTextureManager *CTextureManager::m_instance = NULL;
 
 CTextureManager::CTextureManager()
 {
-	if (instance == NULL)
-		instance = this;
+	if (m_instance == NULL)
+		m_instance = this;
 }
 
 CTexture *CTextureManager::getTexture(const char *path)
 {
-	auto pos = textureMan.find(std::string(path));
+	auto pos = m_textureMan.find(std::string(path));
 
 	CTexture *texture = new CTexture();
-	if (pos == textureMan.end())
+	if (pos == m_textureMan.end())
 	{
 		if (texture->load(path))
-			textureMan[std::string(path)] = texture;
+			m_textureMan[std::string(path)] = texture;
 		else
 		{
 			std::cout << "Texture " << path << " not found" << std::endl;
@@ -25,5 +25,5 @@ CTexture *CTextureManager::getTexture(const char *path)
 		}
 	}
 
-	return textureMan[std::string(path)];
+	return m_textureMan[std::string(path)];
 }

@@ -424,7 +424,7 @@ int CShader::getUniformLocation(const char* varname)
 
 void CShader::setTexture(const char* varname, CTexture* tex)
 {
-	setTexture( varname, tex->texture_id );
+	setTexture( varname, tex->m_texture_id );
 }
 
 void CShader::setTexture(const char* varname, unsigned int tex)

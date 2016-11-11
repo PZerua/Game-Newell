@@ -117,23 +117,6 @@ void CWindow::focus()
 	SDL_RaiseWindow(mWindow);
 }
 
-void CWindow::Present()
-{
-	if (!mMinimized)
-	{
-		//Update screen
-		//SDL_RenderPresent(mRenderer);
-	}
-}
-
-void CWindow::Clear()
-{
-	if (!mMinimized)
-	{
-		//Clear screen
-		//SDL_RenderClear(mRenderer);
-	}
-}
 
 void CWindow::free()
 {

@@ -8,42 +8,44 @@ using json = nlohmann::json;
 
 CGameMap::CGameMap()
 {
-	testShader = new CShader();
-	testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
+	m_testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
 
-	tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
+	m_tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
 
-	testShader->enable();
+	m_testShader->enable();
 
-	if (tilemap != NULL)
-		testShader->setTexture("color_texture", tilemap->texture_id);
+	if (m_tilemap != NULL)
+		m_testShader->setTexture("color_texture", m_tilemap->m_texture_id);
+
+	m_testShader->disable();
 }
 
 CGameMap::CGameMap(const std::string &mapName, int width, int height)
 {
-	this->mapName = mapName;
+	this->m_mapName = mapName;
 	this->width = width;
 	this->height = height;
 
-	tiles.resize(width*height);
+	m_tiles.resize(width*height);
 
-	testShader = new CShader();
-	testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
+	m_testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
 
-	tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
+	m_tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
 
-	testShader->enable();
+	m_testShader->enable();
 
-	if (tilemap != NULL)
-		testShader->setTexture("color_texture", tilemap->texture_id);
+	if (m_tilemap != NULL)
+		m_testShader->setTexture("color_texture", m_tilemap->m_texture_id);
+
+	m_testShader->disable();
 }
 
 CGameMap::~CGameMap()
 {
-	for (unsigned i = 0; i < tiles.size(); ++i)
-		delete tiles[i];
+	for (unsigned i = 0; i < m_tiles.size(); ++i)
+		delete m_tiles[i];
 
-	tiles.clear();
+	m_tiles.clear();
 }
 
 bool CGameMap::readMap(const std::string &name)
@@ -60,14 +62,14 @@ bool CGameMap::readMap(const std::string &name)
 		if (it.key() == "name")
 		{
 			json::string_t s = it.value();
-			this->mapName = s;
+			this->m_mapName = s;
 		}
 		if (it.key() == "mWidth")
 			this->width = it.value();
 		if (it.key() == "mHeight")
 			this->height = it.value();
 
-		tiles.resize(width*height);
+		m_tiles.resize(width*height);
 
 		if (it.key() == "tilemaps")
 		{
@@ -111,7 +113,7 @@ bool CGameMap::readMap(const std::string &name)
 							}
 
 							CTile *tile = new CTile(mapX, mapY, row, col);
-							tiles[width*(mapY / TILE_SIZE) + (mapX / TILE_SIZE)] = tile;
+							m_tiles[width*(mapY / TILE_SIZE) + (mapX / TILE_SIZE)] = tile;
 						}
 					}
 				}
@@ -119,7 +121,7 @@ bool CGameMap::readMap(const std::string &name)
 		}
 	}
 
-	std::cout << "Map " << mapName << " loaded" << std::endl;
+	std::cout << "Map " << m_mapName << " loaded" << std::endl;
 
 	return true;
 }
@@ -129,15 +131,15 @@ void CGameMap::saveMap()
 	std::map<std::string, std::vector<CTile*>> gameMap;
 
 	// Fill a map where the key is a tilemap name and the values all the tiles using this tilemap
-	for (unsigned i = 0; i < tiles.size(); i++)
+	for (unsigned i = 0; i < m_tiles.size(); i++)
 	{
-		if (tiles[i] != NULL)
-			gameMap[tiles[i]->getTilemapName()].push_back(tiles[i]);
+		if (m_tiles[i] != NULL)
+			gameMap[m_tiles[i]->getTilemapName()].push_back(m_tiles[i]);
 	}
 
 	json j;
 
-	j["name"] = mapName;
+	j["name"] = m_mapName;
 	j["mWidth"] = width;
 	j["mHeight"] = height;
 
@@ -167,11 +169,11 @@ void CGameMap::saveMap()
 	j["tilemaps"] = arrayTilemaps;
 
 	std::ofstream jsonMap;
-	jsonMap.open("data/maps/" + mapName, std::ios::out | std::ios::trunc);
+	jsonMap.open("data/maps/" + m_mapName, std::ios::out | std::ios::trunc);
 	jsonMap << j.dump(4);
 	jsonMap.close();
 
-	std::cout << "Map " << mapName << " saved" << std::endl;
+	std::cout << "Map " << m_mapName << " saved" << std::endl;
 }
 
 void CGameMap::setTile(CTile *tile, int row, int col)
@@ -182,7 +184,7 @@ void CGameMap::setTile(CTile *tile, int row, int col)
 		return;
 	}
 
-	tiles[width * row + col] = tile;
+	m_tiles[width * row + col] = tile;
 }
 
 void CGameMap::deleteTile(int row, int col)
@@ -193,10 +195,10 @@ void CGameMap::deleteTile(int row, int col)
 		return;
 	}
 
-	if (tiles[width * row + col] != NULL)
+	if (m_tiles[width * row + col] != NULL)
 	{
-		delete tiles[width * row + col];
-		tiles[width * row + col] = NULL;
+		delete m_tiles[width * row + col];
+		m_tiles[width * row + col] = NULL;
 	}
 }
 
@@ -224,7 +226,7 @@ void CGameMap::render(CCamera *camera)
 
 	CTile *tile;
 
-	testShader->enable();
+	m_testShader->enable();
 
 	for (unsigned i = 0; i < maxI; i++)
 	{
@@ -234,20 +236,18 @@ void CGameMap::render(CCamera *camera)
 				index = width * i + j;
 			else index = (width * (i + offsetY) + j) + offsetX;
 
-			if (tiles[index])
+			if (m_tiles[index])
 			{
-				tile = tiles[index];
+				tile = m_tiles[index];
 
-				testShader->setMatrix44("u_mvp", camera->VP * tile->model);
-				tile->quad->render(GL_TRIANGLES, testShader);
+				m_testShader->setMatrix44("u_mvp", camera->VP * tile->model);
+				tile->quad->render(GL_TRIANGLES, m_testShader);
 			}
 		}
 	}
-
-	testShader->disable();
 }
 
 std::string CGameMap::getName()
 {
-	return mapName;
+	return m_mapName;
 }

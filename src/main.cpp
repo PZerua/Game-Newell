@@ -39,7 +39,7 @@ void mainLoop()
 	int x, y;
 
 	SDL_GetMouseState(&x, &y);
-	editor->mouse_position = glm::vec2(x, y);
+	editor->m_mouse_position = glm::vec2(x, y);
 	double deltaTime = 0;
 
 	while (1)
@@ -72,9 +72,9 @@ void mainLoop()
 		}
 
 		//get mouse position and delta (do after pump events)
-		editor->mouse_state = SDL_GetMouseState(&x, &y);
+		editor->m_mouse_state = SDL_GetMouseState(&x, &y);
 		//editor->mouse_delta.set(game->mouse_position.x - x, game->mouse_position.y - y);
-		editor->mouse_position = glm::vec2(x, y);
+		editor->m_mouse_position = glm::vec2(x, y);
 
 		//update logic
 		deltaTime = GetDelta();

@@ -20,12 +20,6 @@ public:
 	// Focuses on window
 	void focus();
 
-	// Print render
-	void Present();
-
-	// Clear screen
-	void Clear();
-
 	// Deallocates internals
 	void free();
 

@@ -9,7 +9,7 @@ CTile::CTile(float x, float y, int row, int col) : x(x), y(y), row(row), col(col
 	quad->createQuad(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
 
 	CTextureManager *manager;
-	tilemap = manager->getInstance()->getTexture("data/images/tilemap.png");
+	m_tilemap = manager->getInstance()->getTexture("data/images/tilemap.png");
 
 	quad->uploadToVRAM();
 }
@@ -36,7 +36,7 @@ void CTile::setValues(float x, float y, int row, int col)
 
 	quad->uploadToVRAM();
 	
-	tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
+	m_tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
 }
 
 void CTile::update(double deltaTime)
@@ -46,7 +46,7 @@ void CTile::update(double deltaTime)
 
 std::string CTile::getTilemapName()
 {
-	return tilemap->filename;
+	return m_tilemap->m_filename;
 }
 
 float CTile::getXPos()
