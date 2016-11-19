@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #pragma once
 
 #include "includes.h"
@@ -6,7 +11,6 @@
 
 class CTexture
 {
-
 public:
 	GLuint m_texture_id;
 	std::string m_filename;

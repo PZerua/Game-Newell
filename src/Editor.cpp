@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
 #include "mesh.h"
@@ -14,6 +19,7 @@ CEditor::~CEditor()
 	delete m_gridShader;
 	delete m_tileSelected;
 	delete m_tilemapSelected;
+	delete m_tileSelectedShader;
 	delete[] m_keystate;
 }
 
@@ -88,7 +94,7 @@ void CEditor::setWindowSize(int width, int height)
 {
 	std::cout << "window resized: " << width << "," << height << std::endl;
 
-	float scale = 480.0f / (double)width;
+	float scale = 480.0f / (float)width;
 
 	m_window->setSize(width, height);
 	glViewport(0, 0, width, height);
@@ -98,10 +104,10 @@ void CEditor::setWindowSize(int width, int height)
 
 void CEditor::update(double deltaTime)
 {
-	float vel = 0.1f * deltaTime;
+	float vel = 0.1 * deltaTime;
 
 	if (m_keystate[SDL_SCANCODE_LSHIFT])
-		vel = 0.3f * deltaTime;
+		vel = 0.3 * deltaTime;
 
 	if (m_keystate[SDL_SCANCODE_W] || m_keystate[SDL_SCANCODE_UP]) m_camera.translate(0.0f, vel);
 	if (m_keystate[SDL_SCANCODE_S] || m_keystate[SDL_SCANCODE_DOWN]) m_camera.translate(0.0f, -vel);
@@ -378,5 +384,5 @@ void CEditor::setCameraPos(float x, float y)
 
 void CEditor::setCameraCenter(int width, int height)
 {
-	setCameraPos(m_camera.right * 0.5 * m_camera.scale - width * 0.5 * TILE_SIZE, m_camera.bottom * 0.5 * m_camera.scale - height * 0.5 * TILE_SIZE);
+	setCameraPos(m_camera.right * 0.5f * m_camera.scale - width * 0.5f * TILE_SIZE, m_camera.bottom * 0.5f * m_camera.scale - height * 0.5f * TILE_SIZE);
 }

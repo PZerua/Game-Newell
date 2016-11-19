@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "camera.h"
 
 void CCamera::setOrtho(float left, float right, float bottom, float top, float zNear, float zFar, float scale)
@@ -14,13 +19,13 @@ void CCamera::setOrtho(float left, float right, float bottom, float top, float z
 	VP = projection * view;
 }
 
-void CCamera::setPosition(glm::vec3 pos) 
+void CCamera::setPosition(glm::vec3 pos)
 {
 	view = glm::translate(glm::mat4(1.0f), pos);
 	VP = projection * view;
 }
 
-void CCamera::setViewport(int loc_x, int loc_y, int width, int height) 
+void CCamera::setViewport(int loc_x, int loc_y, int width, int height)
 {
 	viewport_x = loc_x;
 	viewport_y = loc_y;
@@ -31,7 +36,7 @@ void CCamera::setViewport(int loc_x, int loc_y, int width, int height)
 	glViewport(viewport_x, viewport_y, window_width, window_height);
 }
 
-void CCamera::getViewport(int &loc_x, int &loc_y, int &width, int &height) 
+void CCamera::getViewport(int &loc_x, int &loc_y, int &width, int &height)
 {
 	loc_x = viewport_x;
 	loc_y = viewport_y;
@@ -39,7 +44,7 @@ void CCamera::getViewport(int &loc_x, int &loc_y, int &width, int &height)
 	height = window_height;
 }
 
-void CCamera::getMatricies(glm::mat4 &P, glm::mat4 &V) 
+void CCamera::getMatricies(glm::mat4 &P, glm::mat4 &V)
 {
 	P = projection;
 	V = view;

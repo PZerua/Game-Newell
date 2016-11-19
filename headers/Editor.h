@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #pragma once
 
 #include "camera.h"
@@ -11,7 +16,7 @@
 class CEditor
 {
 public:
-	CEditor(CWindow *window) : m_window(window), m_lastRow(-1), m_lastCol(-1), m_showGrid(false), m_selectedMap(NULL), 
+	CEditor(CWindow *window) : m_window(window), m_lastRow(-1), m_lastCol(-1), m_showGrid(false), m_selectedMap(NULL),
 		m_isMouseLeftPressed(false), m_isMouseRightPressed(false), m_tileSelected(NULL), m_tileIDSelected(-1), m_currentMapID(-1) {}
 	~CEditor();
 	void init();

@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "texture.h"
 #include "includes.h"
 #define STBI_ONLY_PNG
@@ -28,7 +33,7 @@ bool CTexture::load(const char* filename)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texinfo->bpp, texinfo->width, texinfo->height, 0, (texinfo->bpp == 3 ? GL_RGB : GL_RGBA), GL_UNSIGNED_BYTE, texinfo->data);
-	
+
 		width = texinfo->width;
 		height = texinfo->height;
 

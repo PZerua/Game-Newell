@@ -1,8 +1,14 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "GameMap.h"
 #include "json.h"
 #include <iostream>
 #include <fstream>
 #include "TextureManager.h"
+#include "utils.h"
 
 using json = nlohmann::json;
 
@@ -57,7 +63,7 @@ bool CGameMap::readMap(const std::string &name)
 
 	json j(jsonMap);
 
-	for (json::iterator it = j.begin(); it != j.end(); ++it) 
+	for (json::iterator it = j.begin(); it != j.end(); ++it)
 	{
 		if (it.key() == "name")
 		{
@@ -145,7 +151,7 @@ void CGameMap::saveMap()
 
 	json arrayTilemaps;
 
-	for (std::map<std::string, std::vector<CTile*>>::iterator it = gameMap.begin(); it != gameMap.end(); ++it) 
+	for (std::map<std::string, std::vector<CTile*>>::iterator it = gameMap.begin(); it != gameMap.end(); ++it)
 	{
 		json objectTilemap;
 		objectTilemap["tilemapPath"] = it->first;
@@ -206,39 +212,27 @@ void CGameMap::render(CCamera *camera)
 {
 	glm::vec3 camTraslation = glm::vec3(camera->view[3]);
 
-	int offsetX = -camTraslation.x / TILE_SIZE;
-	int offsetY = -camTraslation.y / TILE_SIZE;
+	int startX = (int)(-camTraslation.x / TILE_SIZE);
+	int startY = (int)(-camTraslation.y / TILE_SIZE);
+	int endX = (int)((-camTraslation.x + camera->right) / TILE_SIZE + 1);
+	int endY = (int)((-camTraslation.y + camera->bottom) / TILE_SIZE + 1);
 
-	if (offsetX < 0)
-		offsetX = 0;
-	if (offsetY < 0)
-		offsetY = 0;
-
-	if (offsetY >= height - 20)
-		offsetY = height - 20;
-
-	if (offsetX >= width - 34)
-		offsetX = width - 34;
-
-	int maxI = (height > 20 ? 20 : height);
-	int maxJ = (width > 34 ? 34 : width);
-	int index = 0;
+	startX = clip(startX, 0, width);
+	startY = clip(startY, 0, height);
+	endX = clip(endX, 0, width);
+	endY = clip(endY, 0, height);
 
 	CTile *tile;
 
 	m_testShader->enable();
 
-	for (unsigned i = 0; i < maxI; i++)
+	for (int i = startY; i < endY; i++)
 	{
-		for (unsigned j = 0; j < maxJ; j++)
+		for (int j = startX; j < endX; j++)
 		{
-			if (height <= 20 && width <= 20)
-				index = width * i + j;
-			else index = (width * (i + offsetY) + j) + offsetX;
-
-			if (m_tiles[index])
+			if (m_tiles[width * i + j])
 			{
-				tile = m_tiles[index];
+				tile = m_tiles[width * i + j];
 
 				m_testShader->setMatrix44("u_mvp", camera->VP * tile->model);
 				tile->quad->render(GL_TRIANGLES, m_testShader);

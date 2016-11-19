@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "Window.h"
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -5,9 +10,6 @@
 
 using namespace std::chrono;
 
-float P2M = 60.0;
-float M2P = 1.0 / P2M;
-//b2World *world;
 CEditor *editor;
 
 auto timePrev = high_resolution_clock::now();
@@ -20,10 +22,10 @@ double GetDelta()
 	auto timeCurrent = high_resolution_clock::now();
 
 	// Compare the two to create time_point containing delta time in nanosecnds
-	auto timeDiff = duration_cast< nanoseconds >(timeCurrent - timePrev);
+	auto timeDiff = duration_cast<nanoseconds>(timeCurrent - timePrev);
 
 	// Get the tics as a variable
-	double delta = timeDiff.count();
+	double delta = (double)timeDiff.count();
 
 	// Turn nanoseconds into seconds
 	delta /= 1000000.0;
@@ -83,25 +85,6 @@ void mainLoop()
 	}
 }
 
-/*
-void addRect(int x, int y, int w, int h, bool dyn = true)
-{
-	b2BodyDef bodydef;
-	bodydef.position.Set(x*P2M, y*P2M);
-	if (dyn)
-		bodydef.type = b2_dynamicBody;
-	b2Body* body = world->CreateBody(&bodydef);
-
-	b2PolygonShape shape;
-	shape.SetAsBox(P2M*w / 2, P2M*h / 2);
-
-	b2FixtureDef fixturedef;
-	fixturedef.shape = &shape;
-	fixturedef.density = 1.0;
-	body->CreateFixture(&fixturedef);
-}
-*/
-
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
@@ -109,12 +92,12 @@ int main(int argc, char* argv[])
 	CWindow *window;
 	window = new CWindow();
 
-	float fullscreen = false;
+	bool fullscreen = false;
 	glm::vec2 size(1280, 720);
 
 	if (fullscreen)
 		size = getDesktopSize(0);
-	window->init("MAP EDITOR", size.x, size.y, fullscreen);
+	window->init("Game Newell", size.x, size.y, fullscreen);
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
 

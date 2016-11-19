@@ -1,0 +1,16 @@
+﻿  Editor.cpp
+..\src\Editor.cpp(101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+..\src\Editor.cpp(107): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+..\src\Editor.cpp(110): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\src\Editor.cpp(207): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+..\src\Editor.cpp(240): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+..\src\Editor.cpp(305): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
+  GameMap.cpp
+..\src\GameMap.cpp(121): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+..\src\GameMap.cpp(122): warning C4244: 'argument': conversion from 'float' to 'unsigned __int64', possible loss of data
+  Shader.cpp
+..\src\Shader.cpp(149): warning C4267: '=': conversion from 'size_t' to 'long', possible loss of data
+..\src\Shader.cpp(268): error C3861: 'split': identifier not found
+  main.cpp
+..\src\main.cpp(100): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  utils.cpp

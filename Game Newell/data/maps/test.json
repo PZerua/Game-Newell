@@ -1,0 +1,612 @@
+{
+    "mHeight": 10,
+    "mWidth": 10,
+    "name": "test.json",
+    "tilemaps": [
+        {
+            "tilemapPath": "data/images/tilemap.png",
+            "tiles": [
+                {
+                    "mapX": 0.0,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 0.0,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 0.0,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 16,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 16,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 32,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 32,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 32,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 32,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 32,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 48,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 48,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 48,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 48,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 48,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 48,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 48,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 48,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 48,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 48,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 64,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 64,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 64,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 64,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 64,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 64,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 64,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 64,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 64,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 64,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 80,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 80,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 80,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 80,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 80,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 80,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 80,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 80,
+                    "tileCol": 0,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 80,
+                    "tileCol": 3,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 80,
+                    "tileCol": 1,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 96,
+                    "tileCol": 1,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 96,
+                    "tileCol": 0,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 96,
+                    "tileCol": 0,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 96,
+                    "tileCol": 1,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 96,
+                    "tileCol": 1,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 96,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 96,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 96,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 96,
+                    "tileCol": 2,
+                    "tileRow": 1
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 96,
+                    "tileCol": 4,
+                    "tileRow": 0
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 112,
+                    "tileCol": 0,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 112,
+                    "tileCol": 0,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 112,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 112,
+                    "tileCol": 0,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 112,
+                    "tileCol": 0,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 128,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 128,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 128,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 128,
+                    "tileCol": 1,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 128,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 0.0,
+                    "mapY": 144,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 16,
+                    "mapY": 144,
+                    "tileCol": 4,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 32,
+                    "mapY": 144,
+                    "tileCol": 3,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 48,
+                    "mapY": 144,
+                    "tileCol": 4,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 64,
+                    "mapY": 144,
+                    "tileCol": 3,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 80,
+                    "mapY": 144,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 96,
+                    "mapY": 144,
+                    "tileCol": 4,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 112,
+                    "mapY": 144,
+                    "tileCol": 4,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 128,
+                    "mapY": 144,
+                    "tileCol": 2,
+                    "tileRow": 2
+                },
+                {
+                    "mapX": 144,
+                    "mapY": 144,
+                    "tileCol": 4,
+                    "tileRow": 2
+                }
+            ]
+        }
+    ]
+}

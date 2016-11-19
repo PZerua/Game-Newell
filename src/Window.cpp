@@ -1,3 +1,8 @@
+/**
+* (c) 2016 Pablo Luis García. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "Window.h"
 #include <iostream>
 
@@ -31,7 +36,7 @@ SDL_Window* CWindow::init(const std::string &screenTitle, int window_width, int 
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); 
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	// Create window
 	mWindow = SDL_CreateWindow(screenTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL
@@ -116,7 +121,6 @@ void CWindow::focus()
 	// Move window forward
 	SDL_RaiseWindow(mWindow);
 }
-
 
 void CWindow::free()
 {
