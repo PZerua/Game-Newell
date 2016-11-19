@@ -5,14 +5,14 @@
 *.obj
 
 # Game Maps
-/MapEditor/data/maps
+/GameNewell/data/maps
 
 # Executables
 *.exe
 
 # Binary folders
-/MapEditor/Degug
-/MapEditor/x64
+/GameNewell/Degug
+/GameNewell/x64
 /x64
 /Debug
 /.vs
