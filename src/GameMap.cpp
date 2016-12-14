@@ -14,16 +14,7 @@ using json = nlohmann::json;
 
 CGameMap::CGameMap()
 {
-	m_testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
-
-	m_tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
-
-	m_testShader->enable();
-
-	if (m_tilemap != NULL)
-		m_testShader->setTexture("color_texture", m_tilemap->m_texture_id);
-
-	m_testShader->disable();
+	init();
 }
 
 CGameMap::CGameMap(const std::string &mapName, int width, int height)
@@ -34,16 +25,7 @@ CGameMap::CGameMap(const std::string &mapName, int width, int height)
 
 	m_tiles.resize(width*height);
 
-	m_testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
-
-	m_tilemap = CTextureManager::getInstance()->getTexture("data/images/tilemap.png");
-
-	m_testShader->enable();
-
-	if (m_tilemap != NULL)
-		m_testShader->setTexture("color_texture", m_tilemap->m_texture_id);
-
-	m_testShader->disable();
+	init();
 }
 
 CGameMap::~CGameMap()
@@ -52,6 +34,20 @@ CGameMap::~CGameMap()
 		delete m_tiles[i];
 
 	m_tiles.clear();
+}
+
+void CGameMap::init()
+{
+	m_testShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
+
+	m_tilemap = CTextureManager::getInstance()->getTexture("data/tilemaps/tilemap.png");
+
+	m_testShader->enable();
+
+	if (m_tilemap != NULL)
+		m_testShader->setTexture("color_texture", m_tilemap->m_texture_id);
+
+	m_testShader->disable();
 }
 
 bool CGameMap::readMap(const std::string &name)
@@ -160,8 +156,8 @@ void CGameMap::saveMap()
 		json objectTiles;
 		for (int i = 0; i < it->second.size(); i++)
 		{
-			objectTiles["mapX"] = it->second[i]->getXPos();
-			objectTiles["mapY"] = it->second[i]->getYPos();
+			objectTiles["mapX"] = it->second[i]->x;
+			objectTiles["mapY"] = it->second[i]->y;
 			objectTiles["tileRow"] = it->second[i]->getRow();
 			objectTiles["tileCol"] = it->second[i]->getCol();
 
@@ -193,6 +189,11 @@ void CGameMap::setTile(CTile *tile, int row, int col)
 	m_tiles[width * row + col] = tile;
 }
 
+std::string CGameMap::getName()
+{
+	return m_mapName;
+}
+
 void CGameMap::deleteTile(int row, int col)
 {
 	if (row < 0 || col < 0 || row >= height || col >= width)
@@ -210,12 +211,12 @@ void CGameMap::deleteTile(int row, int col)
 
 void CGameMap::render(CCamera *camera)
 {
-	glm::vec3 camTraslation = glm::vec3(camera->view[3]);
+	glm::vec3 camTranslation = camera->getTranslation();
 
-	int startX = (int)(-camTraslation.x / TILE_SIZE);
-	int startY = (int)(-camTraslation.y / TILE_SIZE);
-	int endX = (int)((-camTraslation.x + camera->right) / TILE_SIZE + 1);
-	int endY = (int)((-camTraslation.y + camera->bottom) / TILE_SIZE + 1);
+	int startX = (int)(-camTranslation.x / TILE_SIZE);
+	int startY = (int)(-camTranslation.y / TILE_SIZE);
+	int endX = (int)((-camTranslation.x + camera->right) / TILE_SIZE + 1);
+	int endY = (int)((-camTranslation.y + camera->bottom) / TILE_SIZE + 1);
 
 	startX = clip(startX, 0, width);
 	startY = clip(startY, 0, height);
@@ -234,14 +235,14 @@ void CGameMap::render(CCamera *camera)
 			{
 				tile = m_tiles[width * i + j];
 
-				m_testShader->setMatrix44("u_mvp", camera->VP * tile->model);
-				tile->quad->render(GL_TRIANGLES, m_testShader);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+				m_testShader->setMatrix44("u_mvp", camera->VP * tile->m_modelMatrix);
+				tile->m_quad->render(GL_TRIANGLE_STRIP, m_testShader);
+
+				glDisable(GL_BLEND);
 			}
 		}
 	}
-}
-
-std::string CGameMap::getName()
-{
-	return m_mapName;
 }

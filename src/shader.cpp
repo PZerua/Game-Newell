@@ -43,9 +43,6 @@ bool CShader::load(const std::string& vsf, const std::string& psf)
 	if (!readFile(vsf, vsm) || !readFile(psf, psm))
 		return false;
 
-	//printf("Vertex shader from memory:\n%s\n", vsm.c_str());
-	//printf("Fragment shader from memory:\n%s\n", psm.c_str());
-
 	if (!compileFromMemory(vsm, psm))
 		return false;
 

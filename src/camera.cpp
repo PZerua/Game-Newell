@@ -4,6 +4,7 @@
 */
 
 #include "camera.h"
+#include <glm\gtx\string_cast.hpp>
 
 void CCamera::setOrtho(float left, float right, float bottom, float top, float zNear, float zFar, float scale)
 {
@@ -50,8 +51,14 @@ void CCamera::getMatricies(glm::mat4 &P, glm::mat4 &V)
 	V = view;
 }
 
+glm::vec3 CCamera::getTranslation()
+{
+	return glm::vec3(view[3]);
+}
+
 void CCamera::translate(float x, float y)
 {
 	view = glm::translate(view, glm::vec3(x, y, 0.0f));
+	//std::cout << glm::to_string(view) << std::endl << std::endl;
 	VP = projection * view;
 }

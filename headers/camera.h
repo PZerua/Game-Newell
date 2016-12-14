@@ -29,6 +29,7 @@ public:
 	*/
 	void getViewport(int &loc_x, int &loc_y, int &width, int &height);
 	void getMatricies(glm::mat4 &P, glm::mat4 &V);
+	glm::vec3 getTranslation();
 
 	int viewport_x;
 	int viewport_y;

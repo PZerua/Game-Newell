@@ -17,7 +17,7 @@ class CEditor
 {
 public:
 	CEditor(CWindow *window) : m_window(window), m_lastRow(-1), m_lastCol(-1), m_showGrid(false), m_selectedMap(NULL),
-		m_isMouseLeftPressed(false), m_isMouseRightPressed(false), m_tileSelected(NULL), m_tileIDSelected(-1), m_currentMapID(-1) {}
+		m_isMouseLeftPressed(false), m_isMouseRightPressed(false), m_tileSelected(NULL), m_tileIDSelected(-1), m_currentMapIndex(-1) {}
 	~CEditor();
 	void init();
 	void render();
@@ -31,7 +31,9 @@ public:
 	void setGrid();
 	void setCameraPos(float x, float y);
 	void setCameraCenter(int width, int height);
-	void addMap();
+	void loadMap();
+	void addMap(const std::string &mapName, int width, int height);
+	void deleteMap();
 	CWindow *m_window;
 	glm::vec2 m_mouse_position;
 	const Uint8* m_keystate;
@@ -56,5 +58,5 @@ private:
 	int m_tileIDSelected;
 	int m_lastRow;
 	int m_lastCol;
-	int m_currentMapID;
+	int m_currentMapIndex;
 };

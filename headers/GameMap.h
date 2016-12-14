@@ -15,14 +15,24 @@ public:
 	CGameMap();
 	CGameMap(const std::string &mapName, int width, int height);
 	~CGameMap();
+
+	/**
+	* Read map from Json file using map name
+	*/
 	bool readMap(const std::string &name);
+
+	/**
+	* Save Json map
+	*/
 	void saveMap();
+
+	void init();
 	void setTile(CTile *tile, int row, int col);
+	std::string getName();
 	void deleteTile(int row, int col);
 	void render(CCamera *camara);
 	int width;
 	int height;
-	std::string getName();
 
 private:
 	std::string m_mapName;

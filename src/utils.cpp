@@ -45,8 +45,8 @@ glm::vec2 getDesktopSize(int display_index)
 
 void convertCoord(int &x, int &y, int Xres, int Yres)
 {
-	x = (int)((x * 480.0f) / (float)Xres);
-	y = (int)((y * 270.0f) / (float)Yres);
+	x = (int)((x * BASE_RESOLUTION_WIDTH) / (float)Xres);
+	y = (int)((y * BASE_RESOLUTION_HEIGHT) / (float)Yres);
 }
 
 void getMouseRowCol(int &row, int &col, int mouseX, int mouseY)

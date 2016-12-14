@@ -108,6 +108,7 @@ int main(int argc, char* argv[])
 
 	mainLoop();
 
+	ImGui_ImplSdlGL3_Shutdown();
 	SDL_Quit();
 
 	return 0;
