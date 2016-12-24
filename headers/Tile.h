@@ -14,9 +14,9 @@
 class CTile
 {
 public:
-	CTile() : x(0), y(0), row(0), col(0), m_quad(nullptr) {}
-	CTile(float x, float y, int row, int col);
-	~CTile();
+	CTile() : x(0), y(0), row(0), col(0) {}
+	CTile(int x, int y, int row, int col);
+	~CTile() {}
 
 	void update(double deltaTime);
 	void setValues(float x, float y, int row, int col);
@@ -25,16 +25,16 @@ public:
 	int getCol();
 	std::string getTilemapName();
 
-	CMesh* m_quad;
+	std::unique_ptr<CMesh> m_quad;
 	glm::mat4 m_modelMatrix;
 	float x;
 	float y;
 
 private:
-	CTexture *m_tilemap;
+	std::shared_ptr<CTexture> m_tilemap;
 
 	/**
-	* The row and column to start reading UVs from the tilemap
+	* The row and column from the tilemap
 	*/
 	int row;
 	int col;

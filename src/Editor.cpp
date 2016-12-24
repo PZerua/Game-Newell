@@ -12,20 +12,11 @@
 #include "TextureManager.h"
 #include <fstream>
 
-CEditor::~CEditor()
-{
-	delete m_window;
-	delete m_gridShader;
-	delete m_tileSelected;
-	delete m_tilemapSelected;
-	delete m_tileSelectedShader;
-	delete[] m_keystate;
-}
-
 void CEditor::init()
 {
 	m_camera.setViewport(0, 0, m_window->mWidth, m_window->mHeight);
 	m_camera.setOrtho(0.0f, BASE_RESOLUTION_WIDTH, BASE_RESOLUTION_HEIGHT, 0.0f, -1.0f, 1.0f, 1.0f);
+	ImGui::IsAnyItemActive();
 
 	m_gridShader = CShader::Load("data/shaders/simpleColor.vs", "data/shaders/simpleColor.fs");
 	m_tileSelectedShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
@@ -33,12 +24,12 @@ void CEditor::init()
 	// Retreive input
 	m_keystate = SDL_GetKeyboardState(NULL);
 
-	m_tilemapSelected = CTextureManager::getInstance()->getTexture("data/tilemaps/tilemap.png");
+	m_tilemapSelected = CTextureManager::getInstance().getTexture("data/tilemaps/tilemap.png");
 
 	SDL_DisplayMode current;
 	SDL_GetCurrentDisplayMode(0, &current);
 
-	/*if (window->mWidth < current.w && window->mHeight < current.h)
+	/*if (m_window->mWidth < current.w && m_window->mHeight < current.h)
 		setWindowSize(1280, 720);*/
 
 	std::ifstream mapList("data/maps/mapList.txt");
@@ -55,43 +46,25 @@ void CEditor::onKeyPressed(SDL_KeyboardEvent event)
 {
 	switch (event.keysym.sym)
 	{
-	case SDLK_ESCAPE: exit(0);
+	case SDLK_ESCAPE: m_running = false;
 	}
 }
 
 void CEditor::onMouseButtonDown(SDL_MouseButtonEvent event)
 {
-	if (event.button == SDL_BUTTON_MIDDLE)
-	{
-	}
-	if (event.button == SDL_BUTTON_RIGHT)
-	{
-		m_isMouseRightPressed = true;
-	}
-	if (event.button == SDL_BUTTON_LEFT)
-	{
-		m_isMouseLeftPressed = true;
-	}
+	if (event.button == SDL_BUTTON_RIGHT) m_isMouseRightPressed = true;
+	if (event.button == SDL_BUTTON_LEFT) m_isMouseLeftPressed = true;
 }
 
 void CEditor::onMouseButtonUp(SDL_MouseButtonEvent event)
 {
-	if (event.button == SDL_BUTTON_MIDDLE)
-	{
-	}
-	if (event.button == SDL_BUTTON_RIGHT)
-	{
-		m_isMouseRightPressed = false;
-	}
-	if (event.button == SDL_BUTTON_LEFT)
-	{
-		m_isMouseLeftPressed = false;
-	}
+	if (event.button == SDL_BUTTON_RIGHT) m_isMouseRightPressed = false;
+	if (event.button == SDL_BUTTON_LEFT) m_isMouseLeftPressed = false;
 }
 
 void CEditor::setWindowSize(int width, int height)
 {
-	std::cout << "window resized: " << width << "," << height << std::endl;
+	std::clog << "window resized: " << width << "," << height << std::endl;
 
 	float scale = BASE_RESOLUTION_WIDTH / (float)width;
 
@@ -103,7 +76,10 @@ void CEditor::setWindowSize(int width, int height)
 
 void CEditor::update(double deltaTime)
 {
-	float vel = 0.1;
+	if (!m_canMove)
+		return;
+
+	float vel = 0.1 * deltaTime;
 
 	if (m_keystate[SDL_SCANCODE_LSHIFT])
 		vel = 0.3 * deltaTime;
@@ -131,17 +107,13 @@ void CEditor::update(double deltaTime)
 	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow() && m_isMouseLeftPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
 	{
 		m_tileSelected->setPos(mapCol * TILE_SIZE, mapRow * TILE_SIZE);
-
-		CTile *newTile = new CTile();
-		newTile->setValues(m_tileSelected->x, m_tileSelected->y, m_tileSelected->getRow(), m_tileSelected->getCol());
-		m_selectedMap->setTile(newTile, mapRow, mapCol);
+		m_selectedMap->setTile(m_tileSelected->x, m_tileSelected->y, m_tileSelected->getRow(), m_tileSelected->getCol(), mapRow, mapCol);
 		m_lastRow = mapRow;
 		m_lastCol = mapCol;
 	}
 	else if (m_tileSelected && ImGui::IsMouseHoveringAnyWindow() && m_isMouseLeftPressed)
 	{
-		delete m_tileSelected;
-		m_tileSelected = NULL;
+		m_tileSelected.reset();
 		m_tileIDSelected = -1;
 	}
 	else if (!ImGui::IsMouseHoveringAnyWindow() && m_isMouseRightPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
@@ -164,7 +136,7 @@ void CEditor::render()
 	{
 		m_tileSelectedShader->enable();
 		m_tileSelectedShader->setMatrix44("u_mvp", m_camera.VP * m_tileSelected->m_modelMatrix);
-		m_tileSelected->m_quad->render(GL_TRIANGLES, m_tileSelectedShader);
+		m_tileSelected->m_quad->render(GL_TRIANGLES, m_tileSelectedShader.get());
 	}
 
 	if (m_showGrid)
@@ -189,6 +161,7 @@ void CEditor::renderImGui()
 		static char mName[60] = "";
 		static int width = 0;
 		static int height = 0;
+		m_canMove = false;
 
 		ImGui::InputText("Map Name", mName, 60);
 		ImGui::InputInt("Map Width", &width);
@@ -203,7 +176,7 @@ void CEditor::renderImGui()
 
 			if (mapName == "" || width <= 1 || height <= 1)
 			{
-				std::cout << "The map name is empty or the size is incorrect" << std::endl;
+				std::cerr << "The map name is empty or the size is incorrect" << std::endl;
 			}
 			else
 			{
@@ -214,6 +187,7 @@ void CEditor::renderImGui()
 				mName[0] = '\0';
 				width = 0;
 				height = 0;
+				m_canMove = true;
 			}
 
 			ImGui::CloseCurrentPopup();
@@ -229,6 +203,7 @@ void CEditor::renderImGui()
 			mName[0] = '\0';
 			width = 0;
 			height = 0;
+			m_canMove = true;
 		}
 
 		ImGui::EndPopup();
@@ -253,7 +228,7 @@ void CEditor::renderImGui()
 	{
 		if (m_gameMaps.count(m_createdMaps[m_currentMapIndex]))
 		{
-			m_selectedMap = m_gameMaps[m_createdMaps[m_currentMapIndex]];
+			m_selectedMap = m_gameMaps[m_createdMaps[m_currentMapIndex]].get();
 			setCameraCenter(m_selectedMap->width, m_selectedMap->height);
 		}
 		else
@@ -285,16 +260,19 @@ void CEditor::renderImGui()
 	{
 		ImGui::Text("Are you sure you want to delete the selected map?\n\n");
 		ImGui::Separator();
+		m_canMove = false;
 
 		if (ImGui::Button("OK", ImVec2(120, 0)))
 		{
 			deleteMap();
 			ImGui::CloseCurrentPopup();
+			m_canMove = true;
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(120, 0)))
 		{
 			ImGui::CloseCurrentPopup();
+			m_canMove = true;
 		}
 
 		ImGui::EndPopup();
@@ -330,14 +308,14 @@ void CEditor::renderImGui()
 			if (m_tileIDSelected == ID) style.Colors[ImGuiCol_Button] = ImColor(240, 5, 5, 255);
 			else style.Colors[ImGuiCol_Button] = ImColor(240, 240, 240, 255);
 
-			if (ImGui::ImageButton((void*)m_tilemapSelected->m_texture_id, ImVec2(35.0f, 35.0f), ImVec2((1.0f / TILEMAP_SIZE) * j, (1.0f / TILEMAP_SIZE) * i),
+			if (ImGui::ImageButton((void*)std::shared_ptr<CTexture>(m_tilemapSelected)->m_texture_id, ImVec2(35.0f, 35.0f), ImVec2((1.0f / TILEMAP_SIZE) * j, (1.0f / TILEMAP_SIZE) * i),
 				ImVec2((1.0f / TILEMAP_SIZE) * j + 1.0f / TILEMAP_SIZE, (1.0f / TILEMAP_SIZE) * i + 1.0f / TILEMAP_SIZE), frame_padding, ImColor(0, 0, 0, 255)))
 			{
 				m_tileIDSelected = ID;
 				int x = (int)m_mouse_position.x;
 				int y = (int)m_mouse_position.y;
 				convertCoord(x, y, m_window->mWidth, m_window->mHeight);
-				m_tileSelected = new CTile(x + TILE_SIZE * 0.5f, y + TILE_SIZE * 0.5f, i, j);
+				m_tileSelected.reset(new CTile(x + TILE_SIZE * 0.5f, y + TILE_SIZE * 0.5f, i, j));
 			}
 
 			ImGui::PopID();
@@ -369,7 +347,7 @@ void CEditor::drawGrid()
 	m_gridShader->enable();
 	m_gridShader->setVector3("color", glm::vec3(0.25f, 0.35f, 0.45f));
 	m_gridShader->setMatrix44("u_mvp", m_camera.VP);
-	m_gridMesh.render(GL_LINES, m_gridShader);
+	m_gridMesh.render(GL_LINES, m_gridShader.get());
 }
 
 void CEditor::setGrid()
@@ -399,24 +377,22 @@ void CEditor::setGrid()
 
 void CEditor::loadMap()
 {
-	CGameMap *newMap;
-	newMap = new CGameMap();
+	std::unique_ptr<CGameMap> newMap = std::make_unique<CGameMap>();
 	newMap->readMap(m_createdMaps[m_currentMapIndex]);
-	m_gameMaps[newMap->getName()] = newMap;
+	m_selectedMap = newMap.get();
+	m_gameMaps[newMap->getName()] = std::move(newMap);
 
-	m_selectedMap = newMap;
 	setCameraCenter(m_selectedMap->width, m_selectedMap->height);
 }
 
 void CEditor::addMap(const std::string &mapName, int width, int height)
 {
-	CGameMap *newMap;
-	newMap = new CGameMap(mapName, width, height);
+	std::unique_ptr<CGameMap> newMap = std::make_unique<CGameMap>(mapName, width, height);
 	newMap->saveMap();
 
-	m_gameMaps[mapName] = newMap;
+	m_selectedMap = newMap.get();
+	m_gameMaps[mapName] = std::move(newMap);
 	m_currentMapIndex = m_createdMaps.size();
-	m_selectedMap = newMap;
 
 	setGrid();
 	m_showGrid = true;
@@ -425,12 +401,12 @@ void CEditor::addMap(const std::string &mapName, int width, int height)
 	setCameraCenter(m_selectedMap->width, m_selectedMap->height);
 
 	// Add to map names list
-	m_createdMaps.push_back(newMap->getName());
+	m_createdMaps.push_back(m_selectedMap->getName());
 
 	// Add map to file with map names
 	std::ofstream jsonMap;
 	jsonMap.open("data/maps/mapList.txt", std::ios::out | std::ios::app);
-	jsonMap << newMap->getName() << "\n";
+	jsonMap << m_selectedMap->getName() << "\n";
 	jsonMap.close();
 }
 
@@ -442,15 +418,13 @@ void CEditor::deleteMap()
 	m_createdMaps.erase(it2);
 
 	// Delete from maps container
-	std::map<std::string, CGameMap *>::iterator it;
+	std::map<std::string, std::unique_ptr<CGameMap>>::iterator it;
 	it = m_gameMaps.find(m_selectedMap->getName());
+	std::clog << "Map " << m_selectedMap->getName() << " deleted" << std::endl;;
 	m_gameMaps.erase(it);
 
-	std::cout << "Map " << m_selectedMap->getName() << " deleted" << std::endl;;
-
-	delete m_selectedMap;
-	m_selectedMap = NULL;
 	m_currentMapIndex = -1;
+	m_selectedMap = nullptr;
 
 	// Rewrite the file with map names
 	std::ofstream jsonMap;

@@ -5,28 +5,20 @@
 
 #include "TextureManager.h"
 
-CTextureManager *CTextureManager::m_instance = NULL;
-
-CTextureManager::CTextureManager()
-{
-	if (m_instance == NULL)
-		m_instance = this;
-}
-
-CTexture *CTextureManager::getTexture(const char *path)
+std::shared_ptr<CTexture> CTextureManager::getTexture(const char *path)
 {
 	auto pos = m_textureMan.find(std::string(path));
 
-	CTexture *texture = new CTexture();
 	if (pos == m_textureMan.end())
 	{
+		std::unique_ptr<CTexture> texture = std::make_unique<CTexture>();
+
 		if (texture->load(path))
-			m_textureMan[std::string(path)] = texture;
+			m_textureMan[std::string(path)] = std::move(texture);
 		else
 		{
 			std::cout << "Texture " << path << " not found" << std::endl;
-			delete texture;
-			return NULL;
+			return nullptr;
 		}
 	}
 

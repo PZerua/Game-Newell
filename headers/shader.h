@@ -79,9 +79,9 @@ public:
 	bool hasInfoLog() const;
 	bool compiled;
 
-	static CShader* Load(const char* vsf, const char* psf);
+	static std::shared_ptr<CShader> Load(const char* vsf, const char* psf);
 	static void ReloadAll();
-	static std::map<std::string, CShader*> s_Shaders;
+	static std::map <std::string, std::shared_ptr<CShader>> s_Shaders;
 
 protected:
 

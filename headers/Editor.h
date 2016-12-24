@@ -16,9 +16,10 @@
 class CEditor
 {
 public:
-	CEditor(CWindow *window) : m_window(window), m_lastRow(-1), m_lastCol(-1), m_showGrid(false), m_selectedMap(NULL),
-		m_isMouseLeftPressed(false), m_isMouseRightPressed(false), m_tileSelected(NULL), m_tileIDSelected(-1), m_currentMapIndex(-1) {}
-	~CEditor();
+	CEditor(std::shared_ptr<CWindow> window) : m_window(window), m_lastRow(-1), m_lastCol(-1), m_showGrid(false),
+		m_isMouseLeftPressed(false), m_isMouseRightPressed(false), m_tileIDSelected(-1), m_currentMapIndex(-1),
+		m_running(true), m_canMove(true) {}
+	~CEditor() {}
 	void init();
 	void render();
 	void renderImGui();
@@ -34,27 +35,32 @@ public:
 	void loadMap();
 	void addMap(const std::string &mapName, int width, int height);
 	void deleteMap();
-	CWindow *m_window;
+
+	std::shared_ptr<CWindow> m_window;
 	glm::vec2 m_mouse_position;
-	const Uint8* m_keystate;
 	int m_mouse_state;
+	bool m_running;
 
 private:
-	CTexture *m_tilemapSelected;
-	CGameMap *m_selectedMap;
-	std::map<std::string, CGameMap *> m_gameMaps;
+	// Temporal addresses to current selected objects
+	std::weak_ptr<CTexture> m_tilemapSelected;
+	CGameMap* m_selectedMap;
+
+	std::unique_ptr<CTile> m_tileSelected;
+	std::map<std::string, std::unique_ptr<CGameMap>> m_gameMaps;
 	CCamera m_camera;
 	CMesh m_gridMesh;
-	CShader *m_gridShader;
-	CShader *m_tileSelectedShader;
-	CTile *m_tileSelected;
+	std::shared_ptr<CShader> m_gridShader;
+	std::shared_ptr<CShader> m_tileSelectedShader;
 	ImVec2 m_editorSize;
 	glm::vec3 m_camTraslation;
 	std::vector<std::string> m_createdMaps;
+	const Uint8* m_keystate;
 
 	bool m_showGrid;
 	bool m_isMouseRightPressed;
 	bool m_isMouseLeftPressed;
+	bool m_canMove;
 	int m_tileIDSelected;
 	int m_lastRow;
 	int m_lastCol;

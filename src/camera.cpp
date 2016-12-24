@@ -59,6 +59,5 @@ glm::vec3 CCamera::getTranslation()
 void CCamera::translate(float x, float y)
 {
 	view = glm::translate(view, glm::vec3(x, y, 0.0f));
-	//std::cout << glm::to_string(view) << std::endl << std::endl;
 	VP = projection * view;
 }

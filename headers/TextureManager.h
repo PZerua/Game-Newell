@@ -11,16 +11,14 @@
 class CTextureManager
 {
 public:
-	static CTextureManager *m_instance;
-	static CTextureManager *getInstance()
+	static CTextureManager& getInstance()
 	{
-		if (m_instance == NULL)
-			m_instance = new CTextureManager();
-		return m_instance;
+		static CTextureManager singleton;
+		return singleton;
 	}
-	CTexture* getTexture(const char* path);
+	std::shared_ptr<CTexture> getTexture(const char* path);
 
 private:
-	CTextureManager();
-	std::map<std::string, CTexture *> m_textureMan;
+	CTextureManager() {};
+	std::map<std::string, std::shared_ptr<CTexture>> m_textureMan;
 };

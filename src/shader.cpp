@@ -9,8 +9,9 @@
 #include "utils.h"
 #include <glm/gtc/type_ptr.hpp>
 
-std::map<std::string, CShader*> CShader::s_Shaders;
 bool CShader::s_ready = false;
+
+std::map <std::string, std::shared_ptr<CShader>> CShader::s_Shaders;
 
 CShader::CShader()
 {
@@ -38,7 +39,7 @@ bool CShader::load(const std::string& vsf, const std::string& psf)
 	vs_filename = vsf;
 	ps_filename = psf;
 
-	std::cout << " * Shader: Vertex: " << vsf << "  Pixel: " << psf << std::endl;
+	std::clog << " * Shader: Vertex: " << vsf << "  Pixel: " << psf << std::endl;
 	std::string vsm, psm;
 	if (!readFile(vsf, vsm) || !readFile(psf, psm))
 		return false;
@@ -51,25 +52,25 @@ bool CShader::load(const std::string& vsf, const std::string& psf)
 	return true;
 }
 
-CShader* CShader::Load(const char* vsf, const char* psf)
+std::shared_ptr<CShader> CShader::Load(const char* vsf, const char* psf)
 {
 	std::string name = std::string(vsf) + "," + std::string(psf);
-	std::map<std::string, CShader*>::iterator it = s_Shaders.find(name);
+	std::map<std::string, std::shared_ptr<CShader>>::iterator it = s_Shaders.find(name);
 	if (it != s_Shaders.end())
 		return it->second;
 
-	CShader* sh = new CShader();
+	std::shared_ptr<CShader> sh = std::make_shared<CShader>();
 	if (!sh->load(vsf, psf))
-		return NULL;
+		return nullptr;
 	s_Shaders[name] = sh;
 	return sh;
 }
 
 void CShader::ReloadAll()
 {
-	for (std::map<std::string, CShader*>::iterator it = s_Shaders.begin(); it != s_Shaders.end(); it++)
+	for (std::map<std::string, std::shared_ptr<CShader>>::iterator it = s_Shaders.begin(); it != s_Shaders.end(); it++)
 		it->second->compile();
-	std::cout << "Shaders recompiled" << std::endl;
+	std::clog << "Shaders recompiled" << std::endl;
 }
 
 bool CShader::compile()
@@ -129,7 +130,7 @@ bool CShader::compileFromMemory(const std::string& vsm, const std::string& psm)
 {
 	if (glCreateProgram == 0)
 	{
-		std::cout << "Error: your graphics cards dont support shaders. Sorry." << std::endl;
+		std::clog << "Error: your graphics cards dont support shaders. Sorry." << std::endl;
 		exit(0);
 	}
 
@@ -224,10 +225,10 @@ bool CShader::createShaderObject(unsigned int type, GLuint& handle, const std::s
 	if (!compile)
 	{
 		saveShaderInfoLog(handle);
-		std::cout << "Shader code:\n " << std::endl;
+		std::cerr << "Shader code:\n " << std::endl;
 		std::vector<std::string> lines = split(fullcode, '\n');
 		for (size_t i = 0; i < lines.size(); ++i)
-			std::cout << i << "  " << lines[i] << std::endl;
+			std::cerr << i << "  " << lines[i] << std::endl;
 
 		return false;
 	}

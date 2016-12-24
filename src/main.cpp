@@ -44,7 +44,7 @@ void mainLoop()
 	editor->m_mouse_position = glm::vec2(x, y);
 	double deltaTime = 0;
 
-	while (1)
+	while (editor->m_running)
 	{
 		//update events
 		while (SDL_PollEvent(&sdlEvent))
@@ -65,7 +65,8 @@ void mainLoop()
 				editor->onKeyPressed(sdlEvent.key);
 				break;
 			case SDL_WINDOWEVENT:
-				switch (sdlEvent.window.event) {
+				switch (sdlEvent.window.event)
+				{
 				case SDL_WINDOWEVENT_RESIZED:
 					editor->setWindowSize(sdlEvent.window.data1, sdlEvent.window.data2);
 					break;
@@ -89,8 +90,7 @@ int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
-	CWindow *window;
-	window = new CWindow();
+	std::shared_ptr<CWindow> window = std::make_shared<CWindow>();
 
 	bool fullscreen = false;
 	glm::vec2 size(1280, 720);
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 		size = getDesktopSize(0);
 	window->init("Game Newell", size.x, size.y, fullscreen);
 
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	std::clog << glGetString(GL_VERSION) << std::endl;
 
 	ImGui_ImplSdlGL3_Init(window->mWindow);
 

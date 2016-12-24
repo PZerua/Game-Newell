@@ -6,20 +6,14 @@
 #include "Tile.h"
 #include "TextureManager.h"
 
-CTile::CTile(float x, float y, int row, int col) : x(x), y(y), row(row), col(col)
+CTile::CTile(int x, int y, int row, int col) : x(x), y(y), row(row), col(col)
 {
 	m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(x, y, 0));
 
-	m_quad = new CMesh();
+	m_quad = std::make_unique<CMesh>();
 	m_quad->createQuad(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
 
-	CTextureManager *manager;
-	m_tilemap = manager->getInstance()->getTexture("data/tilemaps/tilemap.png");
-}
-
-CTile::~CTile()
-{
-	delete m_quad;
+	m_tilemap = CTextureManager::getInstance().getTexture("data/tilemaps/tilemap.png");
 }
 
 void CTile::setValues(float x, float y, int row, int col)
@@ -31,13 +25,10 @@ void CTile::setValues(float x, float y, int row, int col)
 
 	m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(x, y, 0));
 
-	if (m_quad)
-		delete m_quad;
-
-	m_quad = new CMesh();
+	m_quad = std::make_unique<CMesh>();
 	m_quad->createQuad(TILE_SIZE * 0.5, TILE_SIZE * 0.5, TILE_SIZE, TILE_SIZE, row, col);
 
-	m_tilemap = CTextureManager::getInstance()->getTexture("data/tilemaps/tilemap.png");
+	m_tilemap = CTextureManager::getInstance().getTexture("data/tilemaps/tilemap.png");
 }
 
 void CTile::update(double deltaTime)

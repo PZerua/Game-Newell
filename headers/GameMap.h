@@ -12,9 +12,9 @@
 class CGameMap
 {
 public:
-	CGameMap();
+	CGameMap() : width(0), height(0) { init(); }
 	CGameMap(const std::string &mapName, int width, int height);
-	~CGameMap();
+	~CGameMap() {};
 
 	/**
 	* Read map from Json file using map name
@@ -27,7 +27,7 @@ public:
 	void saveMap();
 
 	void init();
-	void setTile(CTile *tile, int row, int col);
+	void setTile(int x, int y, int tilemapX, int tilemapY, int mapRow, int mapCol);
 	std::string getName();
 	void deleteTile(int row, int col);
 	void render(CCamera *camara);
@@ -36,8 +36,8 @@ public:
 
 private:
 	std::string m_mapName;
-	std::vector<CTile *> m_tiles;
-	CShader *m_testShader;
-	CTexture *m_tilemap;
-	CMesh* m_quad;
+	std::vector<std::unique_ptr<CTile>> m_tiles;
+	std::shared_ptr<CShader> m_testShader;
+	std::shared_ptr<CTexture> m_tilemap;
+	std::unique_ptr<CMesh> m_quad;
 };

@@ -8,8 +8,8 @@
 #define USE_GLEW
 #include <GL/glew.h>
 
-#define BASE_RESOLUTION_WIDTH 256.0f
-#define BASE_RESOLUTION_HEIGHT 144.0f
+#define BASE_RESOLUTION_WIDTH 384.0f
+#define BASE_RESOLUTION_HEIGHT 216.0f
 #define TILE_SIZE 16.0f
 #define TILEMAP_SIZE 8.0f
 
@@ -18,3 +18,4 @@
 #include "SDL2/SDL_opengl.h"
 
 #include <iostream>
+#include <memory>

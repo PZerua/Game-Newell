@@ -126,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Editor.cpp" />
+    <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameMap.cpp" />
     <ClCompile Include="..\src\imgui.cpp" />
     <ClCompile Include="..\src\imgui_demo.cpp" />
@@ -139,10 +140,12 @@
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
+    <ClCompile Include="..\src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Camera.h" />
     <ClInclude Include="..\headers\Editor.h" />
+    <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameMap.h" />
     <ClInclude Include="..\headers\imconfig.h" />
     <ClInclude Include="..\headers\imgui.h" />
@@ -161,6 +164,7 @@
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\utils.h" />
     <ClInclude Include="..\headers\Window.h" />
+    <ClInclude Include="..\headers\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
