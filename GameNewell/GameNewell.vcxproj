@@ -135,6 +135,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Mesh.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\headers\json.h" />
     <ClInclude Include="..\headers\Mesh.h" />
     <ClInclude Include="..\headers\Shader.h" />
+    <ClInclude Include="..\headers\Sprite.h" />
     <ClInclude Include="..\headers\stb_image.h" />
     <ClInclude Include="..\headers\stb_rect_pack.h" />
     <ClInclude Include="..\headers\stb_textedit.h" />

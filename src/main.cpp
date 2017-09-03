@@ -7,6 +7,16 @@
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
 #include <chrono>
+#include <windows.h>
+
+extern "C" 
+{
+	// NVIDIA Optimus: Default dGPU instead of iGPU (Driver: 302+)
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+	// AMD: Request dGPU High Performance (Driver: 13.35+)
+	_declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 
 using namespace std::chrono;
 
@@ -27,7 +37,7 @@ double GetDelta()
 	// Get the tics as a variable
 	double delta = (double)timeDiff.count();
 
-	// Turn nanoseconds into seconds
+	// Turn nanoseconds into milliseconds
 	delta /= 1000000.0;
 
 	timePrev = timeCurrent;

@@ -18,5 +18,6 @@
 /.vs
 
 # Visual Studio Files
+/GameNewell/GameNewell.vcxproj.user
 *.sd
 *.db
