@@ -1,13 +1,13 @@
-attribute vec3 a_vertex;
-attribute vec2 a_uv;
+#version 330
+layout (location = 0) in vec3 aVertex;
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in vec2 aUv;
 
 uniform mat4 u_mvp;
-
-//this will store the color for the pixel shader
-varying vec2 v_coord;
+out vec2 Uv;
 
 void main(void)
 {
-    v_coord = a_uv;
-	gl_Position = u_mvp * vec4( a_vertex, 1.0 );
+	Uv = aUv;
+	gl_Position = u_mvp * vec4( aVertex, 1.0 );
 }

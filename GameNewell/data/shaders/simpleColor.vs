@@ -1,9 +1,13 @@
-attribute vec3 a_vertex;
+#version 330
+layout (location = 0) in vec3 aVertex;
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in vec2 aUv;
 
 uniform mat4 u_mvp;
-uniform vec3 color;
+out vec3 color;
 
 void main(void)
 {
-	gl_Position = u_mvp * vec4( a_vertex, 1.0 );
+	color = aColor;
+	gl_Position = u_mvp * vec4( aVertex, 1.0 );
 }

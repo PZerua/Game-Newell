@@ -54,7 +54,7 @@ SDL_Window* CWindow::init(const std::string &screenTitle, int window_width, int 
 		// Create renderer for window
 		SDL_GLContext glcontext = SDL_GL_CreateContext(mWindow);
 
-		SDL_GL_SetSwapInterval(1);
+		//SDL_GL_SetSwapInterval(1);
 
 		std::cout << "[GAME] OpenGL context created" << std::endl;
 

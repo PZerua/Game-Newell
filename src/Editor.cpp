@@ -18,8 +18,8 @@ void CEditor::init()
 	m_camera.setOrtho(0.0f, BASE_RESOLUTION_WIDTH, BASE_RESOLUTION_HEIGHT, 0.0f, -1.0f, 1.0f, 1.0f);
 	ImGui::IsAnyItemActive();
 
-	m_gridShader = CShader::Load("data/shaders/simpleColor.vs", "data/shaders/simpleColor.fs");
-	m_tileSelectedShader = CShader::Load("data/shaders/simple.vs", "data/shaders/simple.fs");
+	m_gridShader = std::make_shared<CShader>("data/shaders/simpleColor.vs", "data/shaders/simpleColor.fs");
+	m_tileSelectedShader = std::make_shared<CShader>("data/shaders/simple.vs", "data/shaders/simple.fs");
 
 	// Retreive input
 	m_keystate = SDL_GetKeyboardState(NULL);
@@ -135,7 +135,7 @@ void CEditor::render()
 	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow())
 	{
 		m_tileSelectedShader->enable();
-		m_tileSelectedShader->setMatrix44("u_mvp", m_camera.VP * m_tileSelected->m_modelMatrix);
+		m_tileSelectedShader->setMatrix4("u_mvp", m_camera.VP * m_tileSelected->m_modelMatrix);
 		m_tileSelected->m_quad->render(GL_TRIANGLES, m_tileSelectedShader.get());
 	}
 
@@ -345,8 +345,7 @@ void CEditor::drawGrid()
 		return;
 
 	m_gridShader->enable();
-	m_gridShader->setVector3("color", glm::vec3(0.25f, 0.35f, 0.45f));
-	m_gridShader->setMatrix44("u_mvp", m_camera.VP);
+	m_gridShader->setMatrix4("u_mvp", m_camera.VP);
 	m_gridMesh.render(GL_LINES, m_gridShader.get());
 }
 
@@ -354,22 +353,29 @@ void CEditor::setGrid()
 {
 	glm::vec3 tmp;
 	m_gridMesh.clear();
+	unsigned counter = 0;
 
 	// Create grid
 	for (int i = 0; i < m_selectedMap->height + 1; i++)
 	{
 		tmp = glm::vec3(0, i * TILE_SIZE, 0);
-		m_gridMesh.m_vertices.push_back(tmp);
+		m_gridMesh.addVertex(tmp, glm::vec2(0.0f, 0.0f));
+		m_gridMesh.m_verticesIndices.push_back(counter++);
+
 		tmp = glm::vec3(m_selectedMap->width * TILE_SIZE, i * TILE_SIZE, 0);
-		m_gridMesh.m_vertices.push_back(tmp);
+		m_gridMesh.addVertex(tmp, glm::vec2(0.0f, 0.0f));
+		m_gridMesh.m_verticesIndices.push_back(counter++);
 	}
 
 	for (int i = 0; i < m_selectedMap->width + 1; i++)
 	{
 		tmp = glm::vec3(i * TILE_SIZE, 0, 0);
-		m_gridMesh.m_vertices.push_back(tmp);
+		m_gridMesh.addVertex(tmp, glm::vec2(0.0f, 0.0f));
+		m_gridMesh.m_verticesIndices.push_back(counter++);
+
 		tmp = glm::vec3(i * TILE_SIZE, m_selectedMap->height * TILE_SIZE, 0);
-		m_gridMesh.m_vertices.push_back(tmp);
+		m_gridMesh.addVertex(tmp, glm::vec2(0.0f, 0.0f));
+		m_gridMesh.m_verticesIndices.push_back(counter++);
 	}
 
 	m_gridMesh.uploadToVRAM();

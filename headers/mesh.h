@@ -15,18 +15,23 @@ class CShader;
 class CMesh
 {
 public:
-	CMesh() : m_vertices_vbo_id(0), m_uvs_vbo_id(0) {}
+	CMesh() : m_verticesVBO(0), m_uvsVBO(0) {}
 	~CMesh();
 
 	void clear();
 	void render(int primitive, CShader* sh);
 	void uploadToVRAM();
 	void createQuad(float center_x, float center_y, float w, float h, int row, int col);
-	void setUVs(int row, int col);
+	void createGrid(int size, int scale);
+	void addVertex(glm::vec3 pos, glm::vec2 uv);
 
-	std::vector< glm::vec3 > m_vertices;
+	std::vector< float > m_vertices;
+	std::vector< unsigned > m_verticesIndices;
 	std::vector< glm::vec2 > m_uvs;
+	glm::mat4 m_modelMatrix;
 
-	unsigned int m_vertices_vbo_id;
-	unsigned int m_uvs_vbo_id;
+	unsigned int m_verticesVAO;
+	unsigned int m_verticesVBO;
+	unsigned int m_indicesEBO;
+	unsigned int m_uvsVBO;
 };

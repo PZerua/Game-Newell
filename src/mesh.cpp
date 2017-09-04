@@ -9,8 +9,9 @@
 
 CMesh::~CMesh()
 {
-	if (m_vertices_vbo_id) glDeleteBuffers(1, &m_vertices_vbo_id);
-	if (m_uvs_vbo_id) glDeleteBuffers(1, &m_uvs_vbo_id);
+	if (m_verticesVBO) glDeleteBuffers(1, &m_verticesVBO);
+	if (m_uvsVBO) glDeleteBuffers(1, &m_uvsVBO);
+	if (m_verticesVAO) glDeleteVertexArrays(1, &m_verticesVAO);
 
 	clear();
 }
@@ -18,81 +19,94 @@ CMesh::~CMesh()
 void CMesh::clear()
 {
 	m_vertices.clear();
+	m_verticesIndices.clear();
 	m_uvs.clear();
 }
 
 void CMesh::render(int primitive, CShader* shader)
 {
-	// Setup vertices
-	int vertex_location = shader->getAttribLocation("a_vertex");
+	// Bind VAO
+	glBindVertexArray(m_verticesVAO);
 
-	glEnableVertexAttribArray(vertex_location);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertices_vbo_id);
-	glVertexAttribPointer(vertex_location, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	// Draw triangles
+	glDrawElements(primitive, (GLsizei)m_verticesIndices.size(), GL_UNSIGNED_INT, 0);
 
-	// Setup uvs
-	int uv_location = shader->getAttribLocation("a_uv");
-
-	if (m_uvs.size())
-	{
-		glEnableVertexAttribArray(uv_location);
-		glBindBuffer(GL_ARRAY_BUFFER, m_uvs_vbo_id);
-		glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-	}
-
-	// Draw the quads
-	glDrawArrays(primitive, 0, (GLsizei)m_vertices.size());
-
-	// Disable bindings
-	glDisableVertexAttribArray(vertex_location);
-	if (m_uvs.size()) glDisableVertexAttribArray(uv_location);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// Disable binding
+	glBindVertexArray(0);
 }
 
 void CMesh::uploadToVRAM()
 {
-	// Delete old VBOs
-	if (m_vertices_vbo_id) glDeleteBuffers(1, &m_vertices_vbo_id);
-	if (m_uvs_vbo_id) glDeleteBuffers(1, &m_uvs_vbo_id);
+	// Delete old buffers and VAO
+	if (m_verticesVAO) glDeleteVertexArrays(1, &m_verticesVAO);
+	if (m_verticesVBO) glDeleteBuffers(1, &m_verticesVBO);
+	if (m_uvsVBO) glDeleteBuffers(1, &m_uvsVBO);
 
-	glGenBuffers(1, &m_vertices_vbo_id);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertices_vbo_id);
-	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * 3 * sizeof(float), &m_vertices[0], GL_STATIC_DRAW);
+	// Generate buffers and VAO
+	glGenVertexArrays(1, &m_verticesVAO);
+	glGenBuffers(1, &m_verticesVBO);
+	glGenBuffers(1, &m_indicesEBO);
+	glGenBuffers(1, &m_uvsVBO);
 
-	if (m_uvs.size())
-	{
-		glGenBuffers(1, &m_uvs_vbo_id);
-		glBindBuffer(GL_ARRAY_BUFFER, m_uvs_vbo_id);
-		glBufferData(GL_ARRAY_BUFFER, m_uvs.size() * 2 * sizeof(float), &m_uvs[0], GL_STATIC_DRAW);
-	}
+	// Bind the VAO
+	glBindVertexArray(m_verticesVAO);
+
+	// Setup vertices
+	glBindBuffer(GL_ARRAY_BUFFER, m_verticesVBO);
+	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), &m_vertices[0], GL_STATIC_DRAW);
+
+	// Set vertices as vertex attribute to shader (pos 0)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), NULL);
+	glEnableVertexAttribArray(0);
+
+	// Color attribute (pos 1)
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// Setup indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_verticesIndices.size() * sizeof(unsigned), &m_verticesIndices[0], GL_STATIC_DRAW);
+
+	// Set uvs
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+}
+
+void CMesh::addVertex(glm::vec3 pos, glm::vec2 uv)
+{
+	// Vertex
+	m_vertices.push_back(pos.x);
+	m_vertices.push_back(pos.y);
+	m_vertices.push_back(pos.z);
+
+	m_vertices.push_back(0.25f); // R
+	m_vertices.push_back(0.35f); // G
+	m_vertices.push_back(0.45f); // B
+
+	m_vertices.push_back(uv.x);
+	m_vertices.push_back(uv.y);
+
 }
 
 void CMesh::createQuad(float center_x, float center_y, float w, float h, int row, int col)
 {
 	m_vertices.clear();
 
-	// Create four vertices for the quad (then using TRIANGLE_STRIP)
-	m_vertices.push_back(glm::vec3(center_x - w*0.5f, center_y - h*0.5f, 0.0f));
-	m_vertices.push_back(glm::vec3(center_x + w*0.5f, center_y - h*0.5f, 0.0f));
-	m_vertices.push_back(glm::vec3(center_x - w*0.5f, center_y + h*0.5f, 0.0f));
-	m_vertices.push_back(glm::vec3(center_x + w*0.5f, center_y + h*0.5f, 0.0f));
-
-	// Texture coordinates
-	setUVs(row, col);
-
-	uploadToVRAM();
-}
-
-void CMesh::setUVs(int row, int col)
-{
-	m_uvs.clear();
-
-	// The uvs of a tile depend on the number of tiles in a Tilemap
 	float uv_offset = 1.0f / TILEMAP_SIZE;
 
-	// Texture coordinates
-	m_uvs.push_back(glm::vec2(0.0f + uv_offset * col, 0.0f + uv_offset * row));
-	m_uvs.push_back(glm::vec2(uv_offset + uv_offset * col, 0.0f + uv_offset * row));
-	m_uvs.push_back(glm::vec2(0.0f + uv_offset * col, uv_offset + uv_offset * row));
-	m_uvs.push_back(glm::vec2(uv_offset + uv_offset * col, uv_offset + uv_offset * row));
+	// Create four vertices for the quad (then using TRIANGLE_STRIP)
+	addVertex(glm::vec3(center_x - w*0.5f, center_y - h*0.5f, 0.0f), glm::vec2(0.0f + uv_offset * col, 0.0f + uv_offset * row));
+	addVertex(glm::vec3(center_x + w*0.5f, center_y - h*0.5f, 0.0f), glm::vec2(uv_offset + uv_offset * col, 0.0f + uv_offset * row));
+	addVertex(glm::vec3(center_x - w*0.5f, center_y + h*0.5f, 0.0f), glm::vec2(0.0f + uv_offset * col, uv_offset + uv_offset * row));
+	addVertex(glm::vec3(center_x + w*0.5f, center_y + h*0.5f, 0.0f), glm::vec2(uv_offset + uv_offset * col, uv_offset + uv_offset * row));
+
+	m_verticesIndices.push_back(0);
+	m_verticesIndices.push_back(1);
+	m_verticesIndices.push_back(2);
+
+	m_verticesIndices.push_back(1);
+	m_verticesIndices.push_back(3);
+	m_verticesIndices.push_back(2);
+
+	uploadToVRAM();
 }
