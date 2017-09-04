@@ -6,14 +6,29 @@
 #pragma once
 
 #include "includes.h"
-#include "GameMap.h"
-#include "Camera.h"
+#include "Mesh.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Tile.h"
+#include "TextureManager.h"
+#include <fstream>
+#include "Sprite.h"
+#include "Editor.h"
+#include "InputHandler.h"
 
 class CGame
 {
 public:
-	CGame();
-	~CGame();
+	CGame(std::shared_ptr<CWindow> window);
+	~CGame() {}
+
+	void update(double deltaTime);
+	void render();
+	void setWindowSize(int width, int height);
 
 private:
+	std::unique_ptr<CEditor> m_editor;
+	std::shared_ptr<CCamera> m_camera;
+	std::shared_ptr<CWindow> m_window;
+
 };

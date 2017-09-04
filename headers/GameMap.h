@@ -37,7 +37,7 @@ public:
 private:
 	std::string m_mapName;
 	std::vector<std::unique_ptr<CTile>> m_tiles;
-	std::shared_ptr<CShader> m_testShader;
+	std::shared_ptr<CShader> m_mapShader;
 	std::shared_ptr<CTexture> m_tilemap;
 	std::unique_ptr<CMesh> m_quad;
 };

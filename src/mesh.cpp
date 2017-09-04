@@ -88,11 +88,11 @@ void CMesh::addVertex(glm::vec3 pos, glm::vec2 uv)
 
 }
 
-void CMesh::createQuad(float center_x, float center_y, float w, float h, int row, int col)
+void CMesh::createQuad(float center_x, float center_y, float w, float h, int row, int col, float uv_divide_factor)
 {
 	m_vertices.clear();
 
-	float uv_offset = 1.0f / TILEMAP_SIZE;
+	float uv_offset = 1.0f / uv_divide_factor;
 
 	// Create four vertices for the quad (then using TRIANGLE_STRIP)
 	addVertex(glm::vec3(center_x - w*0.5f, center_y - h*0.5f, 0.0f), glm::vec2(0.0f + uv_offset * col, 0.0f + uv_offset * row));

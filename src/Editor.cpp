@@ -5,24 +5,25 @@
 
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
-#include "mesh.h"
-#include "shader.h"
-#include "texture.h"
+#include "Mesh.h"
+#include "Shader.h"
+#include "Texture.h"
 #include "Tile.h"
 #include "TextureManager.h"
 #include <fstream>
+#include "Sprite.h"
+
+std::unique_ptr<CSprite> mainChar;
 
 void CEditor::init()
 {
-	m_camera.setViewport(0, 0, m_window->mWidth, m_window->mHeight);
-	m_camera.setOrtho(0.0f, BASE_RESOLUTION_WIDTH, BASE_RESOLUTION_HEIGHT, 0.0f, -1.0f, 1.0f, 1.0f);
+	mainChar = std::make_unique<CSprite>("data/spritesheets/spriteSheet.png");
+	input = &CInputHandler::getInstance();
+
 	ImGui::IsAnyItemActive();
 
 	m_gridShader = std::make_shared<CShader>("data/shaders/simpleColor.vs", "data/shaders/simpleColor.fs");
 	m_tileSelectedShader = std::make_shared<CShader>("data/shaders/simple.vs", "data/shaders/simple.fs");
-
-	// Retreive input
-	m_keystate = SDL_GetKeyboardState(NULL);
 
 	m_tilemapSelected = CTextureManager::getInstance().getTexture("data/tilemaps/tilemap.png");
 
@@ -42,38 +43,6 @@ void CEditor::init()
 	}
 }
 
-void CEditor::onKeyPressed(SDL_KeyboardEvent event)
-{
-	switch (event.keysym.sym)
-	{
-	case SDLK_ESCAPE: m_running = false;
-	}
-}
-
-void CEditor::onMouseButtonDown(SDL_MouseButtonEvent event)
-{
-	if (event.button == SDL_BUTTON_RIGHT) m_isMouseRightPressed = true;
-	if (event.button == SDL_BUTTON_LEFT) m_isMouseLeftPressed = true;
-}
-
-void CEditor::onMouseButtonUp(SDL_MouseButtonEvent event)
-{
-	if (event.button == SDL_BUTTON_RIGHT) m_isMouseRightPressed = false;
-	if (event.button == SDL_BUTTON_LEFT) m_isMouseLeftPressed = false;
-}
-
-void CEditor::setWindowSize(int width, int height)
-{
-	std::clog << "window resized: " << width << "," << height << std::endl;
-
-	float scale = BASE_RESOLUTION_WIDTH / (float)width;
-
-	m_window->setSize(width, height);
-	glViewport(0, 0, width, height);
-	m_camera.setOrtho(0.0f, width, height, 0.0f, -1.0f, 1.0f, scale);
-	m_camera.aspect = width / (float)height;
-}
-
 void CEditor::update(double deltaTime)
 {
 	if (!m_canMove)
@@ -81,18 +50,18 @@ void CEditor::update(double deltaTime)
 
 	float vel = 0.1 * deltaTime;
 
-	if (m_keystate[SDL_SCANCODE_LSHIFT])
+	if (input->isPressed(SDL_SCANCODE_LSHIFT))
 		vel = 0.3 * deltaTime;
 
-	if (m_keystate[SDL_SCANCODE_W] || m_keystate[SDL_SCANCODE_UP]) m_camera.translate(0.0f, vel);
-	if (m_keystate[SDL_SCANCODE_S] || m_keystate[SDL_SCANCODE_DOWN]) m_camera.translate(0.0f, -vel);
-	if (m_keystate[SDL_SCANCODE_A] || m_keystate[SDL_SCANCODE_LEFT]) m_camera.translate(vel, 0.0f);
-	if (m_keystate[SDL_SCANCODE_D] || m_keystate[SDL_SCANCODE_RIGHT]) m_camera.translate(-vel, 0.0f);
+	if (input->isPressed(SDL_SCANCODE_W) || input->isPressed(SDL_SCANCODE_UP)) m_camera->translate(0.0f, vel);
+	if (input->isPressed(SDL_SCANCODE_S) || input->isPressed(SDL_SCANCODE_DOWN)) m_camera->translate(0.0f, -vel);
+	if (input->isPressed(SDL_SCANCODE_A) || input->isPressed(SDL_SCANCODE_LEFT)) m_camera->translate(vel, 0.0f);
+	if (input->isPressed(SDL_SCANCODE_D) || input->isPressed(SDL_SCANCODE_RIGHT)) m_camera->translate(-vel, 0.0f);
 
-	m_camTraslation = m_camera.getTranslation();
+	m_camTraslation = m_camera->getTranslation();
 
-	int x = (int)m_mouse_position.x;
-	int y = (int)m_mouse_position.y;
+	int x = (int)input->m_mouse_position.x;
+	int y = (int)input->m_mouse_position.y;
 	int mapRow = 0;
 	int mapCol = 0;
 
@@ -104,19 +73,19 @@ void CEditor::update(double deltaTime)
 	if (!m_selectedMap)
 		return;
 
-	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow() && m_isMouseLeftPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
+	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseLeftPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
 	{
 		m_tileSelected->setPos(mapCol * TILE_SIZE, mapRow * TILE_SIZE);
 		m_selectedMap->setTile(m_tileSelected->x, m_tileSelected->y, m_tileSelected->getRow(), m_tileSelected->getCol(), mapRow, mapCol);
 		m_lastRow = mapRow;
 		m_lastCol = mapCol;
 	}
-	else if (m_tileSelected && ImGui::IsMouseHoveringAnyWindow() && m_isMouseLeftPressed)
+	else if (m_tileSelected && ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseLeftPressed)
 	{
 		m_tileSelected.reset();
 		m_tileIDSelected = -1;
 	}
-	else if (!ImGui::IsMouseHoveringAnyWindow() && m_isMouseRightPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
+	else if (!ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseRightPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
 	{
 		m_selectedMap->deleteTile(mapRow, mapCol);
 		m_lastRow = mapRow;
@@ -126,16 +95,18 @@ void CEditor::update(double deltaTime)
 
 void CEditor::render()
 {
-	glClearColor(0.92f, 0.90f, 0.94f, 1.0f);
+	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (m_selectedMap)
-		m_selectedMap->render(&m_camera);
+		m_selectedMap->render(m_camera.get());
+
+	mainChar->render(m_camera.get());
 
 	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow())
 	{
 		m_tileSelectedShader->enable();
-		m_tileSelectedShader->setMatrix4("u_mvp", m_camera.VP * m_tileSelected->m_modelMatrix);
+		m_tileSelectedShader->setMatrix4("u_mvp", m_camera->VP * m_tileSelected->m_modelMatrix);
 		m_tileSelected->m_quad->render(GL_TRIANGLES, m_tileSelectedShader.get());
 	}
 
@@ -152,7 +123,7 @@ void CEditor::renderImGui()
 	ImGui_ImplSdlGL3_NewFrame(m_window->mWindow);
 
 	ImGui::SetNextWindowPos(ImVec2(m_window->mWidth - m_editorSize.x, m_window->mHeight * 0.5f - m_editorSize.y * 0.5f));
-	ImGui::Begin("Editor", (bool *)true, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Editor", (bool *)true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
 	if (ImGui::Button("New Map"))
 		ImGui::OpenPopup("New Map");
@@ -312,8 +283,8 @@ void CEditor::renderImGui()
 				ImVec2((1.0f / TILEMAP_SIZE) * j + 1.0f / TILEMAP_SIZE, (1.0f / TILEMAP_SIZE) * i + 1.0f / TILEMAP_SIZE), frame_padding, ImColor(0, 0, 0, 255)))
 			{
 				m_tileIDSelected = ID;
-				int x = (int)m_mouse_position.x;
-				int y = (int)m_mouse_position.y;
+				int x = (int)input->m_mouse_position.x;
+				int y = (int)input->m_mouse_position.y;
 				convertCoord(x, y, m_window->mWidth, m_window->mHeight);
 				m_tileSelected.reset(new CTile(x + TILE_SIZE * 0.5f, y + TILE_SIZE * 0.5f, i, j));
 			}
@@ -345,7 +316,7 @@ void CEditor::drawGrid()
 		return;
 
 	m_gridShader->enable();
-	m_gridShader->setMatrix4("u_mvp", m_camera.VP);
+	m_gridShader->setMatrix4("u_mvp", m_camera->VP);
 	m_gridMesh.render(GL_LINES, m_gridShader.get());
 }
 
@@ -444,10 +415,10 @@ void CEditor::deleteMap()
 
 void CEditor::setCameraPos(float x, float y)
 {
-	m_camera.setPosition(glm::vec3(x, y, 0.0f));
+	m_camera->setPosition(glm::vec3(x, y, 0.0f));
 }
 
 void CEditor::setCameraCenter(int width, int height)
 {
-	setCameraPos(m_camera.right * 0.5f * m_camera.scale - width * 0.5f * TILE_SIZE, m_camera.bottom * 0.5f * m_camera.scale - height * 0.5f * TILE_SIZE);
+	setCameraPos(m_camera->right * 0.5f * m_camera->scale - width * 0.5f * TILE_SIZE, m_camera->bottom * 0.5f * m_camera->scale - height * 0.5f * TILE_SIZE);
 }

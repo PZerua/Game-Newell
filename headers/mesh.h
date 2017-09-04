@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "includes.h"
 #include <vector>
 #include <glm\glm.hpp>
 #include <glm\vec3.hpp>
@@ -21,8 +22,7 @@ public:
 	void clear();
 	void render(int primitive, CShader* sh);
 	void uploadToVRAM();
-	void createQuad(float center_x, float center_y, float w, float h, int row, int col);
-	void createGrid(int size, int scale);
+	void createQuad(float center_x, float center_y, float w, float h, int row, int col, float uv_divide_factor = TILEMAP_SIZE);
 	void addVertex(glm::vec3 pos, glm::vec2 uv);
 
 	std::vector< float > m_vertices;

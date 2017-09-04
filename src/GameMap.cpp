@@ -25,16 +25,9 @@ CGameMap::CGameMap(const std::string &mapName, int width, int height)
 
 void CGameMap::init()
 {
-	m_testShader = std::make_shared<CShader>("data/shaders/simple.vs", "data/shaders/simple.fs");
+	m_mapShader = std::make_shared<CShader>("data/shaders/simple.vs", "data/shaders/simple.fs");
 
 	m_tilemap = CTextureManager::getInstance().getTexture("data/tilemaps/tilemap.png");
-
-	m_testShader->enable();
-
-	if (m_tilemap != NULL)
-		glBindTexture(GL_TEXTURE_2D, m_tilemap->m_texture_id);
-
-	m_testShader->disable();
 }
 
 bool CGameMap::readMap(const std::string &name)
@@ -212,7 +205,10 @@ void CGameMap::render(CCamera *camera)
 
 	CTile *tile;
 
-	m_testShader->enable();
+	m_mapShader->enable();
+
+	if (m_tilemap != NULL)
+		glBindTexture(GL_TEXTURE_2D, m_tilemap->m_texture_id);
 
 	for (int i = startY; i < endY; i++)
 	{
@@ -225,8 +221,8 @@ void CGameMap::render(CCamera *camera)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-				m_testShader->setMatrix4("u_mvp", camera->VP * tile->m_modelMatrix);
-				tile->m_quad->render(GL_TRIANGLES, m_testShader.get());
+				m_mapShader->setMatrix4("u_mvp", camera->VP * tile->m_modelMatrix);
+				tile->m_quad->render(GL_TRIANGLES, m_mapShader.get());
 
 				glDisable(GL_BLEND);
 			}

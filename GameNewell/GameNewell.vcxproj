@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\imgui_demo.cpp" />
     <ClCompile Include="..\src\imgui_draw.cpp" />
     <ClCompile Include="..\src\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="..\src\InputHandler.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Mesh.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="..\headers\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="..\headers\imgui_internal.h" />
     <ClInclude Include="..\headers\includes.h" />
+    <ClInclude Include="..\headers\InputHandler.h" />
     <ClInclude Include="..\headers\json.h" />
     <ClInclude Include="..\headers\Mesh.h" />
     <ClInclude Include="..\headers\Shader.h" />

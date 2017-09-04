@@ -4,10 +4,13 @@
 */
 
 #include "Window.h"
-#include "Editor.h"
+#include "includes.h"
+#include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
 #include <chrono>
 #include <windows.h>
+#include "Game.h"
+#include "InputHandler.h"
 
 extern "C" 
 {
@@ -19,8 +22,6 @@ extern "C"
 
 
 using namespace std::chrono;
-
-CEditor *editor;
 
 auto timePrev = high_resolution_clock::now();
 
@@ -45,54 +46,27 @@ double GetDelta()
 	return delta;
 }
 
-void mainLoop()
+void mainLoop(CGame *game)
 {
-	SDL_Event sdlEvent;
+	CInputHandler &input = CInputHandler::getInstance();
 	int x, y;
-
 	SDL_GetMouseState(&x, &y);
-	editor->m_mouse_position = glm::vec2(x, y);
+
+	input.m_mouse_position = glm::vec2(x, y);
 	double deltaTime = 0;
 
-	while (editor->m_running)
+	while (input.m_running)
 	{
-		//update events
-		while (SDL_PollEvent(&sdlEvent))
-		{
-			ImGui_ImplSdlGL3_ProcessEvent(&sdlEvent);
-
-			switch (sdlEvent.type)
-			{
-			case SDL_QUIT:
-				return;
-			case SDL_MOUSEBUTTONDOWN:
-				editor->onMouseButtonDown(sdlEvent.button);
-				break;
-			case SDL_MOUSEBUTTONUP:
-				editor->onMouseButtonUp(sdlEvent.button);
-				break;
-			case SDL_KEYDOWN:
-				editor->onKeyPressed(sdlEvent.key);
-				break;
-			case SDL_WINDOWEVENT:
-				switch (sdlEvent.window.event)
-				{
-				case SDL_WINDOWEVENT_RESIZED:
-					editor->setWindowSize(sdlEvent.window.data1, sdlEvent.window.data2);
-					break;
-				}
-			}
-		}
-
+		input.handleInput();
 		//get mouse position and delta (do after pump events)
-		editor->m_mouse_state = SDL_GetMouseState(&x, &y);
+		input.m_mouse_state = SDL_GetMouseState(&x, &y);
 		//editor->mouse_delta.set(game->mouse_position.x - x, game->mouse_position.y - y);
-		editor->m_mouse_position = glm::vec2(x, y);
+		input.m_mouse_position = glm::vec2(x, y);
 
 		//update logic
 		deltaTime = GetDelta();
-		editor->update(deltaTime);
-		editor->render();
+		game->update(deltaTime);
+		game->render();
 	}
 }
 
@@ -103,7 +77,7 @@ int main(int argc, char* argv[])
 	std::shared_ptr<CWindow> window = std::make_shared<CWindow>();
 
 	bool fullscreen = false;
-	glm::vec2 size(1280, 720);
+	glm::vec2 size(800, 720); // 5 times 160x144
 
 	if (fullscreen)
 		size = getDesktopSize(0);
@@ -113,10 +87,9 @@ int main(int argc, char* argv[])
 
 	ImGui_ImplSdlGL3_Init(window->mWindow);
 
-	editor = new CEditor(window);
-	editor->init();
+	std::unique_ptr<CGame> game = std::make_unique<CGame>(window);
 
-	mainLoop();
+	mainLoop(game.get());
 
 	ImGui_ImplSdlGL3_Shutdown();
 	SDL_Quit();

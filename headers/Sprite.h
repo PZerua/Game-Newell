@@ -7,16 +7,22 @@
 
 #include "includes.h"
 #include "Texture.h"
+#include "Mesh.h"
 #include "Camera.h"
+#include "Shader.h"
 
 class CSprite
 {
 public:
-	CSprite();
+	CSprite(std::string spriteSheet);
 	~CSprite();
 
 	void render(CCamera *camera);
 	void update(double deltaTime);
 private:
-	std::unique_ptr<CTexture> m_spriteSheet;
+	std::shared_ptr<CTexture> m_spriteSheet;
+	std::shared_ptr<CShader> m_spriteShader;
+	glm::mat4 m_modelMatrix;;
+
+	CMesh m_quad;
 };
