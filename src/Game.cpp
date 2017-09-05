@@ -7,13 +7,15 @@
 
 CGame::CGame(std::shared_ptr<CWindow> window)
 {
+	m_world = &CWorld::getInstance();
+
 	m_window = window;
 
 	m_camera = std::make_shared<CCamera>();
 	m_camera->setViewport(0, 0, window->mWidth, window->mHeight);
 	m_camera->setOrtho(0.0f, BASE_RESOLUTION_WIDTH, BASE_RESOLUTION_HEIGHT, 0.0f, -1.0f, 1.0f, 1.0f);
 
-	m_editor = std::make_unique<CEditor>(window, m_camera);
+	m_editor = std::make_unique<CEditor>(window, m_camera, m_currentMap);
 	m_editor->init();
 }
 
@@ -43,5 +45,12 @@ void CGame::update(double deltaTime)
 
 void CGame::render()
 {
+	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	m_editor->render();
+
+	//m_world->m_mainCharacter->render(m_camera.get());
+
+	SDL_GL_SwapWindow(m_window->mWindow);
 }

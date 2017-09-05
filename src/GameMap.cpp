@@ -189,7 +189,7 @@ void CGameMap::deleteTile(int row, int col)
 	}
 }
 
-void CGameMap::render(CCamera *camera)
+void CGameMap::render(CCamera *camera, int row, int col)
 {
 	glm::vec3 camTranslation = camera->getTranslation();
 
@@ -216,6 +216,9 @@ void CGameMap::render(CCamera *camera)
 		{
 			if (m_tiles[width * i + j])
 			{
+				if (i == row && j == col)
+					continue;
+
 				tile = m_tiles[width * i + j].get();
 
 				glEnable(GL_BLEND);
@@ -228,4 +231,6 @@ void CGameMap::render(CCamera *camera)
 			}
 		}
 	}
+
+	m_mapShader->disable();
 }

@@ -54,5 +54,7 @@ void CTile::setPos(float x, float y)
 {
 	this->x = x;
 	this->y = y;
-	m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(x, y, 0));
+
+	glm::mat4 model;
+	m_modelMatrix = glm::translate(model, glm::vec3(x, y, 0));
 }

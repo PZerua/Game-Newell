@@ -5,20 +5,12 @@
 
 #include "Editor.h"
 #include "imgui_impl_sdl_gl3.h"
-#include "Mesh.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Tile.h"
 #include "TextureManager.h"
-#include <fstream>
-#include "Sprite.h"
-
-std::unique_ptr<CSprite> mainChar;
 
 void CEditor::init()
 {
-	mainChar = std::make_unique<CSprite>("data/spritesheets/spriteSheet.png");
 	input = &CInputHandler::getInstance();
+	m_world = &CWorld::getInstance();
 
 	ImGui::IsAnyItemActive();
 
@@ -32,15 +24,6 @@ void CEditor::init()
 
 	/*if (m_window->mWidth < current.w && m_window->mHeight < current.h)
 		setWindowSize(1280, 720);*/
-
-	std::ifstream mapList("data/maps/mapList.txt");
-
-	std::string line;
-
-	while (mapList >> line)
-	{
-		m_createdMaps.push_back(line);
-	}
 }
 
 void CEditor::update(double deltaTime)
@@ -73,19 +56,24 @@ void CEditor::update(double deltaTime)
 	if (!m_selectedMap)
 		return;
 
-	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseLeftPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
+	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow())
 	{
 		m_tileSelected->setPos(mapCol * TILE_SIZE, mapRow * TILE_SIZE);
-		m_selectedMap->setTile(m_tileSelected->x, m_tileSelected->y, m_tileSelected->getRow(), m_tileSelected->getCol(), mapRow, mapCol);
-		m_lastRow = mapRow;
-		m_lastCol = mapCol;
+
+		if (input->m_isMouseLeftPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
+		{
+			m_selectedMap->setTile(m_tileSelected->x, m_tileSelected->y, m_tileSelected->getRow(), m_tileSelected->getCol(), mapRow, mapCol);
+			m_lastRow = mapRow;
+			m_lastCol = mapCol;
+		}
 	}
 	else if (m_tileSelected && ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseLeftPressed)
 	{
 		m_tileSelected.reset();
 		m_tileIDSelected = -1;
 	}
-	else if (!ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseRightPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
+	
+	if (!ImGui::IsMouseHoveringAnyWindow() && input->m_isMouseRightPressed && (m_lastRow != mapRow || m_lastCol != mapCol))
 	{
 		m_selectedMap->deleteTile(mapRow, mapCol);
 		m_lastRow = mapRow;
@@ -95,27 +83,34 @@ void CEditor::update(double deltaTime)
 
 void CEditor::render()
 {
-	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	if (m_selectedMap)
-		m_selectedMap->render(m_camera.get());
-
-	mainChar->render(m_camera.get());
+	{
+		// TODO: change uv in CMesh using row and col, this is currently very ugly
+		if (m_tileSelected)
+		{
+			m_selectedMap->render(m_camera.get(), m_tileSelected->y / TILE_SIZE, m_tileSelected->x / TILE_SIZE);
+		}
+		else m_selectedMap->render(m_camera.get());
+	}
 
 	if (m_tileSelected && !ImGui::IsMouseHoveringAnyWindow())
 	{
 		m_tileSelectedShader->enable();
+		glBindTexture(GL_TEXTURE_2D, std::shared_ptr<CTexture>(m_tilemapSelected)->m_texture_id);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		m_tileSelectedShader->setMatrix4("u_mvp", m_camera->VP * m_tileSelected->m_modelMatrix);
 		m_tileSelected->m_quad->render(GL_TRIANGLES, m_tileSelectedShader.get());
+
+		glDisable(GL_BLEND);
 	}
 
 	if (m_showGrid)
 		drawGrid();
 
 	renderImGui();
-
-	SDL_GL_SwapWindow(m_window->mWindow);
 }
 
 void CEditor::renderImGui()
@@ -182,24 +177,24 @@ void CEditor::renderImGui()
 
 	ImGui::Separator();
 
-	ImGui::Combo("Select Map", &m_currentMapIndex,
+	ImGui::Combo("Select Map", &m_world->m_currentMapIndex,
 		[](void* vec, int idx, const char** out_text) {
 		std::vector<std::string>* vector = reinterpret_cast<std::vector<std::string>*>(vec);
 		if (idx < 0 || idx >= vector->size()) return false;
 		*out_text = vector->at(idx).c_str();
 		return true;
-	}, reinterpret_cast<void*>(&m_createdMaps), m_createdMaps.size());
+	}, reinterpret_cast<void*>(&m_world->m_createdMaps), m_world->m_createdMaps.size());
 
-	if (!m_selectedMap && m_currentMapIndex != -1)
+	if (!m_selectedMap && m_world->m_currentMapIndex != -1)
 	{
 		loadMap();
 		setGrid();
 	}
-	else if (m_selectedMap && m_selectedMap->getName() != m_createdMaps[m_currentMapIndex])
+	else if (m_selectedMap && m_selectedMap->getName() != m_world->m_createdMaps[m_world->m_currentMapIndex])
 	{
-		if (m_gameMaps.count(m_createdMaps[m_currentMapIndex]))
+		if (m_world->m_gameMaps.count(m_world->m_createdMaps[m_world->m_currentMapIndex]))
 		{
-			m_selectedMap = m_gameMaps[m_createdMaps[m_currentMapIndex]].get();
+			m_selectedMap = m_world->m_gameMaps[m_world->m_createdMaps[m_world->m_currentMapIndex]];
 			setCameraCenter(m_selectedMap->width, m_selectedMap->height);
 		}
 		else
@@ -354,63 +349,25 @@ void CEditor::setGrid()
 
 void CEditor::loadMap()
 {
-	std::unique_ptr<CGameMap> newMap = std::make_unique<CGameMap>();
-	newMap->readMap(m_createdMaps[m_currentMapIndex]);
-	m_selectedMap = newMap.get();
-	m_gameMaps[newMap->getName()] = std::move(newMap);
-
+	m_selectedMap = m_world->loadMap();
 	setCameraCenter(m_selectedMap->width, m_selectedMap->height);
 }
 
 void CEditor::addMap(const std::string &mapName, int width, int height)
 {
-	std::unique_ptr<CGameMap> newMap = std::make_unique<CGameMap>(mapName, width, height);
-	newMap->saveMap();
-
-	m_selectedMap = newMap.get();
-	m_gameMaps[mapName] = std::move(newMap);
-	m_currentMapIndex = m_createdMaps.size();
-
+	m_selectedMap = m_world->addMap(mapName, width, height);
+	
 	setGrid();
 	m_showGrid = true;
 
 	// Center the camera to the center of the map
 	setCameraCenter(m_selectedMap->width, m_selectedMap->height);
-
-	// Add to map names list
-	m_createdMaps.push_back(m_selectedMap->getName());
-
-	// Add map to file with map names
-	std::ofstream jsonMap;
-	jsonMap.open("data/maps/mapList.txt", std::ios::out | std::ios::app);
-	jsonMap << m_selectedMap->getName() << "\n";
-	jsonMap.close();
 }
 
 void CEditor::deleteMap()
 {
-	// Delete from name list
-	std::vector<std::string>::iterator it2;
-	it2 = std::find(m_createdMaps.begin(), m_createdMaps.end(), m_selectedMap->getName());
-	m_createdMaps.erase(it2);
-
-	// Delete from maps container
-	std::map<std::string, std::unique_ptr<CGameMap>>::iterator it;
-	it = m_gameMaps.find(m_selectedMap->getName());
-	std::clog << "Map " << m_selectedMap->getName() << " deleted" << std::endl;;
-	m_gameMaps.erase(it);
-
-	m_currentMapIndex = -1;
+	m_world->deleteMap();
 	m_selectedMap = nullptr;
-
-	// Rewrite the file with map names
-	std::ofstream jsonMap;
-	jsonMap.open("data/maps/mapList.txt", std::ios::out | std::ios::trunc);
-	for (unsigned i = 0; i < m_createdMaps.size(); ++i)
-	{
-		jsonMap << m_createdMaps[i] << "\n";
-	}
-	jsonMap.close();
 }
 
 void CEditor::setCameraPos(float x, float y)

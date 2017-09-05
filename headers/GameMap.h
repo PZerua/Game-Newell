@@ -30,7 +30,7 @@ public:
 	void setTile(int x, int y, int tilemapX, int tilemapY, int mapRow, int mapCol);
 	std::string getName();
 	void deleteTile(int row, int col);
-	void render(CCamera *camara);
+	void render(CCamera *camara, int row = -1, int col = -1);
 	int width;
 	int height;
 

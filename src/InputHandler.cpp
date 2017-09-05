@@ -12,7 +12,8 @@ void CInputHandler::handleInput()
 		switch (sdlEvent.type)
 		{
 		case SDL_QUIT:
-			return;
+			m_running = false;
+			break;
 		case SDL_MOUSEBUTTONDOWN:
 			if (sdlEvent.button.button == SDL_BUTTON_RIGHT) m_isMouseRightPressed = true;
 			if (sdlEvent.button.button == SDL_BUTTON_LEFT) m_isMouseLeftPressed = true;
