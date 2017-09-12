@@ -4,17 +4,11 @@
 *.o
 *.obj
 
-# Game Maps
-/GameNewell/data/maps
-
 # Executables
 *.exe
 
 # Binary folders
-/GameNewell/Degug
-/GameNewell/x64
-/x64
-/Debug
+/bin/*
 /.vs
 
 # Visual Studio Files

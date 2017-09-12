@@ -1,156 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="src">
+      <UniqueIdentifier>{204fc54c-af4c-45b9-a59b-8556d1c69a12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src\graphics">
+      <UniqueIdentifier>{df2ae4fc-7134-4b43-88a5-9d678296860c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\External">
-      <UniqueIdentifier>{f823ee67-4af4-4063-ba96-d407c01c48ec}</UniqueIdentifier>
+    <Filter Include="src\input">
+      <UniqueIdentifier>{704e4c01-fc3d-4c55-87c4-c7d5f1a2588e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="src\math">
+      <UniqueIdentifier>{5acb1e13-9c89-4b9a-963d-025c04221933}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\External">
-      <UniqueIdentifier>{a9733d4f-7666-4361-9324-7913e8737de7}</UniqueIdentifier>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{d5b651a1-7fd2-4933-a9b3-ab202d9ffae9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\graphics\window.cpp">
+      <Filter>src\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\input\input.cpp">
+      <Filter>src\input</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgui_impl_sdl_gl3.cpp">
-      <Filter>Source Files\External</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgui_draw.cpp">
-      <Filter>Source Files\External</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgui_demo.cpp">
-      <Filter>Source Files\External</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgui.cpp">
-      <Filter>Source Files\External</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\InputHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Camera.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\graphics\shader.cpp">
+      <Filter>src\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\headers\includes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\graphics\window.h">
+      <Filter>src\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\input\input.h">
+      <Filter>src\input</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Window.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\math\vec2.h">
+      <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Editor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\math\vec3.h">
+      <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Tile.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\math\vec4.h">
+      <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\GameMap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\math\mat4.h">
+      <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\TextureManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\utils\fileutils.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\math\math.h">
+      <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Mesh.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\graphics\shader.h">
+      <Filter>src\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\imgui_impl_sdl_gl3.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\imgui.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\imgui_internal.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\imconfig.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\json.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\stb_image.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\stb_rect_pack.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\stb_truetype.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\stb_textedit.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\InputHandler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\utils\mathutils.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
