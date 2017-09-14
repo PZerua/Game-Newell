@@ -13,7 +13,7 @@ namespace gfx
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	// Compile shaders
-	unsigned int vertex, fragment;
+	GLuint vertex, fragment;
 
 	compileShader(vertex, GL_VERTEX_SHADER, utils::readFile(vertexPath).c_str());
 	compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFile(fragmentPath).c_str());
@@ -25,7 +25,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glLinkProgram(m_programID);
 
 	// Print errors if any
-	printErrors(m_programID);
+	printProgramErrors(m_programID);
 
 	// Delete unnecessary shaders (we have program)
 	glDeleteShader(vertex);
@@ -37,26 +37,39 @@ Shader::~Shader()
 	glDeleteProgram(m_programID);
 }
 
-void Shader::compileShader(unsigned int &shader, unsigned int shaderType, const char *shaderCode)
+void Shader::compileShader(GLuint &shader, GLenum shaderType, const char *shaderCode)
 {
 	shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &shaderCode, NULL);
 	glCompileShader(shader);
 
 	// Print compile errors if any
-	printErrors(shader);
+	printShaderErrors(shader);
 }
 
-void Shader::printErrors(unsigned int &shader) const
+void Shader::printShaderErrors(GLuint shader) const
 {
-	int success;
-	char infoLog[512];
+	GLint success;
+	char compileLog[512];
 
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "Error in shader compilation\n" << infoLog << std::endl;
+		glGetShaderInfoLog(shader, 512, NULL, compileLog);
+		std::cout << "Error in shader compilation\n" << compileLog << std::endl;
+	}
+}
+
+void Shader::printProgramErrors(GLuint shader) const
+{
+	GLint success;
+	char linkLog[512];
+
+	glGetProgramiv(shader, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shader, 512, NULL, linkLog);
+		std::cout << "Error in shader compilation\n" << linkLog << std::endl;
 	}
 }
 

@@ -41,11 +41,11 @@ struct mat4
 	{
 		for (unsigned col = 0; col < 4; col++)
 			for (unsigned row = 0; row < 4; row++)
-				m[col + row * 4] = 0.0f;
+				m[row + col * 4] = 0.0f;
 	}
 
-	inline float& operator()(unsigned row, unsigned col) { return m[col + row * 4]; }
-	inline float operator()(unsigned row, unsigned col) const { return m[col + row * 4]; }
+	inline float& operator()(unsigned row, unsigned col) { return m[row + col * 4]; }
+	inline float operator()(unsigned row, unsigned col) const { return m[row + col * 4]; }
 
 	void translate(const vec3 &value)
 	{
@@ -54,33 +54,36 @@ struct mat4
 		m[2 + 3 * 4] += value.z;
 	}
 
-	mat4 setTranslation(const vec3 &pos)
+	void setTranslation(const vec3 &pos)
 	{
-		mat4 mat;
+		m[0 + 3 * 4] = pos.x;
+		m[1 + 3 * 4] = pos.y;
+		m[2 + 3 * 4] = pos.z;
+	}
 
-		mat(0, 3) = pos.x;
-		mat(1, 3) = pos.y;
-		mat(2, 3) = pos.z;
+	void setScale(const vec3 &scale)
+	{
+		m[0 + 0 * 4] = scale.x;
+		m[1 + 1 * 4] = scale.y;
+		m[2 + 2 * 4] = scale.z;
+	}
 
+	static mat4 translationMatrix(const vec3 &pos)
+	{
+		mat4 mat(1.0f);
+		mat.setTranslation(pos);
 		return mat;
 	}
 
-	mat4 setScale(const vec3 &scale)
+	static mat4 rotationMatrix(float angle, const vec3 &axis)
 	{
-		mat4 mat;
-
-		mat(0, 0) = scale.x;
-		mat(1, 1) = scale.y;
-		mat(2, 2) = scale.z;
-
+		mat4 mat(1.0f);
+		mat.setRotation(angle, axis);
 		return mat;
 	}
 
-
-	mat4 setRotation(float angle, const vec3 &axis)
+	void setRotation(float angle, const vec3 &axis)
 	{
-		mat4 mat;
-
 		float c = cosf(utils::toRadians(angle));
 		float s = sinf(utils::toRadians(angle));
 		float cmo = 1.0f - c;
@@ -89,19 +92,17 @@ struct mat4
 		float y = axis.y;
 		float z = axis.z;
 
-		mat(0, 0) = c + x * x * cmo;
-		mat(1, 0) = y * x * cmo + z * s;
-		mat(2, 0) = z * x * cmo - y * s;
+		m[0 + 0 * 4] = c + x * x * cmo;
+		m[1 + 0 * 4] = y * x * cmo + z * s;
+		m[2 + 0 * 4] = z * x * cmo - y * s;
 
-		mat(0, 1) = x * y * cmo - z * s;
-		mat(1, 1) = c + y * y * cmo;
-		mat(2, 1) = z * y * cmo + x * s;
+		m[0 + 1 * 4] = x * y * cmo - z * s;
+		m[1 + 1 * 4] = c + y * y * cmo;
+		m[2 + 1 * 4] = z * y * cmo + x * s;
 
-		mat(0, 2) = x * z * cmo + y * s;
-		mat(1, 2) = y * z * cmo - x * s;
-		mat(2, 2) = c + z * z * cmo;
-
-		return mat;
+		m[0 + 2 * 4] = x * z * cmo + y * s;
+		m[1 + 2 * 4] = y * z * cmo - x * s;
+		m[2 + 2 * 4] = c + z * z * cmo;
 	}
 
 	static mat4 identity() { return mat4(1.0f); }
@@ -113,9 +114,9 @@ struct mat4
 		mat(1, 1) = 2.0f / (top - bottom);
 		mat(2, 2) = -2.0f / (farZ - nearZ);
 		mat(3, 3) = 1.0f;
-		mat(3, 0) = -(right + left) / (right - left);
-		mat(3, 1) = -(top + bottom) / (top - bottom);
-		mat(3, 2) = -(farZ + nearZ) / (farZ - nearZ);
+		mat(0, 3) = -(right + left) / (right - left);
+		mat(1, 3) = -(top + bottom) / (top - bottom);
+		mat(2, 3) = -(farZ + nearZ) / (farZ - nearZ);
 
 		return mat;
 
@@ -135,5 +136,13 @@ struct mat4
 		return mat;
 	}
 };
+
+mat4 operator+(const mat4 &left, const mat4 &right);
+mat4 operator+=(mat4 &left, const mat4 &right);
+mat4 operator-(const mat4 &left, const mat4 &right);
+mat4 operator-=(mat4 &left, const mat4 &right);
+mat4 operator*(const mat4 &left, const mat4 &right);
+mat4 operator*=(mat4 &left, const mat4 &right);
+std::ostream& operator<<(std::ostream& os, const mat4 &mat);
 
 } // namespace math

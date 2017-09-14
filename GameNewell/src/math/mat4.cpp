@@ -72,7 +72,7 @@ std::ostream& operator<<(std::ostream& os, const mat4 &mat)
 		os << "| ";
 
 		for (unsigned row = 0; row < 4; row++)
-			os << mat(row, col) << " ";
+			os << mat(col, row) << " ";
 
 		os << "|" << std::endl;
 	}

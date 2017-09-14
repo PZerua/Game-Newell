@@ -9,27 +9,34 @@ namespace gfx
 {
 	std::unique_ptr<IndexBuffer> Renderable2D::m_ebo = nullptr;
 
-	Renderable2D::Renderable2D(math::vec2 size) :
+	Renderable2D::Renderable2D(math::vec2 position, math::vec2 size) :
 		m_size(size)
 	{
+		m_modelMatrix = math::mat4::identity();
+		m_modelMatrix.setRotation(-90, math::vec3(0, 1, 0));
+		m_modelMatrix.setTranslation(math::vec3(position.x, position.y, 0));
+
 		initEbo();
 		initVbo();
+		initVao();
 	}
 
 
-	Renderable2D::Renderable2D(math::vec2 size, math::vec4 color) :
+	Renderable2D::Renderable2D(math::vec2 position, math::vec2 size, math::vec4 color) :
 		m_size(size), m_color(color)
 	{
+		m_modelMatrix = math::mat4::translationMatrix(math::vec3(position.x, position.y, 0)) * math::mat4::rotationMatrix(0, math::vec3(0, 1, 0));
+
 		initEbo();
 		initVbo(BUFFER_COLOR);
+		initVao(BUFFER_COLOR);
 	}
 
 	void Renderable2D::initVao(unsigned char flag)
 	{
-		
 		m_vao = std::make_unique<VertexArray>();
 		m_vao->addVertexBuffer(m_vbo.get());
-
+		m_vao->addIndexBuffer(m_ebo.get());
 	}
 
 	void Renderable2D::initEbo()
@@ -57,17 +64,21 @@ namespace gfx
 				center_x - m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z, m_color.w,
 				center_x + m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z, m_color.w
 			};
+
+			m_vbo = std::make_unique<VertexBuffer>(vertexData, QUAD_VERTEXCOLOR_SIZE);
 		}
-
-		GLfloat vertexData[QUAD_VERTEX_SIZE] =
+		else
 		{
-			center_x - m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f,
-			center_x + m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f,
-			center_x - m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f,
-			center_x + m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f
-		};
+			GLfloat vertexData[QUAD_VERTEX_SIZE] =
+			{
+				center_x - m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f,
+				center_x + m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f,
+				center_x - m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f,
+				center_x + m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f
+			};
 
-		m_vbo = std::make_unique<VertexBuffer>(vertexData, hasColor ? QUAD_VERTEXCOLOR_SIZE : QUAD_VERTEX_SIZE, hasColor ? 7 : 3);
+			m_vbo = std::make_unique<VertexBuffer>(vertexData, QUAD_VERTEX_SIZE);
+		}
 	}
 
 } // namespace gfx

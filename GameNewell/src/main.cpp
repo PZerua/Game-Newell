@@ -9,9 +9,10 @@
 #include <windows.h>
 
 #include <src/graphics/window.h>
-#include <src/graphics/buffers/vertexarray.h>
-#include <src/graphics/buffers/indexbuffer.h>
-#include <src/graphics/buffers/vertexbuffer.h>
+#include <src/graphics/renderable2d.h>
+#include <src/graphics/shader.h>
+#include <src/math/mat4.h>
+#include <src/utils/debugutils.h>
 
 extern "C" 
 {
@@ -52,17 +53,37 @@ int main(int argc, char* argv[])
 
 	window->init("Game Newell", 960, 864);
 	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
+	glViewport(0, 0, 960, 864);
 
 	double deltaTime = 0;
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
+	gfx::Shader shaderTest("src/graphics/shaders/simpleColor.vs", "src/graphics/shaders/simpleColor.fs");
+
+	gfx::Renderable2D test(math::vec2(100, 100), math::vec2(700, 300), math::vec4(1, 0, 0, 1));
+	
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{		
 		window->clear();
+
+		shaderTest.enable();
+
+		shaderTest.setMatrix4("u_mvp", math::mat4::ortho(0.0f, 960.0f, 864.0f, 0.0f, -1.0f, 1.0f) * test.m_modelMatrix);
+
+		test.m_vao->bind();
+
+		glDrawElements(GL_TRIANGLES, QUAD_INDICES_SIZE, GL_UNSIGNED_SHORT, 0);
+
+		test.m_vao->unbind();
+
+		shaderTest.disable();
+
 		window->update();
 
 		deltaTime = GetDelta();
+
+		utils::printGlErrors();
 	}
 
 	return 0;

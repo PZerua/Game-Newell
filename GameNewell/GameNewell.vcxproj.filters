@@ -13,35 +13,38 @@
     <Filter Include="src\utils">
       <UniqueIdentifier>{d5b651a1-7fd2-4933-a9b3-ab202d9ffae9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="graphics">
+    <Filter Include="src\graphics">
       <UniqueIdentifier>{df2ae4fc-7134-4b43-88a5-9d678296860c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="graphics\buffers">
+    <Filter Include="src\graphics\buffers">
       <UniqueIdentifier>{ac5ceb40-ae1c-4879-9df6-4aa052b21edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\shaders">
+      <UniqueIdentifier>{c7ed88ab-67bc-4cbf-94af-cec4de87e745}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\window.cpp">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\input\input.cpp">
       <Filter>src\input</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\shader.cpp">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\buffers\indexbuffer.cpp">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\buffers\vertexarray.cpp">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\buffers\vertexbuffer.cpp">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\renderable2d.cpp">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\math\mat4.cpp">
       <Filter>src\math</Filter>
@@ -58,10 +61,16 @@
     <ClCompile Include="src\utils\mathutils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\fileutils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\debugutils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\input\input.h">
       <Filter>src\input</Filter>
@@ -85,22 +94,33 @@
       <Filter>src\math</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\shader.h">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\mathutils.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\buffers\indexbuffer.h">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\buffers\vertexarray.h">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\buffers\vertexbuffer.h">
-      <Filter>graphics\buffers</Filter>
+      <Filter>src\graphics\buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderable2d.h">
-      <Filter>graphics</Filter>
+      <Filter>src\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\debugutils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\graphics\shaders\simpleColor.vs">
+      <Filter>src\graphics\shaders</Filter>
+    </None>
+    <None Include="src\graphics\shaders\simpleColor.fs">
+      <Filter>src\graphics\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

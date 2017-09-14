@@ -36,8 +36,9 @@ public:
 
 private:
 	// Utility functions
-	void compileShader(unsigned int &shader, unsigned int shaderType, const char *shaderCode);
-	void printErrors(unsigned int &shader) const;
+	void compileShader(GLuint &shader, GLenum shaderType, const char *shaderCode);
+	void printShaderErrors(GLuint shader) const;
+	void printProgramErrors(GLuint shader) const;
 };
 
 } // namespace gfx

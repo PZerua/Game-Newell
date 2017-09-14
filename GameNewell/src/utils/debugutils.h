@@ -5,13 +5,11 @@
 
 #pragma once
 
-#include <fstream>
-#include <sstream>
-#include <string>
+#include <GL\glew.h>
 
 namespace utils
 {
 
-std::string readFile(const std::string &filePath);
+	void printGlErrors();
 
 } // namespace utils

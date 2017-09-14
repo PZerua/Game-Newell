@@ -13,7 +13,7 @@ namespace gfx
 	{
 		glGenBuffers(1, &m_eboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboId);
-		glBufferData(m_eboId, size * sizeof(GLushort), data, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(GLushort), &data[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 

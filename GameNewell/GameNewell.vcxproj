@@ -31,6 +31,8 @@
     <ClCompile Include="src\math\vec2.cpp" />
     <ClCompile Include="src\math\vec3.cpp" />
     <ClCompile Include="src\math\vec4.cpp" />
+    <ClCompile Include="src\utils\debugutils.cpp" />
+    <ClCompile Include="src\utils\fileutils.cpp" />
     <ClCompile Include="src\utils\mathutils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -46,8 +48,13 @@
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\math\vec3.h" />
     <ClInclude Include="src\math\vec4.h" />
+    <ClInclude Include="src\utils\debugutils.h" />
     <ClInclude Include="src\utils\fileutils.h" />
     <ClInclude Include="src\utils\mathutils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\graphics\shaders\simpleColor.fs" />
+    <None Include="src\graphics\shaders\simpleColor.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19AC05EB-589C-42F4-8A64-25186CD41806}</ProjectGuid>

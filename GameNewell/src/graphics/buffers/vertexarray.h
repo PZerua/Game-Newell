@@ -32,6 +32,7 @@ namespace gfx
 		~VertexArray();
 
 		void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag = 0);
+		void addIndexBuffer(IndexBuffer* indexBuffer);
 
 		void bind() const;
 		void unbind() const;

@@ -14,17 +14,14 @@ namespace gfx
 	{
 	private:
 		GLuint m_vboId;
-		GLuint m_componentCount;
 
 	public:
 
-		VertexBuffer(GLfloat *data, GLsizei size, GLuint componentCount);
+		VertexBuffer(GLfloat *data, GLsizei size);
 		~VertexBuffer();
 
 		void bind() const;
 		void unbind() const;
-
-		inline GLuint getComponentCount() { return m_componentCount; }
 	};
 
 } // namespace gfx

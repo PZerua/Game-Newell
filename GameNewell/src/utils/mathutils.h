@@ -14,7 +14,7 @@ namespace utils
 {
 
 const float PI = 3.14159265358979f;
-inline float toRadians(float degrees);
+float toRadians(float degrees);
 
 } // namespace utils
 

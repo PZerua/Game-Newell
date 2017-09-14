@@ -23,17 +23,17 @@ namespace gfx
 	class Renderable2D
 	{
 	private:
-		math::mat4 m_modelMatrix;
 		math::vec2 m_size;
 		math::vec4 m_color;
 		std::vector<float> m_vertexData;
-		std::unique_ptr<VertexArray> m_vao;
 		std::unique_ptr<VertexBuffer> m_vbo;
-		static std::unique_ptr<IndexBuffer> m_ebo;
 
 	public:
-		Renderable2D(math::vec2 size, math::vec4 color);
-		Renderable2D(math::vec2 size);
+		Renderable2D(math::vec2 position, math::vec2 size, math::vec4 color);
+		Renderable2D(math::vec2 position, math::vec2 size);
+		std::unique_ptr<VertexArray> m_vao;
+		static std::unique_ptr<IndexBuffer> m_ebo;
+		math::mat4 m_modelMatrix;
 
 	private:
 		void initVao(unsigned char flag = 0);

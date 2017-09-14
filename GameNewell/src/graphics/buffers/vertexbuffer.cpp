@@ -8,12 +8,11 @@
 namespace gfx
 {
 
-	VertexBuffer::VertexBuffer(GLfloat *data, GLsizei size, GLuint componentCount) :
-		m_componentCount(componentCount)
+	VertexBuffer::VertexBuffer(GLfloat *data, GLsizei size)
 	{
 		glGenBuffers(1, &m_vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
-		glBufferData(m_vboId, size * sizeof(GLfloat), data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size * sizeof(GLfloat), &data[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
