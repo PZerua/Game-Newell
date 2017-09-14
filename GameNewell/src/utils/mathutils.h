@@ -10,11 +10,12 @@
 namespace math
 {
 
-	const float PI = 3.14159265358979f;
+namespace utils
+{
 
-	float toRadians(float degrees)
-	{
-		return degrees * (PI / 180.0f);
-	}
+const float PI = 3.14159265358979f;
+inline float toRadians(float degrees);
+
+} // namespace utils
 
 } // namespace math

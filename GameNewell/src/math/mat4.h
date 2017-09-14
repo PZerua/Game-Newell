@@ -15,193 +15,125 @@
 namespace math
 {
 
-	struct mat4
+struct mat4
+{
+	union
 	{
-		union
-		{
-			float m[16];
-			vec4 column[4];
-		};
-
-		mat4() 
-		{ 
-			reset();
-		}
-		mat4(float identity)
-		{
-			reset();
-
-			m[0 + 0 * 4] = identity;
-			m[1 + 1 * 4] = identity;
-			m[2 + 2 * 4] = identity;
-			m[3 + 3 * 4] = identity;
-		}
-
-		void reset()
-		{
-			for (unsigned col = 0; col < 4; col++)
-				for (unsigned row = 0; row < 4; row++)
-					m[col + row * 4] = 0.0f;
-		}
-
-		inline float& operator()(unsigned row, unsigned col) { return m[col + row * 4]; }
-		inline float operator()(unsigned row, unsigned col) const { return m[col + row * 4]; }
-
-		void translate(const vec3 &value)
-		{
-			m[0 + 3 * 4] += value.x;
-			m[1 + 3 * 4] += value.y;
-			m[2 + 3 * 4] += value.z;
-		}
-
-		mat4 setTranslation(const vec3 &pos)
-		{
-			mat4 mat;
-
-			mat(0, 3) = pos.x;
-			mat(1, 3) = pos.y;
-			mat(2, 3) = pos.z;
-
-			return mat;
-		}
-
-		mat4 setScale(const vec3 &scale)
-		{
-			mat4 mat;
-
-			mat(0, 0) = scale.x;
-			mat(1, 1) = scale.y;
-			mat(2, 2) = scale.z;
-
-			return mat;
-		}
-
-
-		mat4 setRotation(float angle, const vec3 &axis)
-		{
-			mat4 mat;
-
-			float c = cosf(toRadians(angle));
-			float s = sinf(toRadians(angle));
-			float cmo = 1.0f - c;
-
-			float x = axis.x;
-			float y = axis.y;
-			float z = axis.z;
-
-			mat(0, 0) = c + x * x * cmo;
-			mat(1, 0) = y * x * cmo + z * s;
-			mat(2, 0) = z * x * cmo - y * s;
-
-			mat(0, 1) = x * y * cmo - z * s;
-			mat(1, 1) = c + y * y * cmo;
-			mat(2, 1) = z * y * cmo + x * s;
-
-			mat(0, 2) = x * z * cmo + y * s;
-			mat(1, 2) = y * z * cmo - x * s;
-			mat(2, 2) = c + z * z * cmo;
-
-			return mat;
-		}
-
-		static mat4 identity() { return mat4(1.0f); }
-		static mat4 ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
-		{
-			mat4 mat;
-
-			mat(0, 0) = 2.0f / (right - left);
-			mat(1, 1) = 2.0f / (top - bottom);
-			mat(2, 2) = -2.0f / (farZ - nearZ);
-			mat(3, 3) = 1.0f;
-			mat(3, 0) = -(right + left) / (right - left);
-			mat(3, 1) = -(top + bottom) / (top - bottom);
-			mat(3, 2) = -(farZ + nearZ) / (farZ - nearZ);
-
-			return mat;
-
-		}
-		static mat4 perspective(float fov, float aspect, float nearZ, float farZ)
-		{
-			mat4 mat;
-
-			float q = 1.0f / tanf(toRadians(fov) / 2.0f);
-
-			mat(0, 0) = (1.0f / aspect) * q;
-			mat(1, 1) = q;
-			mat(2, 2) = -(farZ + nearZ) / (farZ - nearZ);
-			mat(2, 3) = -(2 * farZ * nearZ) / (farZ - nearZ);
-			mat(3, 2) = -1;
-
-			return mat;
-		}
+		float m[16];
+		vec4 column[4];
 	};
 
-	mat4 operator+(const mat4 &left, const mat4 &right) 
+	mat4() 
 	{ 
-		mat4 sum;
+		reset();
+	}
+	mat4(float identity)
+	{
+		reset();
 
+		m[0 + 0 * 4] = identity;
+		m[1 + 1 * 4] = identity;
+		m[2 + 2 * 4] = identity;
+		m[3 + 3 * 4] = identity;
+	}
+
+	void reset()
+	{
 		for (unsigned col = 0; col < 4; col++)
 			for (unsigned row = 0; row < 4; row++)
-				sum(row, col) = left(row, col) + right(row, col);
-
-		return sum;
+				m[col + row * 4] = 0.0f;
 	}
 
-	mat4 operator+=(mat4 &left, const mat4 &right)
+	inline float& operator()(unsigned row, unsigned col) { return m[col + row * 4]; }
+	inline float operator()(unsigned row, unsigned col) const { return m[col + row * 4]; }
+
+	void translate(const vec3 &value)
 	{
-		left = left + right;
-		return left;
+		m[0 + 3 * 4] += value.x;
+		m[1 + 3 * 4] += value.y;
+		m[2 + 3 * 4] += value.z;
 	}
 
-	mat4 operator-(const mat4 &left, const mat4 &right)
+	mat4 setTranslation(const vec3 &pos)
 	{
-		mat4 sub;
+		mat4 mat;
 
-		for (unsigned col = 0; col < 4; col++)
-			for (unsigned row = 0; row < 4; row++)
-				sub(row, col) = left(row, col) - right(row, col);
+		mat(0, 3) = pos.x;
+		mat(1, 3) = pos.y;
+		mat(2, 3) = pos.z;
 
-		return sub;
+		return mat;
 	}
 
-	mat4 operator-=(mat4 &left, const mat4 &right)
+	mat4 setScale(const vec3 &scale)
 	{
-		left = left - right;
-		return left;
+		mat4 mat;
+
+		mat(0, 0) = scale.x;
+		mat(1, 1) = scale.y;
+		mat(2, 2) = scale.z;
+
+		return mat;
 	}
 
-	mat4 operator*(const mat4 &left, const mat4 &right)
+
+	mat4 setRotation(float angle, const vec3 &axis)
 	{
-		mat4 mul;
+		mat4 mat;
 
-		for (unsigned row = 0; row < 4; row++)
-			for (unsigned e = 0; e < 4; e++)
-				for (unsigned col = 0; col < 4; col++)
-					mul(row, col) += left(row, e) * right(e, col);
+		float c = cosf(utils::toRadians(angle));
+		float s = sinf(utils::toRadians(angle));
+		float cmo = 1.0f - c;
 
-		return mul;
+		float x = axis.x;
+		float y = axis.y;
+		float z = axis.z;
+
+		mat(0, 0) = c + x * x * cmo;
+		mat(1, 0) = y * x * cmo + z * s;
+		mat(2, 0) = z * x * cmo - y * s;
+
+		mat(0, 1) = x * y * cmo - z * s;
+		mat(1, 1) = c + y * y * cmo;
+		mat(2, 1) = z * y * cmo + x * s;
+
+		mat(0, 2) = x * z * cmo + y * s;
+		mat(1, 2) = y * z * cmo - x * s;
+		mat(2, 2) = c + z * z * cmo;
+
+		return mat;
 	}
 
-	mat4 operator*=(mat4 &left, const mat4 &right)
+	static mat4 identity() { return mat4(1.0f); }
+	static mat4 ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
 	{
-		left = left * right;
-		return left;
+		mat4 mat;
+
+		mat(0, 0) = 2.0f / (right - left);
+		mat(1, 1) = 2.0f / (top - bottom);
+		mat(2, 2) = -2.0f / (farZ - nearZ);
+		mat(3, 3) = 1.0f;
+		mat(3, 0) = -(right + left) / (right - left);
+		mat(3, 1) = -(top + bottom) / (top - bottom);
+		mat(3, 2) = -(farZ + nearZ) / (farZ - nearZ);
+
+		return mat;
+
 	}
+	static mat4 perspective(float fov, float aspect, float nearZ, float farZ)
+	{
+		mat4 mat;
 
-	std::ostream& operator<<(std::ostream& os, const mat4 &mat) 
-	{ 
-		for (unsigned col = 0; col < 4; col++)
-		{
-			os << "| ";
+		float q = 1.0f / tanf(utils::toRadians(fov) / 2.0f);
 
-			for (unsigned row = 0; row < 4; row++)
-				os << mat(row, col) << " ";
+		mat(0, 0) = (1.0f / aspect) * q;
+		mat(1, 1) = q;
+		mat(2, 2) = -(farZ + nearZ) / (farZ - nearZ);
+		mat(2, 3) = -(2 * farZ * nearZ) / (farZ - nearZ);
+		mat(3, 2) = -1;
 
-			os << "|" << std::endl;
-		}
-
-		return os;
+		return mat;
 	}
-
+};
 
 } // namespace math

@@ -9,6 +9,9 @@
 #include <windows.h>
 
 #include <src/graphics/window.h>
+#include <src/graphics/buffers/vertexarray.h>
+#include <src/graphics/buffers/indexbuffer.h>
+#include <src/graphics/buffers/vertexbuffer.h>
 
 extern "C" 
 {

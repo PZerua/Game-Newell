@@ -6,7 +6,6 @@
 #include "shader.h"
 
 #include <iostream>
-#include <GL/glew.h>
 
 namespace gfx
 {
@@ -20,13 +19,13 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFile(fragmentPath).c_str());
 
 	// Shader Program
-	program = glCreateProgram();
-	glAttachShader(program, vertex);
-	glAttachShader(program, fragment);
-	glLinkProgram(program);
+	m_programID = glCreateProgram();
+	glAttachShader(m_programID, vertex);
+	glAttachShader(m_programID, fragment);
+	glLinkProgram(m_programID);
 
 	// Print errors if any
-	printErrors(program);
+	printErrors(m_programID);
 
 	// Delete unnecessary shaders (we have program)
 	glDeleteShader(vertex);
@@ -35,7 +34,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 Shader::~Shader()
 {
-	glDeleteProgram(program);
+	glDeleteProgram(m_programID);
 }
 
 void Shader::compileShader(unsigned int &shader, unsigned int shaderType, const char *shaderCode)
@@ -48,7 +47,7 @@ void Shader::compileShader(unsigned int &shader, unsigned int shaderType, const 
 	printErrors(shader);
 }
 
-void Shader::printErrors(unsigned int &shader)
+void Shader::printErrors(unsigned int &shader) const
 {
 	int success;
 	char infoLog[512];
@@ -63,7 +62,7 @@ void Shader::printErrors(unsigned int &shader)
 
 void Shader::enable() const
 {
-	glUseProgram(program);
+	glUseProgram(m_programID);
 }
 
 void Shader::disable() const
@@ -73,35 +72,35 @@ void Shader::disable() const
 
 void Shader::setBool(const char* name, bool value) const
 {
-	glUniform1i(glGetUniformLocation(program, name), (int)value);
+	glUniform1i(glGetUniformLocation(m_programID, name), (int)value);
 }
 void Shader::setInt(const char* name, int value) const
 {
-	glUniform1i(glGetUniformLocation(program, name), value);
+	glUniform1i(glGetUniformLocation(m_programID, name), value);
 }
 void Shader::setFloat(const char* name, float value) const
 {
-	glUniform1f(glGetUniformLocation(program, name), value);
+	glUniform1f(glGetUniformLocation(m_programID, name), value);
 }
 
-void Shader::setVector2(const char* name, const math::vec2 &vec)
+void Shader::setVector2(const char* name, const math::vec2 &vec) const
 {
-	glUniform2f(glGetUniformLocation(program, name), vec.x, vec.y);
+	glUniform2f(glGetUniformLocation(m_programID, name), vec.x, vec.y);
 }
 
-void Shader::setVector3(const char* name, const math::vec3 &vec)
+void Shader::setVector3(const char* name, const math::vec3 &vec) const
 {
-	glUniform3f(glGetUniformLocation(program, name), vec.x, vec.y, vec.z);
+	glUniform3f(glGetUniformLocation(m_programID, name), vec.x, vec.y, vec.z);
 }
 
-void Shader::setVector4(const char* name, const math::vec4 &vec)
+void Shader::setVector4(const char* name, const math::vec4 &vec) const
 {
-	glUniform4f(glGetUniformLocation(program, name), vec.x, vec.y, vec.z, vec.w);
+	glUniform4f(glGetUniformLocation(m_programID, name), vec.x, vec.y, vec.z, vec.w);
 }
 
-void Shader::setMatrix4(const char* name, const math::mat4 &mat)
+void Shader::setMatrix4(const char* name, const math::mat4 &mat) const
 {
-	glUniformMatrix4fv(glGetUniformLocation(program, name), 1, GL_FALSE, mat.m);
+	glUniformMatrix4fv(glGetUniformLocation(m_programID, name), 1, GL_FALSE, mat.m);
 }
 	
 } // namespace gfx

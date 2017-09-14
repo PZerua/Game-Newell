@@ -15,10 +15,19 @@ namespace gfx
 
 class Window
 {
+private:
+	// Window dimensions
+	int m_width;
+	int m_height;
+
+	// Window attributes
+	bool m_isFullscreen;
+
+	GLFWwindow* m_window;
+
 public:
 	// Intializes internals
 	Window();
-
 	~Window();
 
 	// Creates window
@@ -35,16 +44,6 @@ public:
 
 	void update();
 	void clear() const;
-
-	GLFWwindow* m_window;
-
-private:
-	// Window dimensions
-	int m_width;
-	int m_height;
-
-	// Window attributes
-	bool m_isFullscreen;
 
 };
 
