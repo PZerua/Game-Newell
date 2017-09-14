@@ -53,6 +53,8 @@
     <ClInclude Include="src\utils\mathutils.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\graphics\shaders\simple.fs" />
+    <None Include="src\graphics\shaders\simple.vs" />
     <None Include="src\graphics\shaders\simpleColor.fs" />
     <None Include="src\graphics\shaders\simpleColor.vs" />
   </ItemGroup>

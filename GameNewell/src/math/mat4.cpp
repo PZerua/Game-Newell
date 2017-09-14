@@ -13,6 +13,14 @@
 namespace math
 {
 
+void mat4::rotateLocal(float angle, const vec3& axis)
+{
+	mat4 R(1.0f);
+	R.setRotation(angle, axis);
+
+	*this = R * *this;
+}
+
 mat4 operator+(const mat4 &left, const mat4 &right) 
 { 
 	mat4 sum;

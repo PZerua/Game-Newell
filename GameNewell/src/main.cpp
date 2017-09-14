@@ -54,14 +54,15 @@ int main(int argc, char* argv[])
 	window->init("Game Newell", 960, 864);
 	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
 	glViewport(0, 0, 960, 864);
+	glDisable(GL_CULL_FACE);
 
 	double deltaTime = 0;
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
-	gfx::Shader shaderTest("src/graphics/shaders/simpleColor.vs", "src/graphics/shaders/simpleColor.fs");
+	gfx::Shader shaderTest("src/graphics/shaders/simple.vs", "src/graphics/shaders/simple.fs");
 
-	gfx::Renderable2D test(math::vec2(100, 100), math::vec2(700, 300), math::vec4(1, 0, 0, 1));
+	gfx::Renderable2D test(math::vec2(480, 432), math::vec2(200, 200), math::vec4(1, 0, 0, 1));
 	
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{		
@@ -69,7 +70,8 @@ int main(int argc, char* argv[])
 
 		shaderTest.enable();
 
-		shaderTest.setMatrix4("u_mvp", math::mat4::ortho(0.0f, 960.0f, 864.0f, 0.0f, -1.0f, 1.0f) * test.m_modelMatrix);
+		shaderTest.setMatrix4("u_mvp", math::mat4::ortho(0.0f, 960.0f, 864.0f, 0.0f, -3000.0f, 3000.0f) * test.m_modelMatrix);
+		//shaderTest.setMatrix4("u_mvp", math::mat4::perspective(80, 960.0f / 864.0f, 0.0f, 10000.0f) * test.m_modelMatrix);
 
 		test.m_vao->bind();
 

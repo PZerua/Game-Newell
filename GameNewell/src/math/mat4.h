@@ -82,6 +82,8 @@ struct mat4
 		return mat;
 	}
 
+	void mat4::rotateLocal(float angle, const vec3& axis);
+
 	void setRotation(float angle, const vec3 &axis)
 	{
 		float c = cosf(utils::toRadians(angle));
@@ -103,35 +105,37 @@ struct mat4
 		m[0 + 2 * 4] = x * z * cmo + y * s;
 		m[1 + 2 * 4] = y * z * cmo - x * s;
 		m[2 + 2 * 4] = c + z * z * cmo;
+
+		m[3 + 3 * 4] = 1;
 	}
 
 	static mat4 identity() { return mat4(1.0f); }
 	static mat4 ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
 	{
-		mat4 mat;
+		mat4 mat(1.0f);
 
 		mat(0, 0) = 2.0f / (right - left);
 		mat(1, 1) = 2.0f / (top - bottom);
-		mat(2, 2) = -2.0f / (farZ - nearZ);
-		mat(3, 3) = 1.0f;
-		mat(0, 3) = -(right + left) / (right - left);
-		mat(1, 3) = -(top + bottom) / (top - bottom);
-		mat(2, 3) = -(farZ + nearZ) / (farZ - nearZ);
+		mat(2, 2) = 2.0f / (nearZ - farZ);
+		mat(0, 3) = (left + right) / (left - right);
+		mat(1, 3) = (bottom + top) / (bottom - top);
+		mat(2, 3) = (farZ + nearZ) / (farZ - nearZ);
 
 		return mat;
 
 	}
 	static mat4 perspective(float fov, float aspect, float nearZ, float farZ)
 	{
-		mat4 mat;
+		mat4 mat(1.0f);
 
 		float q = 1.0f / tanf(utils::toRadians(fov) / 2.0f);
 
-		mat(0, 0) = (1.0f / aspect) * q;
+		mat(0, 0) = q / aspect;
 		mat(1, 1) = q;
-		mat(2, 2) = -(farZ + nearZ) / (farZ - nearZ);
-		mat(2, 3) = -(2 * farZ * nearZ) / (farZ - nearZ);
-		mat(3, 2) = -1;
+		mat(2, 2) = (farZ + nearZ) / (nearZ - farZ);
+		mat(2, 3) = -1.0f;
+		mat(3, 2) = 2.0f * (farZ * nearZ) / (nearZ - farZ);
+		mat(3, 3) = 0.0f;
 
 		return mat;
 	}

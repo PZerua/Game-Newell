@@ -122,5 +122,11 @@
     <None Include="src\graphics\shaders\simpleColor.fs">
       <Filter>src\graphics\shaders</Filter>
     </None>
+    <None Include="src\graphics\shaders\simple.vs">
+      <Filter>src\graphics\shaders</Filter>
+    </None>
+    <None Include="src\graphics\shaders\simple.fs">
+      <Filter>src\graphics\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
