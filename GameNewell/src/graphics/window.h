@@ -13,6 +13,8 @@
 namespace gfx
 {
 
+void windowResize(GLFWwindow *window, int width, int height);
+
 class Window
 {
 private:
@@ -38,7 +40,7 @@ public:
 	int getHeight() const;
 
 	bool isClosed() const;
-	bool isFullscreen() const;
+	inline bool isFullscreen() const { return m_isFullscreen; }
 	void setSize(int width, int height);
 	void toggleFullscreen();
 

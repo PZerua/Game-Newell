@@ -24,7 +24,7 @@ namespace gfx
 		unsigned stride = 0;
 
 		if (flag & BUFFER_COLOR)
-			stride += 6;
+			stride += 5;
 
 		if (flag & BUFFER_UV)
 			stride += 2;
@@ -34,12 +34,12 @@ namespace gfx
 		vertexBuffer->bind();
 
 		glEnableVertexAttribArray(m_indexCount);
-		glVertexAttribPointer(m_indexCount++, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), NULL);
+		glVertexAttribPointer(m_indexCount++, 2, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), NULL);
 
 		if (flag & BUFFER_COLOR)
 		{
 			glEnableVertexAttribArray(m_indexCount);
-			glVertexAttribPointer(m_indexCount++, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+			glVertexAttribPointer(m_indexCount++, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 		}
 
 		if (flag & BUFFER_UV)

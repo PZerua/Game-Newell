@@ -4,6 +4,7 @@
 */
 
 #include "renderable2d.h"
+#include <iostream>
 
 namespace gfx
 {
@@ -25,9 +26,10 @@ namespace gfx
 		m_size(size), m_color(color)
 	{
 		m_modelMatrix = math::mat4::identity();
-		//m_modelMatrix.rotateLocal(90, math::vec3(0, 1, 0));
 		m_modelMatrix.translate(math::vec3(position.x, position.y, 0.0f));
-		//m_modelMatrix = math::mat4::translationMatrix(math::vec3(position.x, position.y, 0));
+		std::cout << m_modelMatrix << std::endl;
+		m_modelMatrix.scale(math::vec3(size.x, size.y, 1.0f));
+		std::cout << m_modelMatrix << std::endl;
 
 		initEbo();
 		initVbo(BUFFER_COLOR);
@@ -61,10 +63,10 @@ namespace gfx
 		{
 			GLfloat vertexData[QUAD_VERTEXCOLOR_SIZE] =
 			{
-				center_x - m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z,
-				center_x + m_size.x * 0.5f, center_y - m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z,
-				center_x - m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z,
-				center_x + m_size.x * 0.5f, center_y + m_size.y * 0.5f, 0.0f, m_color.x, m_color.y, m_color.z
+				0.0f, 1.0f, m_color.x, m_color.y, m_color.z,
+				1.0f, 1.0f, m_color.x, m_color.y, m_color.z,
+				0.0f, 0.0f, m_color.x, m_color.y, m_color.z,
+				1.0f, 0.0f, m_color.x, m_color.y, m_color.z
 			};
 
 			m_vbo = std::make_unique<VertexBuffer>(vertexData, QUAD_VERTEXCOLOR_SIZE);

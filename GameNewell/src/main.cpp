@@ -51,10 +51,8 @@ int main(int argc, char* argv[])
 {
 	std::shared_ptr<gfx::Window> window = std::make_shared<gfx::Window>();
 
-	window->init("Game Newell", 960, 864);
+	window->init("Game Newell", 800.0f, 720.0f);
 	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
-	glViewport(0, 0, 960, 864);
-	glDisable(GL_CULL_FACE);
 
 	double deltaTime = 0;
 
@@ -62,16 +60,15 @@ int main(int argc, char* argv[])
 
 	gfx::Shader shaderTest("src/graphics/shaders/simple.vs", "src/graphics/shaders/simple.fs");
 
-	gfx::Renderable2D test(math::vec2(480, 432), math::vec2(200, 200), math::vec4(1, 0, 0, 1));
-	
+	gfx::Renderable2D test(math::vec2(0, 0), math::vec2(100, 100), math::vec4(1, 0, 0, 1));
+
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{		
 		window->clear();
 
 		shaderTest.enable();
 
-		shaderTest.setMatrix4("u_mvp", math::mat4::ortho(0.0f, 960.0f, 864.0f, 0.0f, -3000.0f, 3000.0f) * test.m_modelMatrix);
-		//shaderTest.setMatrix4("u_mvp", math::mat4::perspective(80, 960.0f / 864.0f, 0.0f, 10000.0f) * test.m_modelMatrix);
+		shaderTest.setMatrix4("u_mvp", math::mat4::ortho(0.0f, window->getWidth(), window->getHeight(), 0.0f, -1.0f, 1.0f) * test.m_modelMatrix);
 
 		test.m_vao->bind();
 

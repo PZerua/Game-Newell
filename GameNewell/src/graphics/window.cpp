@@ -53,12 +53,15 @@ bool Window::init(const std::string &screenTitle, int window_width, int window_h
 	glfwSetKeyCallback(m_window, input::onKeyChange);
 	glfwSetMouseButtonCallback(m_window, input::onMouseChange);
 	glfwSetCursorPosCallback(m_window, input::onMouseMove);
+	glfwSetWindowSizeCallback(m_window, windowResize);
 
 	std::cout << "[CORE] OpenGL context created" << std::endl;
 
 	glewInit();
 
 	std::cout << "[CORE] " << glGetString(GL_VERSION) << std::endl;
+
+	glViewport(0, 0, m_width, m_height);
 
 	return true;
 }
@@ -103,6 +106,11 @@ void Window::toggleFullscreen()
 {
 	//bool isFullscreen = SDL_GetWindowFlags(m_window) & SDL_WINDOW_FULLSCREEN;
 	//SDL_SetWindowFullscreen(m_window, isFullscreen ? 0 : SDL_WINDOW_FULLSCREEN);
+}
+
+void windowResize(GLFWwindow *window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 } // namespace gfx

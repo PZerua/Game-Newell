@@ -13,12 +13,28 @@
 namespace math
 {
 
-void mat4::rotateLocal(float angle, const vec3& axis)
+void mat4::rotate(float angle, const vec3& axis)
 {
 	mat4 R(1.0f);
 	R.setRotation(angle, axis);
 
-	*this = R * *this;
+	*this *= R;
+}
+
+void mat4::translate(const vec3 &value)
+{
+	mat4 T(1.0f);
+	T.setTranslation(value);
+
+	*this *= T;
+}
+
+void mat4::scale(const vec3 &value)
+{
+	mat4 S(1.0f);
+	S.setScale(value);
+
+	*this *= S;
 }
 
 mat4 operator+(const mat4 &left, const mat4 &right) 

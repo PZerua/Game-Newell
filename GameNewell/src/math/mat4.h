@@ -47,12 +47,9 @@ struct mat4
 	inline float& operator()(unsigned row, unsigned col) { return m[row + col * 4]; }
 	inline float operator()(unsigned row, unsigned col) const { return m[row + col * 4]; }
 
-	void translate(const vec3 &value)
-	{
-		m[0 + 3 * 4] += value.x;
-		m[1 + 3 * 4] += value.y;
-		m[2 + 3 * 4] += value.z;
-	}
+	void rotate(float angle, const vec3& axis);
+	void translate(const vec3 &value);
+	void scale(const vec3 &value);
 
 	void setTranslation(const vec3 &pos)
 	{
@@ -68,6 +65,13 @@ struct mat4
 		m[2 + 2 * 4] = scale.z;
 	}
 
+	static mat4 scaleMatrix(const vec3 &scale)
+	{
+		mat4 mat(1.0f);
+		mat.setScale(scale);
+		return mat;
+	}
+
 	static mat4 translationMatrix(const vec3 &pos)
 	{
 		mat4 mat(1.0f);
@@ -81,8 +85,6 @@ struct mat4
 		mat.setRotation(angle, axis);
 		return mat;
 	}
-
-	void mat4::rotateLocal(float angle, const vec3& axis);
 
 	void setRotation(float angle, const vec3 &axis)
 	{
@@ -116,10 +118,10 @@ struct mat4
 
 		mat(0, 0) = 2.0f / (right - left);
 		mat(1, 1) = 2.0f / (top - bottom);
-		mat(2, 2) = 2.0f / (nearZ - farZ);
-		mat(0, 3) = (left + right) / (left - right);
-		mat(1, 3) = (bottom + top) / (bottom - top);
-		mat(2, 3) = (farZ + nearZ) / (farZ - nearZ);
+		mat(2, 2) = -2.0f / (farZ - nearZ);
+		mat(0, 3) = -(right + left) / (right - left);
+		mat(1, 3) = -(top + bottom) / (top - bottom);
+		mat(2, 3) = -(farZ + nearZ) / (farZ - nearZ);
 
 		return mat;
 

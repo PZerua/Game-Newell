@@ -15,7 +15,7 @@
 
 #define QUAD_INDICES_SIZE 6
 #define QUAD_VERTEX_SIZE 12
-#define QUAD_VERTEXCOLOR_SIZE 24
+#define QUAD_VERTEXCOLOR_SIZE 20
 
 namespace gfx
 {
