@@ -5,21 +5,10 @@
 
 #pragma once
 
-#include <cmath>
-#include <ostream>
-
 #include <src/math/mat4.h>
 
 namespace math
 {
-
-void mat4::rotate(float angle, const vec3& axis)
-{
-	mat4 R(1.0f);
-	R.setRotation(angle, axis);
-
-	*this *= R;
-}
 
 void mat4::translate(const vec3 &value)
 {
@@ -27,6 +16,14 @@ void mat4::translate(const vec3 &value)
 	T.setTranslation(value);
 
 	*this *= T;
+}
+
+void mat4::rotate(float angle, const vec3& axis)
+{
+	mat4 R(1.0f);
+	R.setRotation(angle, axis);
+
+	*this *= R;
 }
 
 void mat4::scale(const vec3 &value)

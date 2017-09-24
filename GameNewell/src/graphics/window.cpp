@@ -63,6 +63,8 @@ bool Window::init(const std::string &screenTitle, int window_width, int window_h
 
 	glViewport(0, 0, m_width, m_height);
 
+	glfwSetWindowUserPointer(m_window, this);
+
 	return true;
 }
 
@@ -96,20 +98,17 @@ void Window::setSize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
-
-	/*
-	SDL_SetWindowSize(m_window, width, height);
-	SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);*/
 }
 
 void Window::toggleFullscreen()
 {
-	//bool isFullscreen = SDL_GetWindowFlags(m_window) & SDL_WINDOW_FULLSCREEN;
-	//SDL_SetWindowFullscreen(m_window, isFullscreen ? 0 : SDL_WINDOW_FULLSCREEN);
+	
 }
 
 void windowResize(GLFWwindow *window, int width, int height)
 {
+	Window *windowClass = (Window*)glfwGetWindowUserPointer(window);
+	windowClass->setSize(width, height);
 	glViewport(0, 0, width, height);
 }
 

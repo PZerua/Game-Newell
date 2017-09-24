@@ -15,27 +15,33 @@
 namespace gfx
 {
 
-	enum VBO_FLAGS 
-	{
-		BUFFER_COLOR = 0x01,
-		BUFFER_UV = 0x02
-	};
+#define ATTRIBUTE_VERTEX 0
+#define ATTRIBUTE_COLOR 1
+#define ATTRIBUTE_UV 2
+#define ATTRIBUTE_INSTANCE_ARRAY 3
 
-	class VertexArray
-	{
-	private:
-		GLuint m_vaoId;
-		unsigned m_indexCount;
+enum VBO_FLAGS 
+{
+	VBO_BUFFER_VERTEX = 0x01,
+	VBO_BUFFER_COLOR = 0x02,
+	VBO_BUFFER_UV = 0x04,
+	VBO_INSTANCED = 0x08
+};
 
-	public:
-		VertexArray();
-		~VertexArray();
+class VertexArray
+{
+private:
+	GLuint m_vaoId;
 
-		void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag = 0);
-		void addIndexBuffer(IndexBuffer* indexBuffer);
+public:
+	VertexArray();
+	~VertexArray();
 
-		void bind() const;
-		void unbind() const;
-	};
+	void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag = ATTRIBUTE_VERTEX);
+	void addIndexBuffer(IndexBuffer* indexBuffer);
+
+	void bind() const;
+	void unbind() const;
+};
 
 } // namespace gfx

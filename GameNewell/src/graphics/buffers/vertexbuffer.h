@@ -17,11 +17,14 @@ namespace gfx
 
 	public:
 
-		VertexBuffer(GLfloat *data, GLsizei size);
+		VertexBuffer(GLvoid *data, GLsizei size, GLenum drawType = GL_STATIC_DRAW);
+		VertexBuffer();
 		~VertexBuffer();
 
 		void bind() const;
 		void unbind() const;
+
+		void changeData(GLvoid *data, GLsizei size, GLenum drawType = GL_STATIC_DRAW);
 	};
 
 } // namespace gfx

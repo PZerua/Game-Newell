@@ -43,9 +43,6 @@
     <ClCompile Include="src\graphics\buffers\vertexbuffer.cpp">
       <Filter>src\graphics\buffers</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\renderable2d.cpp">
-      <Filter>src\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\math\mat4.cpp">
       <Filter>src\math</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\debugutils.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderer.cpp">
+      <Filter>src\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\debugutils.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer.h">
+      <Filter>src\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

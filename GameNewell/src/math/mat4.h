@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <cmath>
 #include <ostream>
 
 #include <src/math/vec3.h>
@@ -47,8 +46,8 @@ struct mat4
 	inline float& operator()(unsigned row, unsigned col) { return m[row + col * 4]; }
 	inline float operator()(unsigned row, unsigned col) const { return m[row + col * 4]; }
 
-	void rotate(float angle, const vec3& axis);
 	void translate(const vec3 &value);
+	void rotate(float angle, const vec3& axis);
 	void scale(const vec3 &value);
 
 	void setTranslation(const vec3 &pos)
@@ -56,34 +55,6 @@ struct mat4
 		m[0 + 3 * 4] = pos.x;
 		m[1 + 3 * 4] = pos.y;
 		m[2 + 3 * 4] = pos.z;
-	}
-
-	void setScale(const vec3 &scale)
-	{
-		m[0 + 0 * 4] = scale.x;
-		m[1 + 1 * 4] = scale.y;
-		m[2 + 2 * 4] = scale.z;
-	}
-
-	static mat4 scaleMatrix(const vec3 &scale)
-	{
-		mat4 mat(1.0f);
-		mat.setScale(scale);
-		return mat;
-	}
-
-	static mat4 translationMatrix(const vec3 &pos)
-	{
-		mat4 mat(1.0f);
-		mat.setTranslation(pos);
-		return mat;
-	}
-
-	static mat4 rotationMatrix(float angle, const vec3 &axis)
-	{
-		mat4 mat(1.0f);
-		mat.setRotation(angle, axis);
-		return mat;
 	}
 
 	void setRotation(float angle, const vec3 &axis)
@@ -109,6 +80,34 @@ struct mat4
 		m[2 + 2 * 4] = c + z * z * cmo;
 
 		m[3 + 3 * 4] = 1;
+	}
+
+	void setScale(const vec3 &scale)
+	{
+		m[0 + 0 * 4] = scale.x;
+		m[1 + 1 * 4] = scale.y;
+		m[2 + 2 * 4] = scale.z;
+	}
+
+	static mat4 translationMatrix(const vec3 &pos)
+	{
+		mat4 mat(1.0f);
+		mat.setTranslation(pos);
+		return mat;
+	}
+
+	static mat4 rotationMatrix(float angle, const vec3 &axis)
+	{
+		mat4 mat(1.0f);
+		mat.setRotation(angle, axis);
+		return mat;
+	}
+
+	static mat4 scaleMatrix(const vec3 &scale)
+	{
+		mat4 mat(1.0f);
+		mat.setScale(scale);
+		return mat;
 	}
 
 	static mat4 identity() { return mat4(1.0f); }

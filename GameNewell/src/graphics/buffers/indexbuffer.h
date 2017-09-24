@@ -18,7 +18,7 @@ namespace gfx
 		
 	public:
 
-		IndexBuffer(GLushort *data, GLuint size);
+		IndexBuffer(GLubyte *data, GLsizei size);
 		~IndexBuffer();
 
 		void bind() const;
