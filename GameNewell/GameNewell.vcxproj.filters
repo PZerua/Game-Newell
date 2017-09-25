@@ -67,6 +67,9 @@
     <ClCompile Include="src\graphics\renderer.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\texture.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
@@ -115,6 +118,9 @@
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderer.h">
+      <Filter>src\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\texture.h">
       <Filter>src\graphics</Filter>
     </ClInclude>
   </ItemGroup>

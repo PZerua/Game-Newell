@@ -37,7 +37,8 @@ public:
 	VertexArray();
 	~VertexArray();
 
-	void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag = ATTRIBUTE_VERTEX);
+	void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag);
+	void addVertexBufferInstanced(VertexBuffer* vertexBuffer);
 	void addIndexBuffer(IndexBuffer* indexBuffer);
 
 	void bind() const;

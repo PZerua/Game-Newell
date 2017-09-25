@@ -12,6 +12,7 @@
 #include <src/graphics/renderable2d.h>
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
+#include <src/graphics/texture.h>
 #include <src/utils/debugutils.h>
 
 extern "C" 
@@ -58,10 +59,13 @@ int main(int argc, char* argv[])
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
-	gfx::Renderer renderer;
+	gfx::Renderer renderer(gfx::VBO_BUFFER_VERTEX | gfx::VBO_BUFFER_UV | gfx::VBO_INSTANCED);
 	gfx::Renderable2D renderable(math::vec2(100, 100), math::vec2(100, 100));
 	gfx::Renderable2D renderable2(math::vec2(100, 400), math::vec2(100, 100));
-	gfx::Shader shaderTest("src/graphics/shaders/simpleColor.vs", "src/graphics/shaders/simpleColor.fs");
+	gfx::Shader shaderTest("src/graphics/shaders/simple.vs", "src/graphics/shaders/simple.fs");
+
+	gfx::Texture m_arrayTexture(GL_TEXTURE_2D_ARRAY);
+	m_arrayTexture.loadTextureArray("data/sprites/face.png");
 
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{
@@ -72,7 +76,7 @@ int main(int argc, char* argv[])
 
 		shaderTest.enable();
 
-		shaderTest.setMatrix4("uProjection", math::mat4::ortho(0.0f, window->getWidth(), window->getHeight(), 0.0f, -1.0f, 1.0f));
+		shaderTest.setMatrix4("uProjection", math::mat4::ortho(0.0f, (float)window->getWidth(), (float)window->getHeight(), 0.0f, -1.0f, 1.0f));
 
 		renderer.render();
 

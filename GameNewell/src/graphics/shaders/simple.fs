@@ -1,7 +1,11 @@
-#version 330
-in vec3 color;
+#version 450
+
+uniform sampler2DArray uTextureArray;
+
+in vec2 vUvs;
+out vec4 FragColor;
 
 void main (void)
 {
-    gl_FragColor = vec4(color, 1.0);
+    FragColor = texture(uTextureArray, vec3(vUvs, 0));
 }

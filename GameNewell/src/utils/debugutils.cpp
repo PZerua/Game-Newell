@@ -16,7 +16,7 @@ namespace utils
 		GLenum err;
 		while ((err = glGetError()) != GL_NO_ERROR)
 		{
-			std::cout << "OpenGL error: " << err << std::endl;
+			std::cout << "OpenGL error: " << std::hex << err << std::dec << std::endl;
 		}
 	}
 

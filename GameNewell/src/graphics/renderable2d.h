@@ -5,12 +5,7 @@
 
 #pragma once
 
-#include <memory>
-
 #include <src/math/math.h>
-#include <src/graphics/buffers/vertexarray.h>
-#include <src/graphics/buffers/vertexbuffer.h>
-#include <src/graphics/buffers/indexbuffer.h>
 
 namespace gfx
 {
@@ -19,7 +14,7 @@ class Renderable2D
 {
 private:
 	math::vec2 m_position;
-	math::vec2 m_size;
+	math::vec2 m_size;	
 
 public:
 	Renderable2D(math::vec2 position, math::vec2 size) : m_position(position), m_size(size) {}

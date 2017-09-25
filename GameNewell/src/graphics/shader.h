@@ -8,6 +8,7 @@
 #include <src/utils/fileutils.h>
 #include <src/math/math.h>
 #include <GL/glew.h>
+#include <src/graphics/texture.h>
 
 namespace gfx
 {
@@ -33,6 +34,7 @@ public:
 	void setVector3(const char* name, const math::vec3 &vec) const;
 	void setVector4(const char* name, const math::vec4 &vec) const;
 	void setMatrix4(const char* name, const math::mat4 &mat) const;
+	void setTexture(const char* name, const Texture &tex, GLenum target) const;
 
 private:
 	// Utility functions

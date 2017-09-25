@@ -115,5 +115,12 @@ void Shader::setMatrix4(const char* name, const math::mat4 &mat) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_programID, name), 1, GL_FALSE, mat.m);
 }
+
+void Shader::setTexture(const char* name, const Texture &tex, GLenum target) const
+{
+	glBindTexture(target, tex.getId());
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(m_programID, name), tex.getTextureCount());
+}
 	
 } // namespace gfx

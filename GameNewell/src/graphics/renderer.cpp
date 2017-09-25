@@ -10,9 +10,10 @@
 namespace gfx
 {
 
-Renderer::Renderer()
+Renderer::Renderer(unsigned char flags) :
+	m_flags(flags)
 {
-	initVbo(VBO_BUFFER_VERTEX | VBO_INSTANCED); // Vertex buffer object (vertex, color, uv) and transformations
+	initVbo(); // Vertex buffer object (vertex, color, uv) and transformations
 	initEbo(); // Element buffer object (indices)
 	initVao(); // Vertex array object
 }
@@ -37,44 +38,58 @@ void Renderer::addRenderable(Renderable2D *renderable)
 
 	m_transformations.push_back(model);
 
-	m_vbo_instanced->changeData(&m_transformations[0], m_transformations.size() * sizeof(math::mat4), GL_DYNAMIC_DRAW);
+	m_vbo_instanced->changeData(&m_transformations[0], (GLsizei)(m_transformations.size() * sizeof(math::mat4)), GL_DYNAMIC_DRAW);
 }
 
 void Renderer::initVao()
 {
 	m_vao = std::make_unique<VertexArray>();
-	m_vao->addVertexBuffer(m_vbo.get(), VBO_BUFFER_VERTEX);
+	m_vao->addVertexBuffer(m_vbo.get(), m_flags);
 	if (m_vbo_instanced)
-		m_vao->addVertexBuffer(m_vbo_instanced.get(), VBO_INSTANCED);
+		m_vao->addVertexBufferInstanced(m_vbo_instanced.get());
 	m_vao->addIndexBuffer(m_ebo.get());
 }
 
 void Renderer::initEbo()
 {
 	GLubyte indices[GN_QUAD_INDICES_SIZE] = { 0, 1, 2, 1, 3, 2 };
-	m_ebo = std::make_unique<IndexBuffer>(indices, GN_QUAD_INDICES_SIZE * sizeof(GLubyte));
+	m_ebo = std::make_unique<IndexBuffer>(indices, (GLsizei)(GN_QUAD_INDICES_SIZE * sizeof(GLubyte)));
 }
 
-void Renderer::initVbo(unsigned char flag)
+void Renderer::initVbo()
 {
-	if (flag & VBO_BUFFER_VERTEX)
+	if (m_flags & VBO_BUFFER_VERTEX)
 	{
 		GLfloat vertexData[GN_QUAD_VERTEX_SIZE] =
 		{
+			// Pos
 			0.0f, 1.0f,
 			1.0f, 1.0f,
 			0.0f, 0.0f,
 			1.0f, 0.0f,
 		};
 
-		m_vbo = std::make_unique<VertexBuffer>(vertexData, GN_QUAD_VERTEX_SIZE * sizeof(GLfloat));
+		m_vbo = std::make_unique<VertexBuffer>(vertexData, (GLsizei)(GN_QUAD_VERTEX_SIZE * sizeof(GLfloat)));
 	}
 
-	if (flag & VBO_INSTANCED)
+	if (m_flags & VBO_BUFFER_VERTEX && m_flags & VBO_BUFFER_UV)
+	{
+		GLfloat vertexData[GN_QUAD_VERTEXUV_SIZE] =
+		{
+			// Pos		// Tex
+			0.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 1.0f, 1.0f, 1.0f,
+			0.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 0.0f, 1.0f, 0.0f
+		};
+
+		m_vbo = std::make_unique<VertexBuffer>(vertexData, (GLsizei)(GN_QUAD_VERTEXUV_SIZE * sizeof(GLfloat)));
+	}
+
+	if (m_flags & VBO_INSTANCED)
 	{
 		m_vbo_instanced = std::make_unique<VertexBuffer>();
 	}
-
 }
 
 }

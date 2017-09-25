@@ -8,12 +8,16 @@
 #include <vector>
 
 #include <src/graphics/renderable2d.h>
+#include <src/graphics/buffers/vertexarray.h>
+#include <src/graphics/buffers/vertexbuffer.h>
+#include <src/graphics/buffers/indexbuffer.h>
 
 namespace gfx
 {
 
 #define GN_QUAD_INDICES_SIZE 6
 #define GN_QUAD_VERTEX_SIZE 8
+#define GN_QUAD_VERTEXUV_SIZE 16
 
 class Renderer
 {
@@ -27,14 +31,16 @@ private:
 	std::unique_ptr<VertexBuffer> m_vbo_instanced;
 	std::unique_ptr<IndexBuffer> m_ebo;
 
+	unsigned char m_flags;
+
 public:
-	Renderer();
+	Renderer(unsigned char flags);
 	void render();
 	void addRenderable(Renderable2D *renderable);
 
 private:
 	void initVao();
-	void initVbo(unsigned char flag = ATTRIBUTE_VERTEX);
+	void initVbo();
 	void initEbo();
 	
 };
