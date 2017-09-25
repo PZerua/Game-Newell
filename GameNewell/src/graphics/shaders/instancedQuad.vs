@@ -2,13 +2,16 @@
 layout (location = 0) in vec2 aVertex;
 layout (location = 2) in vec2 aUvs;
 layout (location = 3) in mat4 aModel;
+layout (location = 7) in uint aTextureIndex;
 
 uniform mat4 uProjection;
 
-out vec2 vUvs;
+out vec2 oUvs;
+flat out uint oTextureIndex;
 
 void main(void)
 {
-	vUvs = aUvs;
+	oUvs = aUvs;
+	oTextureIndex = aTextureIndex;
 	gl_Position = uProjection * aModel * vec4( aVertex, 0.0, 1.0 );
 }

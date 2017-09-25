@@ -27,6 +27,7 @@ void Renderer::render()
 	m_vao->unbind();
 
 	m_transformations.clear();
+	m_textureIndices.clear();
 }
 
 void Renderer::addRenderable(Renderable2D *renderable)
@@ -37,16 +38,20 @@ void Renderer::addRenderable(Renderable2D *renderable)
 	model.scale(math::vec3(renderable->getSize(), 1.0f));
 
 	m_transformations.push_back(model);
+	m_textureIndices.push_back(renderable->getTextureIndex());
 
-	m_vbo_instanced->changeData(&m_transformations[0], (GLsizei)(m_transformations.size() * sizeof(math::mat4)), GL_DYNAMIC_DRAW);
+	m_vbo_instancedModel->changeData(&m_transformations[0], (GLsizei)(m_transformations.size() * sizeof(math::mat4)), GL_STREAM_DRAW);
+	m_vbo_instancedTextureIndices->changeData(&m_textureIndices[0], (GLsizei)(m_transformations.size() * sizeof(GLuint)), GL_STREAM_DRAW);
 }
 
 void Renderer::initVao()
 {
 	m_vao = std::make_unique<VertexArray>();
 	m_vao->addVertexBuffer(m_vbo.get(), m_flags);
-	if (m_vbo_instanced)
-		m_vao->addVertexBufferInstanced(m_vbo_instanced.get());
+	if (m_vbo_instancedModel)
+		m_vao->addVertexBufferInstancedModel(m_vbo_instancedModel.get());
+	if (m_vbo_instancedTextureIndices)
+		m_vao->addVertexBufferInstancedTextureIndices(m_vbo_instancedTextureIndices.get());
 	m_vao->addIndexBuffer(m_ebo.get());
 }
 
@@ -88,8 +93,10 @@ void Renderer::initVbo()
 
 	if (m_flags & VBO_INSTANCED)
 	{
-		m_vbo_instanced = std::make_unique<VertexBuffer>();
+		m_vbo_instancedModel = std::make_unique<VertexBuffer>();
 	}
+
+	m_vbo_instancedTextureIndices = std::make_unique<VertexBuffer>();
 }
 
 }

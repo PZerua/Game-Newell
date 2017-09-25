@@ -28,7 +28,7 @@ Texture::Texture(GLenum target)
 			1,											// Mipmaps
 			GL_RGBA8,									// Internal format
 			TEX_ARRAY_DIMENSION, TEX_ARRAY_DIMENSION,   // Width, Height
-			1											// Number of layers
+			100											// Number of layers
 		);
 	}
 }

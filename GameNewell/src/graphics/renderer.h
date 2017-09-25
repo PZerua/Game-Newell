@@ -25,10 +25,12 @@ class Renderer
 private:
 	// Supposed to be sorted before added
 	std::vector<math::mat4> m_transformations;
+	std::vector<GLuint> m_textureIndices;
 
 	std::unique_ptr<VertexArray> m_vao;
 	std::unique_ptr<VertexBuffer> m_vbo;
-	std::unique_ptr<VertexBuffer> m_vbo_instanced;
+	std::unique_ptr<VertexBuffer> m_vbo_instancedModel;
+	std::unique_ptr<VertexBuffer> m_vbo_instancedTextureIndices;
 	std::unique_ptr<IndexBuffer> m_ebo;
 
 	unsigned char m_flags;

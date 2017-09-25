@@ -19,6 +19,7 @@ namespace gfx
 #define ATTRIBUTE_COLOR 1
 #define ATTRIBUTE_UV 2
 #define ATTRIBUTE_INSTANCE_ARRAY 3
+#define ATTRIBUTE_INSTANCE_TEXTUREINDICES 7
 
 enum VBO_FLAGS 
 {
@@ -38,7 +39,8 @@ public:
 	~VertexArray();
 
 	void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag);
-	void addVertexBufferInstanced(VertexBuffer* vertexBuffer);
+	void addVertexBufferInstancedModel(VertexBuffer* vertexBuffer);
+	void addVertexBufferInstancedTextureIndices(VertexBuffer* vertexBuffer);
 	void addIndexBuffer(IndexBuffer* indexBuffer);
 
 	void bind() const;
