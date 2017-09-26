@@ -62,6 +62,8 @@ bool Window::init(const std::string &screenTitle, int window_width, int window_h
 	std::cout << "[CORE] " << glGetString(GL_VERSION) << std::endl;
 
 	glViewport(0, 0, m_width, m_height);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glfwSetWindowUserPointer(m_window, this);
 
