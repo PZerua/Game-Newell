@@ -12,7 +12,7 @@
 #include <src/graphics/renderable2d.h>
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
-#include <src/graphics/texture.h>
+#include <src/graphics/texturearray.h>
 #include <src/utils/debugutils.h>
 
 extern "C" 
@@ -59,19 +59,13 @@ int main(int argc, char* argv[])
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
+	gfx::TextureArray m_arrayTexture;
+
 	gfx::Renderer renderer(gfx::VBO_BUFFER_VERTEX | gfx::VBO_BUFFER_UV | gfx::VBO_INSTANCED);
-	gfx::Renderable2D renderable(math::vec2(100, 100), math::vec2(100, 100), 0);
-	gfx::Renderable2D renderable2(math::vec2(100, 400), math::vec2(100, 100), 1);
+	gfx::Renderable2D renderable(math::vec2(100, 100), math::vec2(100, 100), m_arrayTexture.getTexture("data/sprites/face.png"));
+	gfx::Renderable2D renderable2(math::vec2(100, 400), math::vec2(100, 100), m_arrayTexture.getTexture("data/sprites/faceSad.png"));
+
 	gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
-
-	// TODO: refactor to TextureArray class, make some kind of manager to get texture index for every Renderable2D (possibly inside TextureArray itself using map<name, id> (?))
-	gfx::Texture m_arrayTexture(GL_TEXTURE_2D_ARRAY);
-	m_arrayTexture.loadTextureArray("data/sprites/face.png");
-	m_arrayTexture.loadTextureArray("data/sprites/faceSad.png");
-
-	// TODO: check this in TextureArray class
-	GLint test;
-	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &test);
 
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{

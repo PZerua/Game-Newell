@@ -25,6 +25,8 @@
     <ClCompile Include="src\graphics\renderer.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
+    <ClCompile Include="src\graphics\texturearray.cpp" />
+    <ClCompile Include="src\graphics\texturebase.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -44,6 +46,8 @@
     <ClInclude Include="src\graphics\renderer.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\texture.h" />
+    <ClInclude Include="src\graphics\texturearray.h" />
+    <ClInclude Include="src\graphics\texturebase.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\mat4.h" />
@@ -56,10 +60,8 @@
     <ClInclude Include="src\utils\mathutils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\graphics\shaders\simple.fs" />
-    <None Include="src\graphics\shaders\simple.vs" />
-    <None Include="src\graphics\shaders\simpleColor.fs" />
-    <None Include="src\graphics\shaders\simpleColor.vs" />
+    <None Include="src\graphics\shaders\instancedQuad.fs" />
+    <None Include="src\graphics\shaders\instancedQuad.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19AC05EB-589C-42F4-8A64-25186CD41806}</ProjectGuid>

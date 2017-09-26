@@ -70,6 +70,12 @@
     <ClCompile Include="src\graphics\texture.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\texturearray.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\texturebase.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
@@ -123,18 +129,18 @@
     <ClInclude Include="src\graphics\texture.h">
       <Filter>src\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\texturearray.h">
+      <Filter>src\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\texturebase.h">
+      <Filter>src\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\graphics\shaders\simpleColor.vs">
+    <None Include="src\graphics\shaders\instancedQuad.fs">
       <Filter>src\graphics\shaders</Filter>
     </None>
-    <None Include="src\graphics\shaders\simpleColor.fs">
-      <Filter>src\graphics\shaders</Filter>
-    </None>
-    <None Include="src\graphics\shaders\simple.vs">
-      <Filter>src\graphics\shaders</Filter>
-    </None>
-    <None Include="src\graphics\shaders\simple.fs">
+    <None Include="src\graphics\shaders\instancedQuad.vs">
       <Filter>src\graphics\shaders</Filter>
     </None>
   </ItemGroup>
