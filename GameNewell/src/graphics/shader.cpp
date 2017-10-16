@@ -15,8 +15,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	// Compile shaders
 	GLuint vertex, fragment;
 
-	compileShader(vertex, GL_VERTEX_SHADER, utils::readFile(vertexPath).c_str());
-	compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFile(fragmentPath).c_str());
+	compileShader(vertex, GL_VERTEX_SHADER, utils::readFileString(vertexPath).c_str());
+	compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFileString(fragmentPath).c_str());
 
 	// Shader Program
 	m_programID = glCreateProgram();

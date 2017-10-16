@@ -9,11 +9,13 @@
 #include <windows.h>
 
 #include <src/graphics/window.h>
-#include <src/graphics/renderable2d.h>
+#include <src/graphics/sprite.h>
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
 #include <src/graphics/texturearray.h>
 #include <src/utils/debugutils.h>
+
+#include <src/graphics/text.h>
 
 extern "C" 
 {
@@ -50,6 +52,7 @@ double GetDelta()
 
 int main(int argc, char* argv[])
 {
+	// Everything contained here is for testing porpuses
 	std::shared_ptr<gfx::Window> window = std::make_shared<gfx::Window>();
 
 	window->init("Game Newell", 800, 720);
@@ -62,8 +65,11 @@ int main(int argc, char* argv[])
 	gfx::TextureArray m_arrayTexture;
 
 	gfx::Renderer renderer(gfx::VBO_BUFFER_VERTEX | gfx::VBO_BUFFER_UV | gfx::VBO_INSTANCED);
-	gfx::Renderable2D renderable(math::vec2(100, 100), math::vec2(100, 100), m_arrayTexture.getTexture("data/sprites/face.png"));
-	gfx::Renderable2D renderable2(math::vec2(100, 400), math::vec2(100, 100), m_arrayTexture.getTexture("data/sprites/faceSad.png"));
+
+	gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
+
+	gfx::Sprite renderable(math::vec2(100, 100), math::vec2(128, 128), m_arrayTexture.getTexture("data/sprites/face.png"));
+	gfx::Sprite renderable2(math::vec2(100, 400), math::vec2(128, 128), m_arrayTexture.getTexture("data/sprites/faceSad.png"));
 
 	gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
 

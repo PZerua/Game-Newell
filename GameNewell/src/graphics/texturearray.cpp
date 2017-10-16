@@ -70,6 +70,7 @@ bool TextureArray::addTexture(const char* filename)
 		return false;
 	}
 
+	// Add to the map <textureName, index>
 	m_textures[filename] = m_textureCount;
 
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

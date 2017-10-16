@@ -8,10 +8,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace utils
 {
 
-std::string readFile(const std::string &filePath);
+std::string readFileString(const char *filePath);
+std::vector<unsigned char> readFile(const char *filePath);
 
 } // namespace utils

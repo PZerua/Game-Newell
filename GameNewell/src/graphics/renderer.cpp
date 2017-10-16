@@ -30,15 +30,10 @@ void Renderer::render()
 	m_textureIndices.clear();
 }
 
-void Renderer::addRenderable(Renderable2D *renderable)
+void Renderer::addRenderable(Sprite *sprite)
 {
-	math::mat4 model(1.0f);
-
-	model.translate(math::vec3(renderable->getPosition(), 0.0f));
-	model.scale(math::vec3(renderable->getSize(), 1.0f));
-
-	m_transformations.push_back(model);
-	m_textureIndices.push_back(renderable->getTextureIndex());
+	m_transformations.push_back(sprite->getModel());
+	m_textureIndices.push_back(sprite->getTextureIndex());
 
 	m_vbo_instancedModel->changeData(&m_transformations[0], (GLsizei)(m_transformations.size() * sizeof(math::mat4)), GL_STREAM_DRAW);
 	m_vbo_instancedTextureIndices->changeData(&m_textureIndices[0], (GLsizei)(m_transformations.size() * sizeof(GLuint)), GL_STREAM_DRAW);

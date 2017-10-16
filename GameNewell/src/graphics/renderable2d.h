@@ -12,18 +12,18 @@ namespace gfx
 
 class Renderable2D
 {
-private:
-	math::vec2 m_position;
-	math::vec2 m_size;	
-	unsigned m_textureIndex;
+protected:
+	math::mat4 m_model{1.0f};
 
 public:
-	Renderable2D(math::vec2 position, math::vec2 size, unsigned textureIndex) : m_position(position), m_size(size), m_textureIndex(textureIndex) {}
+	inline math::mat4 getModel() const { return m_model; }
 
-	inline math::vec2 getPosition() const { return m_position; }
-	inline math::vec2 getSize() const { return m_size; }
-	inline unsigned getTextureIndex() const { return m_textureIndex; }
-
+protected:
+	Renderable2D(math::vec2 position, math::vec2 size)
+	{
+		m_model.translate(math::vec3(position, 0.0f));
+		m_model.scale(math::vec3(size, 1.0f));
+	}
 };
 
 } // namespace gfx

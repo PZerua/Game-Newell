@@ -24,6 +24,7 @@
     <ClCompile Include="src\graphics\buffers\vertexarray.cpp" />
     <ClCompile Include="src\graphics\renderer.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
+    <ClCompile Include="src\graphics\text.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\texturearray.cpp" />
     <ClCompile Include="src\graphics\texturebase.cpp" />
@@ -37,14 +38,17 @@
     <ClCompile Include="src\utils\debugutils.cpp" />
     <ClCompile Include="src\utils\fileutils.cpp" />
     <ClCompile Include="src\utils\mathutils.cpp" />
+    <ClCompile Include="src\utils\stringutils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\buffers\vertexbuffer.h" />
     <ClInclude Include="src\graphics\buffers\indexbuffer.h" />
     <ClInclude Include="src\graphics\buffers\vertexarray.h" />
+    <ClInclude Include="src\graphics\text.h" />
     <ClInclude Include="src\graphics\renderable2d.h" />
     <ClInclude Include="src\graphics\renderer.h" />
     <ClInclude Include="src\graphics\shader.h" />
+    <ClInclude Include="src\graphics\sprite.h" />
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\texturearray.h" />
     <ClInclude Include="src\graphics\texturebase.h" />
@@ -58,6 +62,7 @@
     <ClInclude Include="src\utils\debugutils.h" />
     <ClInclude Include="src\utils\fileutils.h" />
     <ClInclude Include="src\utils\mathutils.h" />
+    <ClInclude Include="src\utils\stringutils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\graphics\shaders\instancedQuad.fs" />

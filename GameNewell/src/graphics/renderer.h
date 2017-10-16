@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include <src/graphics/renderable2d.h>
+#include <src/graphics/sprite.h>
 #include <src/graphics/buffers/vertexarray.h>
 #include <src/graphics/buffers/vertexbuffer.h>
 #include <src/graphics/buffers/indexbuffer.h>
@@ -38,7 +38,7 @@ private:
 public:
 	Renderer(unsigned char flags);
 	void render();
-	void addRenderable(Renderable2D *renderable);
+	void addRenderable(Sprite *sprite);
 
 private:
 	void initVao();

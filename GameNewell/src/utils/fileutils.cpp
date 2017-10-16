@@ -6,17 +6,18 @@
 #pragma once
 
 #include <src/utils/fileutils.h>
+
 #include <iostream>
 
 namespace utils
 {
 
-std::string readFile(const std::string &filePath)
+std::string readFileString(const char *filePath)
 {
 	std::ifstream fileStream(filePath);
 	if (!fileStream.is_open())
 	{
-		std::cout << "Error opening: " + filePath << std::endl;
+		std::cout << "Error opening: " << filePath << std::endl;
 		return "";
 	}
 
@@ -26,6 +27,30 @@ std::string readFile(const std::string &filePath)
 	fileStream.close();
 
 	return fileStringstream.str();
+}
+
+std::vector<unsigned char> readFile(const char *filePath)
+{
+	std::ifstream fileStream(filePath, std::ios::ate);
+
+	unsigned size = (int)fileStream.tellg();
+
+	if (!fileStream.is_open())
+	{
+		std::cout << "Error opening: " << filePath << std::endl;
+		return {};
+	}
+
+	// Points to the beginning of the file
+	fileStream.seekg(0, std::ios::beg);
+
+	std::vector<unsigned char> data(size);
+
+	fileStream.read((char *)&data[0], size);
+
+	fileStream.close();
+
+	return data;
 }
 
 } // namespace utils
