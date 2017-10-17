@@ -21,14 +21,6 @@ namespace gfx
 #define ATTRIBUTE_INSTANCE_ARRAY 3
 #define ATTRIBUTE_INSTANCE_TEXTUREINDICES 7
 
-enum VBO_FLAGS 
-{
-	VBO_BUFFER_VERTEX = 0x01,
-	VBO_BUFFER_COLOR = 0x02,
-	VBO_BUFFER_UV = 0x04,
-	VBO_INSTANCED = 0x08
-};
-
 class VertexArray
 {
 private:
@@ -37,11 +29,6 @@ private:
 public:
 	VertexArray();
 	~VertexArray();
-
-	void addVertexBuffer(VertexBuffer* vertexBuffer, unsigned char flag);
-	void addVertexBufferInstancedModel(VertexBuffer* vertexBuffer);
-	void addVertexBufferInstancedTextureIndices(VertexBuffer* vertexBuffer);
-	void addIndexBuffer(IndexBuffer* indexBuffer);
 
 	void bind() const;
 	void unbind() const;

@@ -14,7 +14,6 @@ namespace gfx
 		glGenBuffers(1, &m_eboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, &data[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 	IndexBuffer::~IndexBuffer()

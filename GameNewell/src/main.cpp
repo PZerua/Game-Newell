@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 
 	gfx::TextureArray m_arrayTexture;
 
-	gfx::Renderer renderer(gfx::VBO_BUFFER_VERTEX | gfx::VBO_BUFFER_UV | gfx::VBO_INSTANCED);
+	gfx::Renderer renderer;
 
 	gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 

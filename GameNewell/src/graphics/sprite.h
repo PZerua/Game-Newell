@@ -18,6 +18,7 @@ private:
 public:
 	Sprite(math::vec2 position, math::vec2 size, unsigned textureIndex) : Renderable2D(position, size), m_textureIndex(textureIndex) {}
 
+	inline unsigned getTextureIndex() { return m_textureIndex; }
 };
 
 } // namespace gfx

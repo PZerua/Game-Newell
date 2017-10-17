@@ -29,21 +29,14 @@ private:
 
 	std::unique_ptr<VertexArray> m_vao;
 	std::unique_ptr<VertexBuffer> m_vbo;
-	std::unique_ptr<VertexBuffer> m_vbo_instancedModel;
-	std::unique_ptr<VertexBuffer> m_vbo_instancedTextureIndices;
+	std::unique_ptr<VertexBuffer> m_vbo_modelMatrices;
+	std::unique_ptr<VertexBuffer> m_vbo_textureIndices;
 	std::unique_ptr<IndexBuffer> m_ebo;
 
-	unsigned char m_flags;
-
 public:
-	Renderer(unsigned char flags);
+	Renderer();
 	void render();
 	void addRenderable(Sprite *sprite);
-
-private:
-	void initVao();
-	void initVbo();
-	void initEbo();
 	
 };
 
