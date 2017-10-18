@@ -28,6 +28,7 @@
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\texturearray.cpp" />
     <ClCompile Include="src\graphics\texturebase.cpp" />
+    <ClCompile Include="src\graphics\textureManager.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\texturearray.h" />
     <ClInclude Include="src\graphics\texturebase.h" />
+    <ClInclude Include="src\graphics\textureManager.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\mat4.h" />

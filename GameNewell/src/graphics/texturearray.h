@@ -12,8 +12,6 @@
 namespace gfx
 {
 
-#define TEX_ARRAY_DIMENSION 128
-
 class TextureArray : public TextureBase
 {
 
@@ -23,7 +21,7 @@ private:
 	std::map<std::string, GLuint> m_textures;
 
 public:
-	TextureArray();
+	TextureArray(GLuint width, GLuint height);
 	void bind() const;
 	void unbind() const;
 	GLuint getTexture(const char* filename);

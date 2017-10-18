@@ -81,8 +81,7 @@ void Font::parse()
 }
 
 Text::Text(const char *text, math::vec2 position, math::vec2 size, const std::string &fontName) :
-	m_text(text), 
-	Renderable2D(position, size) 
+	m_text(text)
 {
 	// Add the font to the map if it is not loaded yet
 	if (!m_fonts.count(fontName))

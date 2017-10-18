@@ -33,6 +33,7 @@ public:
 
 protected:
 	TextureBase() : m_width(0), m_height(0) {}
+	TextureBase(GLuint width, GLuint height) : m_width(width), m_height(height) {}
 
 	struct TexInfo
 	{

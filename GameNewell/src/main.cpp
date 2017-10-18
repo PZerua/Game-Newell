@@ -13,6 +13,7 @@
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
 #include <src/graphics/texturearray.h>
+#include <src/graphics/textureManager.h>
 #include <src/utils/debugutils.h>
 
 #include <src/graphics/text.h>
@@ -55,21 +56,23 @@ int main(int argc, char* argv[])
 	// Everything contained here is for testing porpuses
 	std::shared_ptr<gfx::Window> window = std::make_shared<gfx::Window>();
 
-	window->init("Game Newell", 800, 720);
-	glClearColor(0.15f, 0.20f, 0.26f, 1.0f);
+	window->init("Game Newell", 1280, 720);
+	window->setClearColor255(225, 208, 130);
 
 	double deltaTime = 0;
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
-	gfx::TextureArray m_arrayTexture;
+	gfx::TextureManager m_manager;
 
 	gfx::Renderer renderer;
 
 	gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
-	gfx::Sprite renderable(math::vec2(100, 100), math::vec2(128, 128), m_arrayTexture.getTexture("data/sprites/face.png"));
-	gfx::Sprite renderable2(math::vec2(100, 400), math::vec2(128, 128), m_arrayTexture.getTexture("data/sprites/faceSad.png"));
+	gfx::Sprite renderable(math::vec2(100, 100), math::vec2(128, 128), m_manager.getTexture("data/sprites/face.png"));
+	gfx::Sprite renderable2(math::vec2(100, 400), math::vec2(128, 128), m_manager.getTexture("data/sprites/faceSad.png"));
+
+	//m_manager.getTexture("data/fonts/default.png");
 
 	gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
 
@@ -90,7 +93,7 @@ int main(int argc, char* argv[])
 
 		deltaTime = GetDelta();
 
-		utils::printGlErrors();
+		//utils::printGlErrors();
 	}
 
 	return 0;

@@ -42,6 +42,8 @@ public:
 	bool isClosed() const;
 	inline bool isFullscreen() const { return m_isFullscreen; }
 	void setSize(int width, int height);
+	void setClearColor(float r, float g, float b);
+	void setClearColor255(int r, int g, int b);
 	void toggleFullscreen();
 
 	void update();

@@ -102,6 +102,21 @@ void Window::setSize(int width, int height)
 	m_height = height;
 }
 
+void Window::setClearColor(float r, float g, float b)
+{
+	glClearColor(r, g, b, 1.0f);
+}
+
+void Window::setClearColor255(int r, int g, int b)
+{
+	float red, green, blue;
+	red = r / 255.0f;
+	green = g / 255.0f;
+	blue = b / 255.0f;
+
+	glClearColor(red, green, blue, 1.0f);
+}
+
 void Window::toggleFullscreen()
 {
 	

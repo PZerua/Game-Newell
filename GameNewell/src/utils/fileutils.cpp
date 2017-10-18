@@ -8,6 +8,7 @@
 #include <src/utils/fileutils.h>
 
 #include <iostream>
+#include <STB/stb_image.h>
 
 namespace utils
 {
@@ -51,6 +52,27 @@ std::vector<unsigned char> readFile(const char *filePath)
 	fileStream.close();
 
 	return data;
+}
+
+bool getTextureSize(const char *fileName, unsigned &width, unsigned &height)
+{
+	std::ifstream fileStream(fileName, std::ios::binary);
+
+	if (!fileStream.is_open())
+	{
+		std::cout << "Error opening: " << fileName << std::endl;
+		return false;
+	}
+	
+	fileStream.seekg(16);
+	fileStream.read(reinterpret_cast<char*>(&width), 4);
+	fileStream.read(reinterpret_cast<char*>(&height), 4);
+
+	// They are in be
+	width = _byteswap_ulong(width);
+	height = _byteswap_ulong(height);
+
+	return true;
 }
 
 } // namespace utils

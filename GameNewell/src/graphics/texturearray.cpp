@@ -10,8 +10,9 @@
 namespace gfx
 {
 
-TextureArray::TextureArray()
-	: TextureBase(), m_textureCount(0)
+TextureArray::TextureArray(GLuint width, GLuint height)
+	: TextureBase(width, height),
+	m_textureCount(0)
 {
 	glGenTextures(1, &m_textureId);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureId);
@@ -21,14 +22,14 @@ TextureArray::TextureArray()
 	glTexStorage3D(GL_TEXTURE_2D_ARRAY,
 		1,											// Mipmaps
 		GL_RGBA8,									// Internal format
-		TEX_ARRAY_DIMENSION, TEX_ARRAY_DIMENSION,   // Width, Height
+		m_width, m_height,							// Width, Height
 		m_maxLayers									// Number of layers
 	);
 }
 
 GLuint TextureArray::getTexture(const char *filename)
 {
-	// Get id from the map is the texture is already uploaded
+	// Get id from the map if the texture is already uploaded
 	if (m_textures.count(filename))
 		return m_textures[filename];
 	else
@@ -64,9 +65,9 @@ bool TextureArray::addTexture(const char* filename)
 		return false;
 	}
 
-	if (texinfo->width != TEX_ARRAY_DIMENSION || texinfo->height != TEX_ARRAY_DIMENSION)
+	if (texinfo->width != m_width || texinfo->height != m_height)
 	{
-		std::cout << "The texture submited for texture array doesn't have a valid size" << std::endl;
+		std::cout << "The texture submited to the texture array doesn't have a valid size" << std::endl;
 		return false;
 	}
 

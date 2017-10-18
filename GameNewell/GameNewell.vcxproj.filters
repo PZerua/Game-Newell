@@ -82,6 +82,9 @@
     <ClCompile Include="src\utils\stringutils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\textureManager.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\stringutils.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\textureManager.h">
+      <Filter>src\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

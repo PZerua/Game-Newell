@@ -40,7 +40,12 @@ struct Font
 	void parse();
 };
 
-class Text : public Renderable2D
+class Letter : public Renderable2D
+{
+
+};
+
+class Text
 {
 private:
 	// This contains all the different fonts loaded, they are shared for all texts

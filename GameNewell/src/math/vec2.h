@@ -17,7 +17,10 @@ struct vec2
 	vec2() : x(0), y(0) {}
 	vec2(float x, float y) : x(x), y(y) {}
 
-	float dot(const vec2 &vec) { return (x * vec.x + y * vec.y); }
+	float dot(const vec2 &vec) const { return (x * vec.x + y * vec.y); }
+	inline float magnitude() const { return sqrt(x*x + y*y); }
+
+	bool operator<(const vec2 &vec) const;
 };
 
 } // namespace math

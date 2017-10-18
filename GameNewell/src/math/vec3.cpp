@@ -7,6 +7,8 @@
 
 #include <src/math/vec3.h>
 
+#include <tuple>
+
 namespace math 
 {
 
@@ -22,5 +24,7 @@ vec3 operator/=(vec3 &left, const vec3 &right) { left = left / right; return lef
 bool operator==(const vec3 &left, const vec3 &right) { return (left.x == right.x) && (left.y == right.y) && (left.z == right.z); }
 bool operator!=(const vec3 &left, const vec3 &right) { return (left.x != right.x) || (left.y != right.y) || (left.z != right.z); }
 std::ostream& operator<<(std::ostream& os, const vec3 &vec) { return os << "[" << vec.x << ", " << vec.y << ", " << vec.z << "]"; }
+
+bool vec3::operator<(const vec3 &vec) const { return std::tie(x, y, z) < std::tie(vec.x, vec.y, vec.z); }
 
 } // namespace math
