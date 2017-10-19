@@ -34,7 +34,7 @@ public:
 	void setVector3(const char* name, const math::vec3 &vec) const;
 	void setVector4(const char* name, const math::vec4 &vec) const;
 	void setMatrix4(const char* name, const math::mat4 &mat) const;
-	void setTextureArray(const char* name, const TextureArray &tex, GLenum target) const;
+	void setTextureArray(const char* name, const TextureArray &tex) const;
 
 private:
 	// Utility functions

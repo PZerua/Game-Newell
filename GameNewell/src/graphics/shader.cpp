@@ -116,9 +116,9 @@ void Shader::setMatrix4(const char* name, const math::mat4 &mat) const
 	glUniformMatrix4fv(glGetUniformLocation(m_programID, name), 1, GL_FALSE, mat.m);
 }
 
-void Shader::setTextureArray(const char* name, const TextureArray &tex, GLenum target) const
+void Shader::setTextureArray(const char* name, const TextureArray &tex) const
 {
-	glBindTexture(target, tex.getId());
+	glBindTexture(GL_TEXTURE_2D_ARRAY, tex.getId());
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(glGetUniformLocation(m_programID, name), tex.getTextureCount());
 }

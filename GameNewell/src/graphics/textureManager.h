@@ -17,7 +17,7 @@ namespace gfx
 class TextureManager
 {
 public:
-	GLuint getTexture(const char* filename);
+	std::tuple<GLuint, GLuint, bool> getTexture(const char* filename);
 
 private:
 	// Each texture array is defined by its size

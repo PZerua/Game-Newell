@@ -10,21 +10,23 @@
 namespace gfx
 {
 
-	class VertexBuffer
-	{
-	private:
-		GLuint m_vboId;
+class VertexBuffer
+{
+private:
+	GLuint m_vboId;
 
-	public:
+public:
 
-		VertexBuffer(GLvoid *data, GLsizei size, GLenum drawType = GL_STATIC_DRAW);
-		VertexBuffer();
-		~VertexBuffer();
+	VertexBuffer(GLvoid *data, GLsizei size, GLenum drawType = GL_STATIC_DRAW);
+	VertexBuffer();
+	~VertexBuffer();
 
-		void bind() const;
-		void unbind() const;
+	inline GLuint getId() const { return m_vboId; };
 
-		void changeData(GLvoid *data, GLsizei size, GLenum drawType = GL_STATIC_DRAW);
-	};
+	void bind() const;
+	void unbind() const;
+
+	void changeData(GLvoid *data, GLsizei size, GLenum drawType = GL_DYNAMIC_DRAW);
+};
 
 } // namespace gfx

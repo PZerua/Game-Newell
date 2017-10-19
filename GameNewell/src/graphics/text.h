@@ -40,11 +40,6 @@ struct Font
 	void parse();
 };
 
-class Letter : public Renderable2D
-{
-
-};
-
 class Text
 {
 private:

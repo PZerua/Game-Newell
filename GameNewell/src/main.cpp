@@ -13,7 +13,6 @@
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
 #include <src/graphics/texturearray.h>
-#include <src/graphics/textureManager.h>
 #include <src/utils/debugutils.h>
 
 #include <src/graphics/text.h>
@@ -24,31 +23,6 @@ extern "C"
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 	// AMD: Request dGPU High Performance (Driver: 13.35+)
 	_declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-
-using namespace std::chrono;
-
-auto timePrev = high_resolution_clock::now();
-
-// Returns time since last time this function was called in seconds with nanosecond precision
-double GetDelta()
-{
-	// Gett current time as a std::chrono::time_point
-	// which basically contains info about the current point in time
-	auto timeCurrent = high_resolution_clock::now();
-
-	// Compare the two to create time_point containing delta time in nanosecnds
-	auto timeDiff = duration_cast<nanoseconds>(timeCurrent - timePrev);
-
-	// Get the tics as a variable
-	double delta = (double)timeDiff.count();
-
-	// Turn nanoseconds into milliseconds
-	delta /= 1000000.0;
-
-	timePrev = timeCurrent;
-
-	return delta;
 }
 
 int main(int argc, char* argv[])
@@ -63,23 +37,21 @@ int main(int argc, char* argv[])
 
 	input::Keyboard &input = input::Keyboard::getInstance();
 
-	gfx::TextureManager m_manager;
-
 	gfx::Renderer renderer;
 
 	gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
-	gfx::Sprite renderable(math::vec2(100, 100), math::vec2(128, 128), m_manager.getTexture("data/sprites/face.png"));
-	gfx::Sprite renderable2(math::vec2(100, 400), math::vec2(128, 128), m_manager.getTexture("data/sprites/faceSad.png"));
-
-	//m_manager.getTexture("data/fonts/default.png");
+	gfx::Sprite sprite(math::vec2(100, 100), math::vec2(128, 128), renderer.getTexture("data/sprites/face.png"));
+	gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(128, 128), renderer.getTexture("data/sprites/faceSad.png"));
+	gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(256, 256), renderer.getTexture("data/sprites/bigFace.png"));
 
 	gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
 
 	while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
 	{
-		renderer.addRenderable(&renderable);
-		renderer.addRenderable(&renderable2);
+		renderer.addRenderable(sprite);
+		renderer.addRenderable(sprite2);
+		renderer.addRenderable(sprite3);
 
 		window->clear();
 
@@ -91,9 +63,7 @@ int main(int argc, char* argv[])
 
 		window->update();
 
-		deltaTime = GetDelta();
-
-		//utils::printGlErrors();
+		utils::printGlErrors();
 	}
 
 	return 0;
