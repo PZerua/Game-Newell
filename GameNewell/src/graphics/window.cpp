@@ -102,12 +102,12 @@ void Window::setSize(int width, int height)
 	m_height = height;
 }
 
-void Window::setClearColor(float r, float g, float b)
+void Window::setClearColorNormalized(float r, float g, float b)
 {
 	glClearColor(r, g, b, 1.0f);
 }
 
-void Window::setClearColor255(int r, int g, int b)
+void Window::setClearColor(int r, int g, int b)
 {
 	float red, green, blue;
 	red = r / 255.0f;
@@ -125,7 +125,7 @@ void Window::toggleFullscreen()
 void windowResize(GLFWwindow *window, int width, int height)
 {
 	Window *windowClass = (Window*)glfwGetWindowUserPointer(window);
-	windowClass->setSize(width, height);
+	//windowClass->setSize(width, height);
 	glViewport(0, 0, width, height);
 }
 

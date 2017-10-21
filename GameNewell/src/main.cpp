@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	std::shared_ptr<gfx::Window> window = std::make_shared<gfx::Window>();
 
 	window->init("Game Newell", 1280, 720);
-	window->setClearColor255(225, 208, 130);
+	window->setClearColor(225, 208, 130);
 
 	double deltaTime = 0;
 
