@@ -17,11 +17,11 @@ namespace gfx
 class TextureManager
 {
 public:
-	std::tuple<GLuint, GLuint, bool> getTexture(const char* filename);
+    std::tuple<GLuint, GLuint, bool> getTexture(const char* filename);
 
 private:
-	// Each texture array is defined by its size
-	std::map<math::vec2, std::unique_ptr<TextureArray>> m_textureArrays;
+    // Each texture array is defined by its size
+    std::map<math::vec2, std::unique_ptr<TextureArray>> m_textureArrays;
 };
 
 } // namespace gfx

@@ -10,19 +10,19 @@
 namespace gfx
 {
 
-	class IndexBuffer
-	{
-	private:
-		GLuint m_eboId;
-		GLsizei m_size;
-		
-	public:
+    class IndexBuffer
+    {
+    private:
+        GLuint m_eboId;
+        GLsizei m_size;
 
-		IndexBuffer(GLubyte *data, GLsizei size);
-		~IndexBuffer();
+    public:
 
-		void bind() const;
-		void unbind() const;
-	};
+        IndexBuffer(GLubyte *data, GLsizei size);
+        ~IndexBuffer();
+
+        void bind() const;
+        void unbind() const;
+    };
 
 } // namespace gfx

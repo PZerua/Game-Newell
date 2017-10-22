@@ -16,20 +16,20 @@ class TextureArray : public TextureBase
 {
 
 private:
-	GLuint m_textureCount;
-	GLuint m_maxLayers;
-	std::map<std::string, GLuint> m_textures;
+    GLuint m_textureCount;
+    GLuint m_maxLayers;
+    std::map<std::string, GLuint> m_textures;
 
 public:
-	TextureArray(GLuint width, GLuint height);
-	void bind() const;
-	void unbind() const;
-	GLuint getTexture(const char* filename);
+    TextureArray(GLuint width, GLuint height);
+    void bind() const;
+    void unbind() const;
+    GLuint getTexture(const char* filename);
 
-	inline GLuint getTextureCount() const { return m_textureCount; }
+    inline GLuint getTextureCount() const { return m_textureCount; }
 
 private:
-	bool addTexture(const char* filename);
+    bool addTexture(const char* filename);
 
 };
 

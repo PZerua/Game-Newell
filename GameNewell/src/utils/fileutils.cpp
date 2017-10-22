@@ -15,64 +15,64 @@ namespace utils
 
 std::string readFileString(const char *filePath)
 {
-	std::ifstream fileStream(filePath);
-	if (!fileStream.is_open())
-	{
-		std::cout << "Error opening: " << filePath << std::endl;
-		return "";
-	}
+    std::ifstream fileStream(filePath);
+    if (!fileStream.is_open())
+    {
+        std::cout << "Error opening: " << filePath << std::endl;
+        return "";
+    }
 
-	std::stringstream fileStringstream;
-	fileStringstream << fileStream.rdbuf();
+    std::stringstream fileStringstream;
+    fileStringstream << fileStream.rdbuf();
 
-	fileStream.close();
+    fileStream.close();
 
-	return fileStringstream.str();
+    return fileStringstream.str();
 }
 
 std::vector<unsigned char> readFile(const char *filePath)
 {
-	std::ifstream fileStream(filePath, std::ios::ate);
+    std::ifstream fileStream(filePath, std::ios::ate);
 
-	unsigned size = (int)fileStream.tellg();
+    unsigned size = (int)fileStream.tellg();
 
-	if (!fileStream.is_open())
-	{
-		std::cout << "Error opening: " << filePath << std::endl;
-		return {};
-	}
+    if (!fileStream.is_open())
+    {
+        std::cout << "Error opening: " << filePath << std::endl;
+        return {};
+    }
 
-	// Points to the beginning of the file
-	fileStream.seekg(0, std::ios::beg);
+    // Points to the beginning of the file
+    fileStream.seekg(0, std::ios::beg);
 
-	std::vector<unsigned char> data(size);
+    std::vector<unsigned char> data(size);
 
-	fileStream.read((char *)&data[0], size);
+    fileStream.read((char *)&data[0], size);
 
-	fileStream.close();
+    fileStream.close();
 
-	return data;
+    return data;
 }
 
 bool getTextureSize(const char *fileName, unsigned &width, unsigned &height)
 {
-	std::ifstream fileStream(fileName, std::ios::binary);
+    std::ifstream fileStream(fileName, std::ios::binary);
 
-	if (!fileStream.is_open())
-	{
-		std::cout << "Error opening: " << fileName << std::endl;
-		return false;
-	}
-	
-	fileStream.seekg(16);
-	fileStream.read(reinterpret_cast<char*>(&width), 4);
-	fileStream.read(reinterpret_cast<char*>(&height), 4);
+    if (!fileStream.is_open())
+    {
+        std::cout << "Error opening: " << fileName << std::endl;
+        return false;
+    }
+    
+    fileStream.seekg(16);
+    fileStream.read(reinterpret_cast<char*>(&width), 4);
+    fileStream.read(reinterpret_cast<char*>(&height), 4);
 
-	// They are in be
-	width = _byteswap_ulong(width);
-	height = _byteswap_ulong(height);
+    // They are in be
+    width = _byteswap_ulong(width);
+    height = _byteswap_ulong(height);
 
-	return true;
+    return true;
 }
 
 } // namespace utils

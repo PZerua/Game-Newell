@@ -18,36 +18,36 @@ void windowResize(GLFWwindow *window, int width, int height);
 class Window
 {
 private:
-	// Window dimensions
-	int m_width;
-	int m_height;
+    // Window dimensions
+    int m_width;
+    int m_height;
 
-	// Window attributes
-	bool m_isFullscreen;
+    // Window attributes
+    bool m_isFullscreen;
 
-	GLFWwindow* m_window;
+    GLFWwindow* m_window;
 
 public:
-	// Intializes internals
-	Window();
-	~Window();
+    // Intializes internals
+    Window();
+    ~Window();
 
-	// Creates window
-	bool init(const std::string &screenTitle, int window_width, int window_height, bool fullscreen = false);
+    // Creates window
+    bool init(const std::string &screenTitle, int window_width, int window_height, bool fullscreen = false);
 
-	// Window dimensions
-	int getWidth() const;
-	int getHeight() const;
+    // Window dimensions
+    int getWidth() const;
+    int getHeight() const;
 
-	bool isClosed() const;
-	inline bool isFullscreen() const { return m_isFullscreen; }
-	void setSize(int width, int height);
-	void setClearColorNormalized(float r, float g, float b);
-	void setClearColor(int r, int g, int b);
-	void toggleFullscreen();
+    bool isClosed() const;
+    inline bool isFullscreen() const { return m_isFullscreen; }
+    void setSize(int width, int height);
+    void setClearColorNormalized(float r, float g, float b);
+    void setClearColor(int r, int g, int b);
+    void toggleFullscreen();
 
-	void update();
-	void clear() const;
+    void update();
+    void clear() const;
 
 };
 

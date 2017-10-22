@@ -13,7 +13,7 @@ Mouse Mouse::m_instance;
 
 Mouse& Mouse::getInstance()
 {
-	return Mouse::m_instance;
+    return Mouse::m_instance;
 }
 
 // Setup the keyboard singleton.
@@ -21,26 +21,26 @@ Keyboard Keyboard::m_instance;
 
 Keyboard& Keyboard::getInstance()
 {
-	return Keyboard::m_instance;
+    return Keyboard::m_instance;
 }
 
 // Input callback functions
 void onKeyChange(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	Keyboard::getInstance().setKeyState(key, action != GLFW_RELEASE);
+    Keyboard::getInstance().setKeyState(key, action != GLFW_RELEASE);
 }
 
 void onMouseMove(GLFWwindow* window, double mx, double my)
 {
-	Mouse& mouse = input::Mouse::getInstance();
+    Mouse& mouse = input::Mouse::getInstance();
 
-	mouse.setX(mx);
-	mouse.setY(my);
+    mouse.setX(mx);
+    mouse.setY(my);
 }
 
 void onMouseChange(GLFWwindow* window, int button, int action, int mods)
 {
-	Mouse::getInstance().setButtonState(button, action != GLFW_RELEASE);
+    Mouse::getInstance().setButtonState(button, action != GLFW_RELEASE);
 }
 
 } // namespace input

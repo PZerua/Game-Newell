@@ -12,8 +12,8 @@ namespace utils
 
 std::pair<std::string, std::string> getKeyValue(const std::string &base, const std::string &divider)
 {
-	unsigned i = base.find(divider);
-	return {base.substr(0, i), base.substr(i + 1)};
+    auto i = base.find(divider);
+    return {base.substr(0, i), base.substr(i + 1)};
 }
 
 } // namespace utils

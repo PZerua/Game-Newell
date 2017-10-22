@@ -14,10 +14,10 @@ class Texture : public TextureBase
 {
 
 public:
-	Texture();
-	void bind() const ;
-	void unbind() const;
-	bool loadTexture(const char* filename);
+    Texture();
+    void bind() const ;
+    void unbind() const;
+    bool loadTexture(const char* filename);
 
 };
 

@@ -11,16 +11,16 @@ namespace gfx
 
 TextureBase::TexInfo* TextureBase::loadTEX(const char* filename)
 {
-	TexInfo* texinfo = new TexInfo;
-	texinfo->data = stbi_load(filename, &texinfo->width, &texinfo->height, &texinfo->bpp, 0);
+    TexInfo* texinfo = new TexInfo;
+    texinfo->data = stbi_load(filename, &texinfo->width, &texinfo->height, &texinfo->bpp, 0);
 
-	if (texinfo->width <= 0 || texinfo->height <= 0 || texinfo->data == NULL)
-	{
-		delete texinfo;
-		return NULL;
-	}
+    if (texinfo->width <= 0 || texinfo->height <= 0 || texinfo->data == NULL)
+    {
+        delete texinfo;
+        return NULL;
+    }
 
-	return texinfo;
+    return texinfo;
 }
 
 } // namespace gfx

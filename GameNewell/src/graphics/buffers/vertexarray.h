@@ -24,14 +24,14 @@ namespace gfx
 class VertexArray
 {
 private:
-	GLuint m_vaoId;
+    GLuint m_vaoId;
 
 public:
-	VertexArray();
-	~VertexArray();
+    VertexArray();
+    ~VertexArray();
 
-	void bind() const;
-	void unbind() const;
+    void bind() const;
+    void unbind() const;
 };
 
 } // namespace gfx

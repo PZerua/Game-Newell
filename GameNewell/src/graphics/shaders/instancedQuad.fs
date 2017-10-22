@@ -8,8 +8,8 @@ out vec4 FragColor;
 
 void main (void)
 {
-	if (oTextureIndex != -1)
-		FragColor = texture(uTextureArray, vec3(oUvs, oTextureIndex));
-	else 
-		FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+    if (oTextureIndex != -1)
+        FragColor = texture(uTextureArray, vec3(oUvs, oTextureIndex));
+    else 
+        FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }

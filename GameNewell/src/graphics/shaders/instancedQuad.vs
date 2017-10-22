@@ -11,7 +11,7 @@ flat out uint oTextureIndex;
 
 void main(void)
 {
-	oUvs = aUvs;
-	oTextureIndex = aTextureIndex;
-	gl_Position = uProjection * aModel * vec4( aVertex, 0.0, 1.0 );
+    oUvs = aUvs;
+    oTextureIndex = aTextureIndex;
+    gl_Position = uProjection * aModel * vec4( aVertex, 0.0, 1.0 );
 }

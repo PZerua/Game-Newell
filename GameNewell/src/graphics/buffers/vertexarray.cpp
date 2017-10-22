@@ -12,23 +12,23 @@ namespace gfx
 
 VertexArray::VertexArray()
 {
-	glGenVertexArrays(1, &m_vaoId);
-	glBindVertexArray(m_vaoId);
+    glGenVertexArrays(1, &m_vaoId);
+    glBindVertexArray(m_vaoId);
 }
 
 VertexArray::~VertexArray()
 {
-	glDeleteVertexArrays(1, &m_vaoId);
+    glDeleteVertexArrays(1, &m_vaoId);
 }
 
 void VertexArray::bind() const
 {
-	glBindVertexArray(m_vaoId);
+    glBindVertexArray(m_vaoId);
 }
 
 void VertexArray::unbind() const
 {
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 } // namespace gfx

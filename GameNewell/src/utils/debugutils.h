@@ -10,6 +10,6 @@
 namespace utils
 {
 
-	void printGlErrors();
+    void printGlErrors();
 
 } // namespace utils

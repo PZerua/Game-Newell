@@ -15,24 +15,24 @@ namespace gfx
 
 std::tuple<GLuint, GLuint, bool> TextureManager::getTexture(const char *filename)
 {
-	unsigned width, height;
-	math::vec2 size;
-	bool newTextureArray = false;
+    unsigned width, height;
+    math::vec2 size;
+    bool newTextureArray = false;
 
-	if (utils::getTextureSize(filename, width, height))
-	{
-		size.x = (float)width;
-		size.y = (float)height;
+    if (utils::getTextureSize(filename, width, height))
+    {
+        size.x = (float)width;
+        size.y = (float)height;
 
-		if (!m_textureArrays.count(size))
-		{
-			newTextureArray = true;
-			m_textureArrays[size] = std::make_unique<TextureArray>(width, height);
-		}
+        if (!m_textureArrays.count(size))
+        {
+            newTextureArray = true;
+            m_textureArrays[size] = std::make_unique<TextureArray>(width, height);
+        }
 
-		return {m_textureArrays[size]->getId(), m_textureArrays[size]->getTexture(filename), newTextureArray};
-	}
-	else return {0, -1, false};
+        return {m_textureArrays[size]->getId(), m_textureArrays[size]->getTexture(filename), newTextureArray};
+    }
+    else return {0, -1, false};
 }
 
 } // namespace gfx
