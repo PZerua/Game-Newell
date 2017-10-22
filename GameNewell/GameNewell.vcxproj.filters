@@ -85,6 +85,9 @@
     <ClCompile Include="src\graphics\textureManager.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\timer.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
@@ -155,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="src\graphics\textureManager.h">
       <Filter>src\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\timer.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

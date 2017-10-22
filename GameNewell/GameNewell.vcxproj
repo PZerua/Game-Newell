@@ -40,6 +40,7 @@
     <ClCompile Include="src\utils\fileutils.cpp" />
     <ClCompile Include="src\utils\mathutils.cpp" />
     <ClCompile Include="src\utils\stringutils.cpp" />
+    <ClCompile Include="src\utils\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\buffers\vertexbuffer.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\utils\fileutils.h" />
     <ClInclude Include="src\utils\mathutils.h" />
     <ClInclude Include="src\utils\stringutils.h" />
+    <ClInclude Include="src\utils\timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\graphics\shaders\instancedQuad.fs" />
