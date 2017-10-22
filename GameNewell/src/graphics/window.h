@@ -25,7 +25,7 @@ private:
     // Window attributes
     bool m_isFullscreen;
 
-    GLFWwindow* m_window;
+    GLFWwindow * m_window;
 
 public:
     // Intializes internals
@@ -39,6 +39,7 @@ public:
     int getWidth() const;
     int getHeight() const;
 
+    GLFWwindow *getWindow() { return m_window; }
     bool isClosed() const;
     inline bool isFullscreen() const { return m_isFullscreen; }
     void setSize(int width, int height);
@@ -46,6 +47,7 @@ public:
     void setClearColor(int r, int g, int b);
     void toggleFullscreen();
 
+    void pollEvents();
     void update();
     void clear() const;
 

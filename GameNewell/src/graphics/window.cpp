@@ -10,7 +10,7 @@ namespace gfx
 {
 
 Window::Window() :
-    m_window(NULL),
+    m_window(nullptr),
     m_isFullscreen(false),
     m_width(0),
     m_height(0)
@@ -54,6 +54,7 @@ bool Window::init(const std::string &screenTitle, int window_width, int window_h
     glfwSetMouseButtonCallback(m_window, input::onMouseChange);
     glfwSetCursorPosCallback(m_window, input::onMouseMove);
     glfwSetWindowSizeCallback(m_window, windowResize);
+    glfwSwapInterval(0);
 
     std::cout << "[CORE] OpenGL context created" << std::endl;
 
@@ -75,9 +76,13 @@ void Window::clear() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::update()
+void Window::pollEvents()
 {
     glfwPollEvents();
+}
+
+void Window::update()
+{
     glfwSwapBuffers(m_window);
 }
 

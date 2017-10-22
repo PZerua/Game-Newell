@@ -17,6 +17,7 @@ protected:
 
 public:
     inline math::mat4 getModel() const { return m_model; }
+    void setTranslation(math::vec2 position) { m_model.setTranslation(position); }
 
 protected:
     Renderable2D(math::vec2 position, math::vec2 size)

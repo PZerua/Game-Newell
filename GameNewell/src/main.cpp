@@ -14,7 +14,11 @@
 #include <src/graphics/renderer.h>
 #include <src/graphics/texturearray.h>
 #include <src/utils/debugutils.h>
+#include <src/utils/timer.h>
 
+#include <src/editor/gui/imgui.h>
+#include <src/editor/gui/imgui_impl_glfw_gl3.h>
+#include <src/math/math.h>
 #include <src/graphics/text.h>
 
 extern "C"
@@ -33,6 +37,8 @@ int main(int argc, char* argv[])
     window->init("Game Newell", 1280, 720);
     window->setClearColor(225, 208, 130);
 
+    ImGui_ImplGlfwGL3_Init(window->getWindow(), false);
+
     double deltaTime = 0;
 
     input::Keyboard &input = input::Keyboard::getInstance();
@@ -41,19 +47,50 @@ int main(int argc, char* argv[])
 
     gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
-    gfx::Sprite sprite(math::vec2(100, 100), math::vec2(128, 128), renderer.getTexture("data/sprites/face.png"));
-    gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(128, 128), renderer.getTexture("data/sprites/faceSad.png"));
-    gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(256, 256), renderer.getTexture("data/sprites/bigFace.png"));
+    gfx::Sprite sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("data/sprites/smallFace.png"));
+    gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(32, 32), renderer.getTexture("data/sprites/faceSad.png"));
+    gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(32, 32), renderer.getTexture("data/sprites/bigFace.png"));
 
     gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
 
     while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
     {
-        renderer.addRenderable(sprite);
-        renderer.addRenderable(sprite2);
-        renderer.addRenderable(sprite3);
+        window->pollEvents();
+
+        ImGui_ImplGlfwGL3_NewFrame();
 
         window->clear();
+
+        ImGui::Begin("Debug", (bool *)true);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+
+        for (int i = 0; i < 160; i++)
+        {
+            for (int j = 0; j < 90; j++)
+            {
+                sprite.setTranslation(math::vec2(8 * i, 8 * j));
+                renderer.addRenderable(sprite);
+            }
+        }
+
+        for (int i = 0; i < 40; i++)
+        {
+            for (int j = 0; j < 11; j++)
+            {
+                sprite2.setTranslation(math::vec2(32* i, 32 * j));
+                renderer.addRenderable(sprite2);
+            }
+        }
+
+        for (int i = 0; i < 40; i++)
+        {
+            for (int j = 11; j < 22; j++)
+            {
+                sprite3.setTranslation(math::vec2(32 * i, 32 * j));
+                renderer.addRenderable(sprite3);
+            }
+        }
 
         shaderTest.enable();
 
@@ -61,9 +98,11 @@ int main(int argc, char* argv[])
 
         renderer.render();
 
+        ImGui::Render();
+
         window->update();
 
-        utils::printGlErrors();
+        // utils::printGlErrors();
     }
 
     return 0;

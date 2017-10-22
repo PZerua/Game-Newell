@@ -87,12 +87,9 @@ void Renderer::addRenderable(Sprite &sprite)
 {
     auto &group = m_renderables[sprite.getTextureArrayId()];
 
+    // Add the sprite info to the corresponding renderable group
     group.transformations.push_back(sprite.getModel());
     group.textureIndices.push_back(sprite.getTextureIndex());
-
-    // TODO: I can optimize this with a render queue, now I'm changing the vbo every time a renderable is added
-    group.vbo_modelMatrices->changeData(&group.transformations[0], (GLsizei)(group.transformations.size() * sizeof(math::mat4)));
-    group.vbo_textureIndices->changeData(&group.textureIndices[0], (GLsizei)(group.textureIndices.size() * sizeof(GLuint)));
 }
 
 void Renderer::initRenderableGroup(GLuint id)
@@ -108,6 +105,10 @@ void Renderer::render()
 
     for (auto &elem : m_renderables)
     {
+        // Setup the vbos for each renderable group
+        elem.second.vbo_modelMatrices->changeData(&elem.second.transformations[0], (GLsizei)(elem.second.transformations.size() * sizeof(math::mat4)));
+        elem.second.vbo_textureIndices->changeData(&elem.second.textureIndices[0], (GLsizei)(elem.second.textureIndices.size() * sizeof(GLuint)));
+
         glBindTexture(GL_TEXTURE_2D_ARRAY, elem.first);
         glBindVertexBuffer(ATTRIBUTE_INSTANCE_MODELMATRIX, elem.second.vbo_modelMatrices->getId(), 0, 4 * sizeof(math::vec4));
         glBindVertexBuffer(ATTRIBUTE_INSTANCE_TEXTUREINDICES, elem.second.vbo_textureIndices->getId(), 0, sizeof(GLuint));
