@@ -26,7 +26,7 @@ public:
     void bind() const;
     void unbind() const;
 
-    void changeData(GLvoid *data, GLsizei size, GLenum drawType = GL_DYNAMIC_DRAW);
+    void changeData(GLvoid *data, GLsizei size, GLenum drawType = GL_STREAM_DRAW);
 };
 
 } // namespace gfx

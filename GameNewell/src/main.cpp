@@ -48,23 +48,26 @@ int main(int argc, char* argv[])
     gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
     gfx::Sprite sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("data/sprites/smallFace.png"));
-    gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(32, 32), renderer.getTexture("data/sprites/faceSad.png"));
-    gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(32, 32), renderer.getTexture("data/sprites/bigFace.png"));
+    gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("data/sprites/faceSad.png"));
+    gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(16, 16), renderer.getTexture("data/sprites/bigFace.png"));
 
     gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
+
+    math::mat4 ortho = math::mat4::ortho(0.0f, (float)window->getWidth(), (float)window->getHeight(), 0.0f, -1.0f, 1.0f);
 
     while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
     {
         window->pollEvents();
 
-        ImGui_ImplGlfwGL3_NewFrame();
-
         window->clear();
+
+        ImGui_ImplGlfwGL3_NewFrame();
 
         ImGui::Begin("Debug", (bool *)true);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
 
+        // Add 14400 sprites
         for (int i = 0; i < 160; i++)
         {
             for (int j = 0; j < 90; j++)
@@ -74,35 +77,37 @@ int main(int argc, char* argv[])
             }
         }
 
-        for (int i = 0; i < 40; i++)
+        // Add ~1800 sprites
+        for (int i = 0; i < 80; i++)
         {
-            for (int j = 0; j < 11; j++)
+            for (int j = 0; j < 22; j++)
             {
-                sprite2.setTranslation(math::vec2(32* i, 32 * j));
+                sprite2.setTranslation(math::vec2(16 * i, 16 * j));
                 renderer.addRenderable(sprite2);
             }
         }
 
-        for (int i = 0; i < 40; i++)
+        // Add ~1800 sprites
+        for (int i = 0; i < 80; i++)
         {
-            for (int j = 11; j < 22; j++)
+            for (int j = 22; j < 45; j++)
             {
-                sprite3.setTranslation(math::vec2(32 * i, 32 * j));
+                sprite3.setTranslation(math::vec2(16 * i, 16 * j));
                 renderer.addRenderable(sprite3);
             }
         }
 
         shaderTest.enable();
 
-        shaderTest.setMatrix4("uProjection", math::mat4::ortho(0.0f, (float)window->getWidth(), (float)window->getHeight(), 0.0f, -1.0f, 1.0f));
+        shaderTest.setMatrix4("uProjection", ortho);
 
         renderer.render();
 
         ImGui::Render();
 
-        window->update();
+        window->swap();
 
-        // utils::printGlErrors();
+        utils::printGlErrors();
     }
 
     return 0;

@@ -4,6 +4,7 @@ uniform sampler2DArray uTextureArray;
 
 in vec2 oUvs;
 flat in uint oTextureIndex;
+
 out vec4 FragColor;
 
 void main (void)

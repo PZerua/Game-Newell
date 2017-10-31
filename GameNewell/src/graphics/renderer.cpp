@@ -19,7 +19,7 @@ Renderer::Renderer()
     // -- Setup vertex data --
     GLfloat vertexData[GN_QUAD_VERTEXUV_SIZE] =
     {
-        // Pos        // Tex
+        // Vertex   // Uv
         0.0f, 1.0f, 0.0f, 1.0f,
         1.0f, 1.0f, 1.0f, 1.0f,
         0.0f, 0.0f, 0.0f, 0.0f,
@@ -52,7 +52,7 @@ Renderer::Renderer()
     glEnableVertexAttribArray(ATTRIBUTE_INSTANCE_MODELMATRIX + 3);
     glVertexAttribFormat(ATTRIBUTE_INSTANCE_MODELMATRIX + 3, 4, GL_FLOAT, GL_FALSE, 3 * sizeof(math::vec4));
 
-    // Bint to third vbo (third position in shader attributes)
+    // Bind to third vbo (third position in shader attributes)
     glVertexAttribBinding(ATTRIBUTE_INSTANCE_MODELMATRIX + 0, ATTRIBUTE_INSTANCE_MODELMATRIX);
     glVertexAttribBinding(ATTRIBUTE_INSTANCE_MODELMATRIX + 1, ATTRIBUTE_INSTANCE_MODELMATRIX);
     glVertexAttribBinding(ATTRIBUTE_INSTANCE_MODELMATRIX + 2, ATTRIBUTE_INSTANCE_MODELMATRIX);
@@ -95,28 +95,28 @@ void Renderer::addRenderable(Sprite &sprite)
 void Renderer::initRenderableGroup(GLuint id)
 {
     // Setup the vbos to store the model matrices and texture indices of each group
-    m_renderables[id].vbo_modelMatrices = std::make_unique<VertexBuffer>();
-    m_renderables[id].vbo_textureIndices = std::make_unique<VertexBuffer>();
+    m_renderables[id].vboModelMatrices = std::make_unique<VertexBuffer>();
+    m_renderables[id].vboTextureIndices = std::make_unique<VertexBuffer>();
 }
 
 void Renderer::render()
 {
     m_vao->bind();
 
-    for (auto &elem : m_renderables)
+    for (auto &group : m_renderables)
     {
         // Setup the vbos for each renderable group
-        elem.second.vbo_modelMatrices->changeData(&elem.second.transformations[0], (GLsizei)(elem.second.transformations.size() * sizeof(math::mat4)));
-        elem.second.vbo_textureIndices->changeData(&elem.second.textureIndices[0], (GLsizei)(elem.second.textureIndices.size() * sizeof(GLuint)));
+        group.second.vboModelMatrices->changeData(&group.second.transformations[0], (GLsizei)(group.second.transformations.size() * sizeof(math::mat4)));
+        group.second.vboTextureIndices->changeData(&group.second.textureIndices[0], (GLsizei)(group.second.textureIndices.size() * sizeof(GLuint)));
 
-        glBindTexture(GL_TEXTURE_2D_ARRAY, elem.first);
-        glBindVertexBuffer(ATTRIBUTE_INSTANCE_MODELMATRIX, elem.second.vbo_modelMatrices->getId(), 0, 4 * sizeof(math::vec4));
-        glBindVertexBuffer(ATTRIBUTE_INSTANCE_TEXTUREINDICES, elem.second.vbo_textureIndices->getId(), 0, sizeof(GLuint));
-        glDrawElementsInstanced(GL_TRIANGLES, GN_QUAD_INDICES_SIZE, GL_UNSIGNED_BYTE, NULL, (GLsizei)elem.second.transformations.size());
+        glBindTexture(GL_TEXTURE_2D_ARRAY, group.first);
+        glBindVertexBuffer(ATTRIBUTE_INSTANCE_MODELMATRIX, group.second.vboModelMatrices->getId(), 0, 4 * sizeof(math::vec4));
+        glBindVertexBuffer(ATTRIBUTE_INSTANCE_TEXTUREINDICES, group.second.vboTextureIndices->getId(), 0, sizeof(GLuint));
+        glDrawElementsInstanced(GL_TRIANGLES, GN_QUAD_INDICES_SIZE, GL_UNSIGNED_BYTE, NULL, (GLsizei)group.second.transformations.size());
 
         // Since the vectors depend on the current renderables to render, they need to be cleared for the next render pass
-        elem.second.transformations.clear();
-        elem.second.textureIndices.clear();
+        group.second.transformations.clear();
+        group.second.textureIndices.clear();
     }
 
     m_vao->unbind();

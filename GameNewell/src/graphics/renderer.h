@@ -30,8 +30,8 @@ private:
     {
         std::vector<math::mat4> transformations;
         std::vector<GLuint> textureIndices;
-        std::unique_ptr<VertexBuffer> vbo_modelMatrices;
-        std::unique_ptr<VertexBuffer> vbo_textureIndices;
+        std::unique_ptr<VertexBuffer> vboModelMatrices;
+        std::unique_ptr<VertexBuffer> vboTextureIndices;
     };
 
     // Texture array id and the number of renderables
