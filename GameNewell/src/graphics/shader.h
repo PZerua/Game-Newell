@@ -17,11 +17,11 @@ class Shader
 {
 private:
     // Program ID
-    GLuint m_programID;
+    GLuint m_programId;
 
 public:
     // Builds the shader
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(const std::string &shaderName);
     ~Shader();
     // Activate the shader
     void enable() const;
@@ -35,6 +35,8 @@ public:
     void setVector4(const char* name, const math::vec4 &vec) const;
     void setMatrix4(const char* name, const math::mat4 &mat) const;
     void setTextureArray(const char* name, const TextureArray &tex) const;
+
+    inline GLuint getId() const { return m_programId; }
 
 private:
     // Utility functions

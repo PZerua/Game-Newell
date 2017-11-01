@@ -13,7 +13,7 @@
 namespace utils
 {
 
-std::string readFileString(const char *filePath)
+std::string readFileString(const std::string &filePath)
 {
     std::ifstream fileStream(filePath);
     if (!fileStream.is_open())
@@ -54,23 +54,25 @@ std::vector<unsigned char> readFile(const char *filePath)
     return data;
 }
 
-bool getTextureSize(const char *fileName, unsigned &width, unsigned &height)
+bool getTextureSize(const char *spritePath, math::vec2 &size)
 {
-    std::ifstream fileStream(fileName, std::ios::binary);
+    std::ifstream fileStream(spritePath, std::ios::binary);
 
     if (!fileStream.is_open())
     {
-        std::cout << "Error opening: " << fileName << std::endl;
+        std::cout << "Error opening: " << spritePath << std::endl;
         return false;
     }
+
+    unsigned width, height;
     
     fileStream.seekg(16);
     fileStream.read(reinterpret_cast<char*>(&width), 4);
     fileStream.read(reinterpret_cast<char*>(&height), 4);
 
     // They are in be
-    width = _byteswap_ulong(width);
-    height = _byteswap_ulong(height);
+    size.x = (float)_byteswap_ulong(width);
+    size.y = (float)_byteswap_ulong(height);
 
     return true;
 }

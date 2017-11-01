@@ -8,7 +8,6 @@
 #include <memory>
 #include <windows.h>
 
-#include <src/graphics/window.h>
 #include <src/graphics/sprite.h>
 #include <src/graphics/shader.h>
 #include <src/graphics/renderer.h>
@@ -32,34 +31,26 @@ extern "C"
 int main(int argc, char* argv[])
 {
     // Everything contained here is for testing porpuses
-    std::shared_ptr<gfx::Window> window = std::make_shared<gfx::Window>();
-
-    window->init("Game Newell", 1280, 720);
-    window->setClearColor(225, 208, 130);
-
-    ImGui_ImplGlfwGL3_Init(window->getWindow(), false);
-
-    double deltaTime = 0;
-
     input::Keyboard &input = input::Keyboard::getInstance();
 
     gfx::Renderer renderer;
 
+    ImGui_ImplGlfwGL3_Init(renderer.getWindow()->getGlfwWindow(), false);
+
     gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
-    gfx::Sprite sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("data/sprites/smallFace.png"));
-    gfx::Sprite sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("data/sprites/faceSad.png"));
-    gfx::Sprite sprite3(math::vec2(500, 100), math::vec2(16, 16), renderer.getTexture("data/sprites/bigFace.png"));
+    gfx::Shader shaderTest("defaultInstanced2D");
+    gfx::Shader shaderTest2("test2D");
 
-    gfx::Shader shaderTest("src/graphics/shaders/instancedQuad.vs", "src/graphics/shaders/instancedQuad.fs");
+    gfx::Renderable2D sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("smallFace"), shaderTest.getId());
+    gfx::Renderable2D sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("faceSad"), shaderTest.getId());
+    gfx::Renderable2D sprite3(math::vec2(500, 100), math::vec2(16, 16), renderer.getTexture("bigFace"), shaderTest.getId());
 
-    math::mat4 ortho = math::mat4::ortho(0.0f, (float)window->getWidth(), (float)window->getHeight(), 0.0f, -1.0f, 1.0f);
-
-    while (!window->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
+    while (!renderer.getWindow()->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
     {
-        window->pollEvents();
+        renderer.getWindow()->pollEvents();
 
-        window->clear();
+        renderer.getWindow()->clear();
 
         ImGui_ImplGlfwGL3_NewFrame();
 
@@ -72,8 +63,8 @@ int main(int argc, char* argv[])
         {
             for (int j = 0; j < 90; j++)
             {
-                sprite.setTranslation(math::vec2(8 * i, 8 * j));
-                renderer.addRenderable(sprite);
+                sprite.setTranslation(math::vec2(8.0f * i, 8.0f * j));
+                //renderer.addRenderable(sprite);
             }
         }
 
@@ -82,7 +73,7 @@ int main(int argc, char* argv[])
         {
             for (int j = 0; j < 22; j++)
             {
-                sprite2.setTranslation(math::vec2(16 * i, 16 * j));
+                sprite2.setTranslation(math::vec2(16.0f * i, 16.0f * j));
                 renderer.addRenderable(sprite2);
             }
         }
@@ -92,20 +83,16 @@ int main(int argc, char* argv[])
         {
             for (int j = 22; j < 45; j++)
             {
-                sprite3.setTranslation(math::vec2(16 * i, 16 * j));
+                sprite3.setTranslation(math::vec2(16.0f * i, 16.0f * j));
                 renderer.addRenderable(sprite3);
             }
         }
-
-        shaderTest.enable();
-
-        shaderTest.setMatrix4("uProjection", ortho);
 
         renderer.render();
 
         ImGui::Render();
 
-        window->swap();
+        renderer.getWindow()->swap();
 
         utils::printGlErrors();
     }

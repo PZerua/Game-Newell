@@ -7,7 +7,6 @@
 
 #include <fstream>
 #include <sstream>
-#include <string>
 #include <vector>
 
 #include <src/math/vec2.h>
@@ -15,8 +14,8 @@
 namespace utils
 {
 
-std::string readFileString(const char *filePath);
+std::string readFileString(const std::string &filePath);
 std::vector<unsigned char> readFile(const char *filePath);
-bool getTextureSize(const char *fileName, unsigned &width, unsigned &height);
+bool getTextureSize(const char *spritePath, math::vec2 &size);
 
 } // namespace utils

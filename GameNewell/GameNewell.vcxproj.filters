@@ -85,12 +85,6 @@
     <ClCompile Include="src\graphics\text.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\stringutils.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\textureManager.cpp">
-      <Filter>src\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils\timer.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
@@ -171,12 +165,6 @@
     <ClInclude Include="src\graphics\text.h">
       <Filter>src\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\stringutils.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\textureManager.h">
-      <Filter>src\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\timer.h">
       <Filter>src\utils</Filter>
     </ClInclude>
@@ -194,10 +182,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\graphics\shaders\instancedQuad.fs">
+    <None Include="data\shaders\defaultInstanced2D.fs">
       <Filter>src\graphics\shaders</Filter>
     </None>
-    <None Include="src\graphics\shaders\instancedQuad.vs">
+    <None Include="data\shaders\defaultInstanced2D.vs">
       <Filter>src\graphics\shaders</Filter>
     </None>
   </ItemGroup>

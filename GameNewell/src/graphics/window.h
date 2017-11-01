@@ -39,7 +39,7 @@ public:
     int getWidth() const;
     int getHeight() const;
 
-    GLFWwindow* getWindow() { return m_window; }
+    GLFWwindow* getGlfwWindow() { return m_window; }
     bool isClosed() const;
     inline bool isFullscreen() const { return m_isFullscreen; }
     void setSize(int width, int height);

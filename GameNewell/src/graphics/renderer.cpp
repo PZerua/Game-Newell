@@ -10,6 +10,12 @@ namespace gfx
 
 Renderer::Renderer()
 {
+    m_window = std::make_shared<gfx::Window>();
+    m_window->init("Game Newell", 1280, 720);
+    m_window->setClearColor(225, 208, 130);
+
+    m_projectionMatrix = math::mat4::ortho(0.0f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.0f, -1.0f, 1.0f);
+
     m_vao = std::make_unique<VertexArray>();
 
     // -- Setup indices --
@@ -71,52 +77,65 @@ Renderer::Renderer()
     m_vao->unbind();
 }
 
-std::pair<GLuint, GLuint> Renderer::getTexture(const char *fileName)
+TextureArrayInfo Renderer::getTexture(const std::string &spriteName)
 {
-    // Array texture id - Texture id inside the array - Is there a new texture array
-    auto &textureInfo = m_manager.getTexture(fileName);
+    std::string spritePath = "data/sprites/" + spriteName + ".png";
+    math::vec2 size;
 
-    // If new texture array is created
-    if (std::get<2>(textureInfo))
-        initRenderableGroup(std::get<0>(textureInfo));
+    if (utils::getTextureSize(spritePath.c_str(), size))
+    {
+        // Check if texture array already exists
+        if (!m_textureArrays.count(size))
+            m_textureArrays[size] = std::make_unique<TextureArray>((unsigned)size.x, (unsigned)size.y);
+    }
 
-    return {std::get<0>(textureInfo), std::get<1>(textureInfo)};
+    return { m_textureArrays[size]->getId(), m_textureArrays[size]->getTexture(spritePath.c_str()) };
 }
 
-void Renderer::addRenderable(Sprite &sprite)
+void Renderer::addRenderable(Renderable2D &renderable)
 {
-    auto &group = m_renderables[sprite.getTextureArrayId()];
+    auto &textureGroups = m_renderQueue[renderable.getShaderId()];
+    auto &group = textureGroups[renderable.getTextureArrayId()];
 
-    // Add the sprite info to the corresponding renderable group
-    group.transformations.push_back(sprite.getModel());
-    group.textureIndices.push_back(sprite.getTextureIndex());
-}
-
-void Renderer::initRenderableGroup(GLuint id)
-{
-    // Setup the vbos to store the model matrices and texture indices of each group
-    m_renderables[id].vboModelMatrices = std::make_unique<VertexBuffer>();
-    m_renderables[id].vboTextureIndices = std::make_unique<VertexBuffer>();
+    // Add the sprite info to the corresponding renderable group (render queue)
+    group.transformations.push_back(renderable.getModel());
+    group.textureIndices.push_back(renderable.getTextureIndex());
 }
 
 void Renderer::render()
 {
     m_vao->bind();
 
-    for (auto &group : m_renderables)
+    for (auto &textureGroups : m_renderQueue)
     {
-        // Setup the vbos for each renderable group
-        group.second.vboModelMatrices->changeData(&group.second.transformations[0], (GLsizei)(group.second.transformations.size() * sizeof(math::mat4)));
-        group.second.vboTextureIndices->changeData(&group.second.textureIndices[0], (GLsizei)(group.second.textureIndices.size() * sizeof(GLuint)));
+        // Bind the shader
+        glUseProgram(textureGroups.first);
 
-        glBindTexture(GL_TEXTURE_2D_ARRAY, group.first);
-        glBindVertexBuffer(ATTRIBUTE_INSTANCE_MODELMATRIX, group.second.vboModelMatrices->getId(), 0, 4 * sizeof(math::vec4));
-        glBindVertexBuffer(ATTRIBUTE_INSTANCE_TEXTUREINDICES, group.second.vboTextureIndices->getId(), 0, sizeof(GLuint));
-        glDrawElementsInstanced(GL_TRIANGLES, GN_QUAD_INDICES_SIZE, GL_UNSIGNED_BYTE, NULL, (GLsizei)group.second.transformations.size());
+        // Set projection matrix
+        glUniformMatrix4fv(glGetUniformLocation(textureGroups.first, "uProjection"), 1, GL_FALSE, m_projectionMatrix.m);
 
-        // Since the vectors depend on the current renderables to render, they need to be cleared for the next render pass
-        group.second.transformations.clear();
-        group.second.textureIndices.clear();
+        for (auto &group : textureGroups.second)
+        {
+            // Skip if the group is empty
+            if (!group.second.transformations.size())
+                continue;
+
+            // Setup the vbos for each renderable group
+            group.second.vboModelMatrices.changeData(group.second.transformations.data(), (GLsizei)(group.second.transformations.size() * sizeof(math::mat4)));
+            group.second.vboTextureIndices.changeData(group.second.textureIndices.data(), (GLsizei)(group.second.textureIndices.size() * sizeof(GLuint)));
+
+            // Bind current texture array
+            glBindTexture(GL_TEXTURE_2D_ARRAY, group.first);
+            // Bind model matrices and texture indices vbos
+            glBindVertexBuffer(ATTRIBUTE_INSTANCE_MODELMATRIX, group.second.vboModelMatrices.getId(), 0, 4 * sizeof(math::vec4));
+            glBindVertexBuffer(ATTRIBUTE_INSTANCE_TEXTUREINDICES, group.second.vboTextureIndices.getId(), 0, sizeof(GLuint));
+            // Draw instanced quads
+            glDrawElementsInstanced(GL_TRIANGLES, GN_QUAD_INDICES_SIZE, GL_UNSIGNED_BYTE, NULL, (GLsizei)group.second.transformations.size());
+
+            // Since the vectors depend on the current renderables to render, they need to be cleared for the next render pass
+            group.second.transformations.clear();
+            group.second.textureIndices.clear();
+        }
     }
 
     m_vao->unbind();

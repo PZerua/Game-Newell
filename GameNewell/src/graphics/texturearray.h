@@ -12,6 +12,14 @@
 namespace gfx
 {
 
+struct TextureArrayInfo
+{
+    // Id of texture array
+    GLuint textureArrayId = 0;
+    // Id of texture inside of the texture array
+    GLuint textureId = 0;
+};
+
 class TextureArray : public TextureBase
 {
 
@@ -24,12 +32,12 @@ public:
     TextureArray(GLuint width, GLuint height);
     void bind() const;
     void unbind() const;
-    GLuint getTexture(const char* filename);
+    GLuint getTexture(const char *texturePath);
 
     inline GLuint getTextureCount() const { return m_textureCount; }
 
 private:
-    bool addTexture(const char* filename);
+    bool addTexture(const char *texturePath);
 
 };
 

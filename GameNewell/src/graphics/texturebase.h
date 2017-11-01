@@ -43,7 +43,7 @@ protected:
         GLubyte* data;
     };
 
-    TexInfo* loadTEX(const char* filename);
+    TexInfo* loadTEX(const char *texturePath);
 };
 
 } // namespace gfx

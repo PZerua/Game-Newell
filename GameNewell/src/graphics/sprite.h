@@ -6,7 +6,6 @@
 #pragma once
 
 #include <src/graphics/renderable2d.h>
-#include <GL/glew.h>
 
 namespace gfx
 {
@@ -14,14 +13,10 @@ namespace gfx
 class Sprite : public Renderable2D
 {
 private:
-    GLuint m_textureIndex;
-    GLuint m_textureArrayId;
+
 
 public:
-    Sprite(math::vec2 position, math::vec2 size, std::pair<GLuint, GLuint> textureInfo) : Renderable2D(position, size), m_textureArrayId(textureInfo.first), m_textureIndex(textureInfo.second) {}
-
-    inline GLuint getTextureArrayId() const { return m_textureArrayId; }
-    inline GLuint getTextureIndex() const { return m_textureIndex; }
+    Sprite(math::vec2 position, math::vec2 size, TextureArrayInfo textureInfo, GLuint shaderId) : Renderable2D(position, size, textureInfo, shaderId) {}
 };
 
 } // namespace gfx

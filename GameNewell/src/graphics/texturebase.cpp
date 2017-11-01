@@ -9,10 +9,10 @@
 namespace gfx
 {
 
-TextureBase::TexInfo* TextureBase::loadTEX(const char* filename)
+TextureBase::TexInfo* TextureBase::loadTEX(const char *texturePath)
 {
     TexInfo* texinfo = new TexInfo;
-    texinfo->data = stbi_load(filename, &texinfo->width, &texinfo->height, &texinfo->bpp, 0);
+    texinfo->data = stbi_load(texturePath, &texinfo->width, &texinfo->height, &texinfo->bpp, 0);
 
     if (texinfo->width <= 0 || texinfo->height <= 0 || texinfo->data == NULL)
     {

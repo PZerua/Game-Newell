@@ -10,22 +10,22 @@
 namespace gfx
 {
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const std::string &shaderName)
 {
     // Compile shaders
     GLuint vertex, fragment;
 
-    compileShader(vertex, GL_VERTEX_SHADER, utils::readFileString(vertexPath).c_str());
-    compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFileString(fragmentPath).c_str());
+    compileShader(vertex, GL_VERTEX_SHADER, utils::readFileString("data/shaders/" + shaderName + ".vs").c_str());
+    compileShader(fragment, GL_FRAGMENT_SHADER, utils::readFileString("data/shaders/" + shaderName + ".fs").c_str());
 
     // Shader Program
-    m_programID = glCreateProgram();
-    glAttachShader(m_programID, vertex);
-    glAttachShader(m_programID, fragment);
-    glLinkProgram(m_programID);
+    m_programId = glCreateProgram();
+    glAttachShader(m_programId, vertex);
+    glAttachShader(m_programId, fragment);
+    glLinkProgram(m_programId);
 
     // Print errors if any
-    printProgramErrors(m_programID);
+    printProgramErrors(m_programId);
 
     // Delete unnecessary shaders (we have program)
     glDeleteShader(vertex);
@@ -34,7 +34,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 Shader::~Shader()
 {
-    glDeleteProgram(m_programID);
+    glDeleteProgram(m_programId);
 }
 
 void Shader::compileShader(GLuint &shader, GLenum shaderType, const char *shaderCode)
@@ -75,7 +75,7 @@ void Shader::printProgramErrors(GLuint shader) const
 
 void Shader::enable() const
 {
-    glUseProgram(m_programID);
+    glUseProgram(m_programId);
 }
 
 void Shader::disable() const
@@ -85,42 +85,42 @@ void Shader::disable() const
 
 void Shader::setBool(const char* name, bool value) const
 {
-    glUniform1i(glGetUniformLocation(m_programID, name), (int)value);
+    glUniform1i(glGetUniformLocation(m_programId, name), (int)value);
 }
 void Shader::setInt(const char* name, int value) const
 {
-    glUniform1i(glGetUniformLocation(m_programID, name), value);
+    glUniform1i(glGetUniformLocation(m_programId, name), value);
 }
 void Shader::setFloat(const char* name, float value) const
 {
-    glUniform1f(glGetUniformLocation(m_programID, name), value);
+    glUniform1f(glGetUniformLocation(m_programId, name), value);
 }
 
 void Shader::setVector2(const char* name, const math::vec2 &vec) const
 {
-    glUniform2f(glGetUniformLocation(m_programID, name), vec.x, vec.y);
+    glUniform2f(glGetUniformLocation(m_programId, name), vec.x, vec.y);
 }
 
 void Shader::setVector3(const char* name, const math::vec3 &vec) const
 {
-    glUniform3f(glGetUniformLocation(m_programID, name), vec.x, vec.y, vec.z);
+    glUniform3f(glGetUniformLocation(m_programId, name), vec.x, vec.y, vec.z);
 }
 
 void Shader::setVector4(const char* name, const math::vec4 &vec) const
 {
-    glUniform4f(glGetUniformLocation(m_programID, name), vec.x, vec.y, vec.z, vec.w);
+    glUniform4f(glGetUniformLocation(m_programId, name), vec.x, vec.y, vec.z, vec.w);
 }
 
 void Shader::setMatrix4(const char* name, const math::mat4 &mat) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_programID, name), 1, GL_FALSE, mat.m);
+    glUniformMatrix4fv(glGetUniformLocation(m_programId, name), 1, GL_FALSE, mat.m);
 }
 
 void Shader::setTextureArray(const char* name, const TextureArray &tex) const
 {
     glBindTexture(GL_TEXTURE_2D_ARRAY, tex.getId());
     glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(m_programID, name), tex.getTextureCount());
+    glUniform1i(glGetUniformLocation(m_programId, name), tex.getTextureCount());
 }
 
 } // namespace gfx

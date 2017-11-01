@@ -27,21 +27,21 @@ TextureArray::TextureArray(GLuint width, GLuint height)
     );
 }
 
-GLuint TextureArray::getTexture(const char *filename)
+GLuint TextureArray::getTexture(const char *texturePath)
 {
     // Get id from the map if the texture is already uploaded
-    if (m_textures.count(filename))
-        return m_textures[filename];
+    if (m_textures.count(texturePath))
+        return m_textures[texturePath];
     else
     {
         // Upload the texture, add it to the map and get the current id
-        if(addTexture(filename))
+        if(addTexture(texturePath))
             return m_textureCount - 1;
         else return -1;
     }
 }
 
-bool TextureArray::addTexture(const char* filename)
+bool TextureArray::addTexture(const char *texturePath)
 {
     if (m_textureCount >= m_maxLayers)
     {
@@ -49,7 +49,7 @@ bool TextureArray::addTexture(const char* filename)
         return false;
     }
 
-    std::string str = filename;
+    std::string str = texturePath;
     str = str.substr(str.size() - 4, 4);
 
     if (str != ".png")
@@ -58,10 +58,10 @@ bool TextureArray::addTexture(const char* filename)
         return false;
     }
 
-    TexInfo* texinfo = loadTEX(filename);
+    TexInfo* texinfo = loadTEX(texturePath);
     if (!texinfo)
     {
-        std::cout << "Error reading texture: " << filename << std::endl;
+        std::cout << "Error reading texture: " << texturePath << std::endl;
         return false;
     }
 
@@ -72,7 +72,7 @@ bool TextureArray::addTexture(const char* filename)
     }
 
     // Add to the map <textureName, index>
-    m_textures[filename] = m_textureCount;
+    m_textures[texturePath] = m_textureCount;
 
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

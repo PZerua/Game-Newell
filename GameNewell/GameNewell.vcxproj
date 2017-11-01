@@ -32,7 +32,6 @@
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\texturearray.cpp" />
     <ClCompile Include="src\graphics\texturebase.cpp" />
-    <ClCompile Include="src\graphics\textureManager.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -43,7 +42,6 @@
     <ClCompile Include="src\utils\debugutils.cpp" />
     <ClCompile Include="src\utils\fileutils.cpp" />
     <ClCompile Include="src\utils\mathutils.cpp" />
-    <ClCompile Include="src\utils\stringutils.cpp" />
     <ClCompile Include="src\utils\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -62,7 +60,6 @@
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\texturearray.h" />
     <ClInclude Include="src\graphics\texturebase.h" />
-    <ClInclude Include="src\graphics\textureManager.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\mat4.h" />
@@ -73,12 +70,11 @@
     <ClInclude Include="src\utils\debugutils.h" />
     <ClInclude Include="src\utils\fileutils.h" />
     <ClInclude Include="src\utils\mathutils.h" />
-    <ClInclude Include="src\utils\stringutils.h" />
     <ClInclude Include="src\utils\timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\shaders\instancedQuad.fs" />
-    <None Include="data\shaders\instancedQuad.vs" />
+    <None Include="data\shaders\defaultInstanced2D.fs" />
+    <None Include="data\shaders\defaultInstanced2D.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19AC05EB-589C-42F4-8A64-25186CD41806}</ProjectGuid>
