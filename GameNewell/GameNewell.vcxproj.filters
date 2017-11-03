@@ -180,6 +180,9 @@
     <ClInclude Include="src\editor\gui\imgui_impl_glfw_gl3.h">
       <Filter>src\editor\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\uniform.h">
+      <Filter>src\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\defaultInstanced2D.fs">

@@ -60,6 +60,7 @@
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\texturearray.h" />
     <ClInclude Include="src\graphics\texturebase.h" />
+    <ClInclude Include="src\graphics\uniform.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\mat4.h" />
@@ -152,6 +153,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -179,6 +181,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
