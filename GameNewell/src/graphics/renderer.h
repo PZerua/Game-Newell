@@ -15,19 +15,20 @@
 #include <src/graphics/buffers/vertexbuffer.h>
 #include <src/graphics/buffers/indexbuffer.h>
 #include <src/graphics/shader.h>
+#include <src/graphics/uniform.h>
 
 namespace gfx
 {
 
 #define GN_QUAD_INDICES_SIZE 6
 #define GN_QUAD_VERTEX_SIZE 8
-#define GN_QUAD_VERTEXUV_SIZE GN_QUAD_VERTEX_SIZE * 2
 
 class Renderer
 {
 
 private:
 
+    // Contains all the transformation and texture index data of a group of renderables sharing the same texture array
     struct renderableGroup
     {
         std::vector<math::mat4> transformations;
@@ -37,8 +38,20 @@ private:
         VertexBuffer vboTextureIndices;
     };
 
-    // Shader id - Texture array id and the renderables using that texture (render queue)
-    std::map<GLuint, std::map<GLuint, renderableGroup>> m_renderQueue;
+    // Contains all the uniforms used by the shader and all the texture arrays and renderables using this shader
+    struct shaderGroup
+    {
+        // The per shader uniforms
+        std::vector<Uniform<UniformTypes>> shaderUniforms;
+        // Texture array id and the renderables using that texture
+        std::map<GLuint, renderableGroup> shaderRenderables;
+    };
+
+    // The uniforms all shaders share (such as projection matrix)
+    std::vector<Uniform<UniformTypes>> m_shaderUniforms;
+
+    // Shader id and all being rendered with it (render queue)
+    std::map<GLuint, shaderGroup> m_renderQueue;
 
     // Map of texture arrays, they are accessed by their size (storage)
     std::map<math::vec2, std::unique_ptr<TextureArray>> m_textureArrays;
@@ -50,13 +63,15 @@ private:
     // The window we are rendering into
     std::shared_ptr<gfx::Window> m_window;
 
+    // TODO: move this to a camera class
     math::mat4 m_projectionMatrix;
 
 public:
     Renderer();
     void render();
-    void addRenderable(Renderable2D &sprite);
+    void addRenderable(const Renderable2D &sprite);
     TextureArrayInfo getTexture(const std::string &spriteName);
+    void addUniform(Uniform<UniformTypes> uniform, GLint programId = -1);
     Window *getWindow() { return m_window.get(); }
 };
 

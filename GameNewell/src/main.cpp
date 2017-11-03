@@ -19,6 +19,8 @@
 #include <src/editor/gui/imgui_impl_glfw_gl3.h>
 #include <src/math/math.h>
 #include <src/graphics/text.h>
+#include <src/graphics/shader.h>
+
 
 extern "C"
 {
@@ -40,7 +42,6 @@ int main(int argc, char* argv[])
     gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
     gfx::Shader shaderTest("defaultInstanced2D");
-    gfx::Shader shaderTest2("test2D");
 
     gfx::Renderable2D sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("smallFace"), shaderTest.getId());
     gfx::Renderable2D sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("faceSad"), shaderTest.getId());
@@ -64,7 +65,7 @@ int main(int argc, char* argv[])
             for (int j = 0; j < 90; j++)
             {
                 sprite.setTranslation(math::vec2(8.0f * i, 8.0f * j));
-                //renderer.addRenderable(sprite);
+                renderer.addRenderable(sprite);
             }
         }
 

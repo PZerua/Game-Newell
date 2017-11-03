@@ -23,20 +23,21 @@ public:
     // Builds the shader
     Shader(const std::string &shaderName);
     ~Shader();
-    // Activate the shader
-    void enable() const;
-    void disable() const;
-    // Utility uniform functions
-    void setBool(const char* name, bool value) const;
-    void setInt(const char* name, int value) const;
-    void setFloat(const char* name, float value) const;
-    void setVector2(const char* name, const math::vec2 &vec) const;
-    void setVector3(const char* name, const math::vec3 &vec) const;
-    void setVector4(const char* name, const math::vec4 &vec) const;
-    void setMatrix4(const char* name, const math::mat4 &mat) const;
-    void setTextureArray(const char* name, const TextureArray &tex) const;
 
+    // Get program ID
     inline GLuint getId() const { return m_programId; }
+
+    // Activate the shader
+    static void enable(GLuint programId);
+    static void disable(GLuint programId);
+    // Utility uniform functions
+    static void setBool(GLuint programId, const char* name, bool value);
+    static void setInt(GLuint programId, const char* name, int value);
+    static void setFloat(GLuint programId, const char* name, float value);
+    static void setVector2(GLuint programId, const char* name, const math::vec2 &vec);
+    static void setVector3(GLuint programId, const char* name, const math::vec3 &vec);
+    static void setVector4(GLuint programId, const char* name, const math::vec4 &vec);
+    static void setMatrix4(GLuint programId, const char* name, const math::mat4 &mat);
 
 private:
     // Utility functions

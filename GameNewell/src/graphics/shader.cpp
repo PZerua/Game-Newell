@@ -73,54 +73,47 @@ void Shader::printProgramErrors(GLuint shader) const
     }
 }
 
-void Shader::enable() const
+void Shader::enable(GLuint programId)
 {
-    glUseProgram(m_programId);
+    glUseProgram(programId);
 }
 
-void Shader::disable() const
+void Shader::disable(GLuint programId)
 {
     glUseProgram(0);
 }
 
-void Shader::setBool(const char* name, bool value) const
+void Shader::setBool(GLuint programId, const char* name, bool value)
 {
-    glUniform1i(glGetUniformLocation(m_programId, name), (int)value);
+    glUniform1i(glGetUniformLocation(programId, name), (int)value);
 }
-void Shader::setInt(const char* name, int value) const
+void Shader::setInt(GLuint programId, const char* name, int value)
 {
-    glUniform1i(glGetUniformLocation(m_programId, name), value);
+    glUniform1i(glGetUniformLocation(programId, name), value);
 }
-void Shader::setFloat(const char* name, float value) const
+void Shader::setFloat(GLuint programId, const char* name, float value)
 {
-    glUniform1f(glGetUniformLocation(m_programId, name), value);
-}
-
-void Shader::setVector2(const char* name, const math::vec2 &vec) const
-{
-    glUniform2f(glGetUniformLocation(m_programId, name), vec.x, vec.y);
+    glUniform1f(glGetUniformLocation(programId, name), value);
 }
 
-void Shader::setVector3(const char* name, const math::vec3 &vec) const
+void Shader::setVector2(GLuint programId, const char* name, const math::vec2 &vec)
 {
-    glUniform3f(glGetUniformLocation(m_programId, name), vec.x, vec.y, vec.z);
+    glUniform2f(glGetUniformLocation(programId, name), vec.x, vec.y);
 }
 
-void Shader::setVector4(const char* name, const math::vec4 &vec) const
+void Shader::setVector3(GLuint programId, const char* name, const math::vec3 &vec)
 {
-    glUniform4f(glGetUniformLocation(m_programId, name), vec.x, vec.y, vec.z, vec.w);
+    glUniform3f(glGetUniformLocation(programId, name), vec.x, vec.y, vec.z);
 }
 
-void Shader::setMatrix4(const char* name, const math::mat4 &mat) const
+void Shader::setVector4(GLuint programId, const char* name, const math::vec4 &vec)
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_programId, name), 1, GL_FALSE, mat.m);
+    glUniform4f(glGetUniformLocation(programId, name), vec.x, vec.y, vec.z, vec.w);
 }
 
-void Shader::setTextureArray(const char* name, const TextureArray &tex) const
+void Shader::setMatrix4(GLuint programId, const char* name, const math::mat4 &mat)
 {
-    glBindTexture(GL_TEXTURE_2D_ARRAY, tex.getId());
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(m_programId, name), tex.getTextureCount());
+    glUniformMatrix4fv(glGetUniformLocation(programId, name), 1, GL_FALSE, mat.m);
 }
 
 } // namespace gfx
