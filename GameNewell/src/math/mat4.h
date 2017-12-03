@@ -38,9 +38,8 @@ struct mat4
 
     void reset()
     {
-        for (unsigned col = 0; col < 4; col++)
-            for (unsigned row = 0; row < 4; row++)
-                m[row + col * 4] = 0.0f;
+        for (unsigned i = 0; i < 16; i++)
+            m[i] = 0.0f;
     }
 
     inline float& operator()(unsigned row, unsigned col) { return m[row + col * 4]; }

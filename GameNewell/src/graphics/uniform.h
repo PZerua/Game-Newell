@@ -30,17 +30,17 @@ struct Uniform
 
             if constexpr (std::is_same_v<U, bool>)
                 Shader::setBool(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, int>)
+            else if constexpr (std::is_same_v<U, int>)
                 Shader::setInt(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, float>)
+            else if constexpr (std::is_same_v<U, float>)
                 Shader::setFloat(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, math::vec2>)
+            else if constexpr (std::is_same_v<U, math::vec2>)
                 Shader::setVector2(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, math::vec3>)
+            else if constexpr (std::is_same_v<U, math::vec3>)
                 Shader::setVector3(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, math::vec4>)
+            else if constexpr (std::is_same_v<U, math::vec4>)
                 Shader::setVector4(programId, m_name.c_str(), uniform);
-            if constexpr (std::is_same_v<U, math::mat4>)
+            else if constexpr (std::is_same_v<U, math::mat4>)
                 Shader::setMatrix4(programId, this->m_name.c_str(), uniform);
         }, m_uniform);
     }

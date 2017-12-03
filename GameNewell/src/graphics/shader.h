@@ -13,6 +13,8 @@
 namespace gfx
 {
 
+#define GN_PROJECTION_UNIFORM_LOCATION 0
+
 class Shader
 {
 private:

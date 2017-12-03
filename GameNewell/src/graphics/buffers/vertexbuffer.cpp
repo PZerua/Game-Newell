@@ -21,7 +21,7 @@ VertexBuffer::VertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
 }
 
-void VertexBuffer::changeData(GLvoid *data, GLsizei size, GLenum drawType)
+void VertexBuffer::updateData(GLvoid *data, GLsizei size, GLenum drawType)
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
     glBufferData(GL_ARRAY_BUFFER, size, data, drawType);

@@ -100,6 +100,9 @@
     <ClCompile Include="src\editor\gui\imgui_impl_glfw_gl3.cpp">
       <Filter>src\editor\gui</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\buffers\uniformbuffer.cpp">
+      <Filter>src\graphics\buffers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window.h">
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="src\graphics\uniform.h">
       <Filter>src\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffers\uniformbuffer.h">
+      <Filter>src\graphics\buffers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

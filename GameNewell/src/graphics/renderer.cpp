@@ -14,10 +14,6 @@ Renderer::Renderer()
     m_window->init("Game Newell", 1280, 720);
     m_window->setClearColor(225, 208, 130);
 
-    m_projectionMatrix = math::mat4::ortho(0.0f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.0f, -1.0f, 1.0f);
-
-    addUniform({ m_projectionMatrix, "uProjection" });
-
     m_vao = std::make_unique<VertexArray>();
 
     // -- Setup indices --
@@ -69,6 +65,10 @@ Renderer::Renderer()
     glVertexAttribBinding(ATTRIBUTE_TEXTUREINDICES, ATTRIBUTE_TEXTUREINDICES);
 
     m_vao->unbind();
+
+    // Setup uniform buffer object containing camera data
+    m_uboData.projectionMatrix = math::mat4::ortho(0.0f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.0f, -1.0f, 1.0f);
+    m_ubo = std::make_unique<UniformBuffer>(&m_uboData, (GLsizei)sizeof(m_uboData), GL_DYNAMIC_DRAW);
 }
 
 TextureArrayInfo Renderer::getTexture(const std::string &spriteName)
@@ -86,11 +86,21 @@ TextureArrayInfo Renderer::getTexture(const std::string &spriteName)
     return { m_textureArrays[size]->getId(), m_textureArrays[size]->getTexture(spritePath.c_str()) };
 }
 
+GLuint Renderer::getShader(const std::string &shaderName)
+{
+    if (!m_shaders.count(shaderName))
+    {
+        // Create shader and bind the camera ubo with it
+        m_shaders[shaderName] = std::make_unique<Shader>(shaderName);
+        m_ubo->bindToShader(m_shaders[shaderName]->getId(), "cameraData", 0);
+    }
+
+    return m_shaders[shaderName]->getId();
+}
+
 void Renderer::addUniform(Uniform<UniformTypes> uniform, GLint programId)
 {
-    if (programId != -1)
-        m_renderQueue[programId].shaderUniforms.push_back(uniform);
-    else m_shaderUniforms.push_back(uniform);
+    m_renderQueue[programId].shaderUniforms.push_back(uniform);
 }
 
 void Renderer::addRenderable(const Renderable2D &renderable)
@@ -112,12 +122,6 @@ void Renderer::render()
         // Bind the shader
         Shader::enable(shaderGroup.first);
 
-        // TODO: set the uniforms once and reset if changed (?)
-
-        // Set global uniforms
-        for (unsigned i = 0; i < m_shaderUniforms.size(); ++i)
-            m_shaderUniforms[i].setUniform(shaderGroup.first);
-
         // Set the specific uniforms of this shader
         for (unsigned i = 0; i < shaderGroup.second.shaderUniforms.size(); ++i)
             shaderGroup.second.shaderUniforms[i].setUniform(shaderGroup.first);
@@ -129,8 +133,8 @@ void Renderer::render()
                 continue;
 
             // Setup the vbos for each renderable group
-            group.second.vboModelMatrices.changeData(group.second.transformations.data(), (GLsizei)(group.second.transformations.size() * sizeof(math::mat4)));
-            group.second.vboTextureIndices.changeData(group.second.textureIndices.data(), (GLsizei)(group.second.textureIndices.size() * sizeof(GLuint)));
+            group.second.vboModelMatrices.updateData(group.second.transformations.data(), (GLsizei)(group.second.transformations.size() * sizeof(math::mat4)));
+            group.second.vboTextureIndices.updateData(group.second.textureIndices.data(), (GLsizei)(group.second.textureIndices.size() * sizeof(GLuint)));
 
             // Bind current texture array
             glBindTexture(GL_TEXTURE_2D_ARRAY, group.first);

@@ -38,9 +38,8 @@ mat4 operator+(const mat4 &left, const mat4 &right)
 { 
     mat4 sum;
 
-    for (unsigned col = 0; col < 4; col++)
-        for (unsigned row = 0; row < 4; row++)
-            sum(row, col) = left(row, col) + right(row, col);
+    for (unsigned i = 0; i < 16; i++)
+        sum.m[i] = left.m[i] + right.m[i];
 
     return sum;
 }
@@ -55,9 +54,8 @@ mat4 operator-(const mat4 &left, const mat4 &right)
 {
     mat4 sub;
 
-    for (unsigned col = 0; col < 4; col++)
-        for (unsigned row = 0; row < 4; row++)
-            sub(row, col) = left(row, col) - right(row, col);
+    for (unsigned i = 0; i < 16; i++)
+        sub.m[i] = left.m[i] - right.m[i];
 
     return sub;
 }

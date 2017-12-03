@@ -41,16 +41,13 @@ int main(int argc, char* argv[])
 
     gfx::Text text("Hello World", math::vec2(500, 500), math::vec2(200, 100));
 
-    gfx::Shader shaderTest("defaultInstanced2D");
-
-    gfx::Renderable2D sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("smallFace"), shaderTest.getId());
-    gfx::Renderable2D sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("faceSad"), shaderTest.getId());
-    gfx::Renderable2D sprite3(math::vec2(500, 100), math::vec2(16, 16), renderer.getTexture("bigFace"), shaderTest.getId());
+    gfx::Renderable2D sprite(math::vec2(100, 100), math::vec2(8, 8), renderer.getTexture("smallFace"), renderer.getShader("defaultInstanced2D"));
+    gfx::Renderable2D sprite2(math::vec2(100, 400), math::vec2(16, 16), renderer.getTexture("faceSad"), renderer.getShader("defaultInstanced2D"));
+    gfx::Renderable2D sprite3(math::vec2(500, 100), math::vec2(16, 16), renderer.getTexture("bigFace"), renderer.getShader("defaultInstanced2D"));
 
     while (!renderer.getWindow()->isClosed() && !input.isPressed(GLFW_KEY_ESCAPE))
     {
         renderer.getWindow()->pollEvents();
-
         renderer.getWindow()->clear();
 
         ImGui_ImplGlfwGL3_NewFrame();

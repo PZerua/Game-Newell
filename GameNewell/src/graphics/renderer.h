@@ -13,6 +13,7 @@
 #include <src/graphics/texturearray.h>
 #include <src/graphics/buffers/vertexarray.h>
 #include <src/graphics/buffers/vertexbuffer.h>
+#include <src/graphics/buffers/uniformbuffer.h>
 #include <src/graphics/buffers/indexbuffer.h>
 #include <src/graphics/shader.h>
 #include <src/graphics/uniform.h>
@@ -27,7 +28,6 @@ class Renderer
 {
 
 private:
-
     // Contains all the transformation and texture index data of a group of renderables sharing the same texture array
     struct renderableGroup
     {
@@ -47,8 +47,11 @@ private:
         std::map<GLuint, renderableGroup> shaderRenderables;
     };
 
-    // The uniforms all shaders share (such as projection matrix)
-    std::vector<Uniform<UniformTypes>> m_shaderUniforms;
+    struct
+    {
+        // TODO: reference this from a camera class and add a view matrix
+        math::mat4 projectionMatrix;
+    } m_uboData;
 
     // Shader id and all being rendered with it (render queue)
     std::map<GLuint, shaderGroup> m_renderQueue;
@@ -59,19 +62,20 @@ private:
     std::unique_ptr<VertexArray> m_vao;
     std::unique_ptr<VertexBuffer> m_vbo;
     std::unique_ptr<IndexBuffer> m_ebo;
+    std::unique_ptr<UniformBuffer> m_ubo;
+
+    std::map<std::string, std::unique_ptr<Shader>> m_shaders;
 
     // The window we are rendering into
     std::shared_ptr<gfx::Window> m_window;
-
-    // TODO: move this to a camera class
-    math::mat4 m_projectionMatrix;
 
 public:
     Renderer();
     void render();
     void addRenderable(const Renderable2D &sprite);
     TextureArrayInfo getTexture(const std::string &spriteName);
-    void addUniform(Uniform<UniformTypes> uniform, GLint programId = -1);
+    GLuint getShader(const std::string &shaderName);
+    void addUniform(Uniform<UniformTypes> uniform, GLint programId);
     Window *getWindow() { return m_window.get(); }
 };
 
